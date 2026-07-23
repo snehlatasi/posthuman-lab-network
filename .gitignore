@@ -1,0 +1,61 @@
+# ==========================================
+# POSTHUMAN LAB NETWORK - GITIGNORE
+# ==========================================
+
+# Node / Next.js / Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Java / Maven / Backend
+backend/target/
+backend/*.class
+backend/*.jar
+backend/*.war
+backend/*.ear
+backend/.mvn/
+backend/.project
+backend/.classpath
+backend/.settings/
+
+# H2 Embedded Database files
+backend/data/
+
+# General Environment Configurations
+.env
+.env.local
+*.env
+*.pem
+*.key
+
+# IDE Settings / Editors
+.idea/
+*.iml
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs/
+*.log
+backend/logs/
+
+# OS specific files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Icon?
