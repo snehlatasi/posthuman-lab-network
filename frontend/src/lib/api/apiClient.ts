@@ -1,16 +1,38 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
 
+export function getStoredToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("posthuman_auth_token");
+}
+
+export function setStoredToken(token: string | null): void {
+  if (typeof window === "undefined") return;
+  if (token) {
+    localStorage.setItem("posthuman_auth_token", token);
+  } else {
+    localStorage.removeItem("posthuman_auth_token");
+  }
+}
+
 export async function fetchJson<T>(
   path: string,
   options?: RequestInit
 ): Promise<T> {
   const url = `${BASE_URL}${path}`;
+  const token = getStoredToken();
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(options?.headers as Record<string, string> || {})
+  };
+
+  if (token && !headers["Authorization"]) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const response = await fetch(url, {
     ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...(options?.headers || {})
-    }
+    headers
   });
 
   if (!response.ok) {
@@ -31,3 +53,4 @@ export async function fetchJson<T>(
 
   return response.json() as Promise<T>;
 }
+

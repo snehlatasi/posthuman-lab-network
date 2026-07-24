@@ -7,6 +7,9 @@ import org.posthumanlab.network.collaboration.repository.CollaborationRequestRep
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CollaborationRequestService {
 
@@ -27,16 +30,35 @@ public class CollaborationRequestService {
         request.setStatus(CollaborationRequestStatus.NEW);
 
         CollaborationRequest saved = collaborationRequestRepository.save(request);
+        return mapToDto(saved);
+    }
 
-        CollaborationRequestDto response = new CollaborationRequestDto();
-        response.setId(saved.getId());
-        response.setName(saved.getName());
-        response.setEmail(saved.getEmail());
-        response.setOrganization(saved.getOrganization());
-        response.setCollaborationType(saved.getCollaborationType());
-        response.setMessage(saved.getMessage());
-        response.setStatus(saved.getStatus().name());
-        response.setCreatedAt(saved.getCreatedAt());
-        return response;
+    @Transactional(readOnly = true)
+    public List<CollaborationRequestDto> getAllRequests() {
+        return collaborationRequestRepository.findAll().stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteRequest(Long id) {
+        if (!collaborationRequestRepository.existsById(id)) {
+            throw new org.posthumanlab.network.common.exception.ResourceNotFoundException("Collaboration request not found with ID: " + id);
+        }
+        collaborationRequestRepository.deleteById(id);
+    }
+
+    private CollaborationRequestDto mapToDto(CollaborationRequest entity) {
+        CollaborationRequestDto dto = new CollaborationRequestDto();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setEmail(entity.getEmail());
+        dto.setOrganization(entity.getOrganization());
+        dto.setCollaborationType(entity.getCollaborationType());
+        dto.setMessage(entity.getMessage());
+        dto.setStatus(entity.getStatus() != null ? entity.getStatus().name() : "NEW");
+        dto.setCreatedAt(entity.getCreatedAt());
+        return dto;
     }
 }
+

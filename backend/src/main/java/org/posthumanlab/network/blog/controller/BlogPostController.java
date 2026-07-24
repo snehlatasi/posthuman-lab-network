@@ -3,6 +3,7 @@ package org.posthumanlab.network.blog.controller;
 import jakarta.validation.Valid;
 import org.posthumanlab.network.blog.dto.BlogPostDto;
 import org.posthumanlab.network.blog.service.BlogPostService;
+import org.posthumanlab.network.common.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,14 +34,14 @@ public class BlogPostController {
     public ResponseEntity<BlogPostDto> getPostBySlug(@PathVariable("slug") String slug) {
         return blogPostService.getPostBySlug(slug)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Blog post not found with slug: " + slug));
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<BlogPostDto> getPostById(@PathVariable("id") Long id) {
         return blogPostService.getPostById(id)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Blog post not found with ID: " + id));
     }
 
     @PostMapping
@@ -53,7 +54,7 @@ public class BlogPostController {
     public ResponseEntity<BlogPostDto> updatePost(@PathVariable("id") Long id, @Valid @RequestBody BlogPostDto request) {
         return blogPostService.updatePost(id, request)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Blog post not found with ID: " + id));
     }
 
     @DeleteMapping("/{id}")
@@ -61,20 +62,21 @@ public class BlogPostController {
         if (blogPostService.deletePost(id)) {
             return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.notFound().build();
+        throw new ResourceNotFoundException("Blog post not found with ID: " + id);
     }
 
     @PutMapping("/{id}/publish")
     public ResponseEntity<BlogPostDto> publishPost(@PathVariable("id") Long id) {
         return blogPostService.setPublishStatus(id, true)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Blog post not found with ID: " + id));
     }
 
     @PutMapping("/{id}/unpublish")
     public ResponseEntity<BlogPostDto> unpublishPost(@PathVariable("id") Long id) {
         return blogPostService.setPublishStatus(id, false)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("Blog post not found with ID: " + id));
     }
 }
+

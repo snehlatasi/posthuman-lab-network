@@ -11,16 +11,16 @@ export const ManifestoSection: React.FC = () => {
   return (
     <section 
       id="about-us"
-      className="py-24 md:py-36 border-t border-bone-200/5 relative bg-carbon-950/40"
+      className="py-24 md:py-36 border-t border-bone-200/10 relative bg-carbon-950"
     >
       {/* Decorative vertical thread */}
-      <div className="absolute top-0 bottom-0 left-1/2 w-[1px] bg-gradient-to-b from-bone-200/5 via-moss-500/10 to-transparent pointer-events-none hidden md:block" />
+      <div className="absolute top-0 bottom-0 left-1/2 w-[1px] bg-gradient-to-b from-bone-200/10 via-earth-500/20 to-transparent pointer-events-none hidden md:block" />
 
       <Container className="grid grid-cols-12 gap-12 items-center relative z-10">
         {/* Left Column - Content */}
         <div className="col-span-12 lg:col-span-6 space-y-8 max-w-xl">
           <Reveal delay={0.1} yOffset={20}>
-            <span className="font-mono text-xs text-moss-500 font-semibold uppercase tracking-[0.25em] block">
+            <span className="font-mono text-xs text-earth-400 font-bold uppercase tracking-[0.25em] block">
               WHO WE ARE
             </span>
           </Reveal>
@@ -29,7 +29,7 @@ export const ManifestoSection: React.FC = () => {
             <h2 className="font-serif text-4xl sm:text-5xl font-bold text-bone-50 leading-[1.1] uppercase tracking-wide">
               Beyond Human.<br />Beyond Boundaries.
             </h2>
-            <p className="font-sans text-sm md:text-base text-bone-200/65 leading-relaxed pt-2">
+            <p className="font-sans text-sm md:text-base text-bone-100 leading-relaxed pt-2 font-normal">
               Posthumanism should not remain limited to institutions, journals, or inaccessible academic spaces. The Posthuman Lab Network is an open-access global community exploring the shifting boundaries of human consciousness, technology, and ecology. By connecting researchers, students, and creative practitioners, we work to transition critical thought into active, lived experiments.
             </p>
           </Reveal>
@@ -37,10 +37,10 @@ export const ManifestoSection: React.FC = () => {
           <Reveal delay={0.4}>
             <Link
               href="/about"
-              className="group inline-flex items-center space-x-3 text-xs font-sans tracking-widest uppercase font-bold text-bone-100 hover:text-moss-400 transition-colors focus:outline-none"
+              className="group inline-flex items-center space-x-3 text-xs font-sans tracking-widest uppercase font-bold text-bone-50 hover:text-earth-400 transition-colors focus:outline-none"
             >
               <span>Learn More</span>
-              <div className="p-3 bg-carbon-900 group-hover:bg-moss-500 text-bone-200/40 group-hover:text-bone-50 transition-all rounded-full border border-bone-200/5 group-hover:border-transparent">
+              <div className="p-3 bg-carbon-900 group-hover:bg-earth-600 text-bone-50 transition-all rounded-full border border-bone-200/20 group-hover:border-transparent">
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </Link>

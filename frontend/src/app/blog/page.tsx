@@ -1,130 +1,105 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ListingPageLayout } from "@/components/layout/Templates";
-import { ContentCard, AnimatedLink } from "@/components/layout/Primitives";
+import { ContentCard } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";
+import { blogApi, BlogPost } from "@/lib/api/blog";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
-interface BlogArticle {
-  id: number;
-  title: string;
+interface ArticleItem {
   slug: string;
-  category: "POSTHUMANISM" | "AI & TECHNOLOGY" | "ECOLOGY" | "ART & CREATIVITY" | "RESEARCH" | "COMMUNITY" | "REFLECTIONS";
-  summary: string;
+  title: string;
+  category: string;
   author: string;
   date: string;
-  readTime: string;
+  excerpt: string;
 }
 
-// Development-only template records (labeled cleanly as prospective logs)
-const blogArticleFeed: BlogArticle[] = [
+const mockArticles: ArticleItem[] = [
   {
-    id: 1,
-    title: "Speculative Soil: Mapping Forest Bio-Telemetry",
     slug: "speculative-soil-mapping-forest-bio-telemetry",
+    title: "Speculative Soil: Mapping Forest Bio-Telemetry",
     category: "ECOLOGY",
-    summary: "Reflections on translating underground root voltage shifts into spatial digital canvas configurations.",
     author: "Network Coordinator",
     date: "July 12, 2026",
-    readTime: "6 min read"
+    excerpt: "Exploring the translation of underground mycelium voltage signals into interactive digital canvas networks."
   },
   {
-    id: 2,
-    title: "Linguistic Gateways in Machine Architectures",
     slug: "linguistic-gateways-in-machine-architectures",
+    title: "Linguistic Gateways in Machine Architectures",
     category: "AI & TECHNOLOGY",
-    summary: "Auditing LLMs for anthropocentric vocabulary limits and exploring nonhuman semantic structures.",
     author: "Technical Coordinator",
     date: "June 28, 2026",
-    readTime: "8 min read"
+    excerpt: "Auditing transformer neural weights for anthropocentric language limits and exploring nonhuman semantic patterns."
   },
   {
-    id: 3,
-    title: "Embodied Clay: The Digital-to-Real Wilderness Retreat",
     slug: "embodied-clay-digital-to-real-retreat",
+    title: "Embodied Clay: The Digital-to-Real Retreat",
     category: "COMMUNITY",
-    summary: "Reflections from our off-grid coding and clay sculpting retreat in the Black Forest.",
     author: "Practice Coordinator",
     date: "May 19, 2026",
-    readTime: "5 min read"
+    excerpt: "Reflections from our off-grid coding, sculpting, and listening retreat in the Black Forest."
   }
 ];
 
-export default function BlogLandingPage() {
-  const [selectedFilter, setSelectedFilter] = useState<string>("ALL");
+export default function BlogIndexPage() {
+  const [articles, setArticles] = useState<ArticleItem[]>(mockArticles);
 
-  const categories = [
-    "ALL",
-    "POSTHUMANISM",
-    "AI & TECHNOLOGY",
-    "ECOLOGY",
-    "ART & CREATIVITY",
-    "RESEARCH",
-    "COMMUNITY",
-    "REFLECTIONS"
-  ];
-
-  const filteredArticles = selectedFilter === "ALL" 
-    ? blogArticleFeed 
-    : blogArticleFeed.filter((art) => art.category === selectedFilter);
-
-  const filters = categories.map((cat) => ({
-    label: cat,
-    active: selectedFilter === cat,
-    onClick: () => setSelectedFilter(cat)
-  }));
+  useEffect(() => {
+    blogApi.getPublishedBlogPosts()
+      .then((data: BlogPost[]) => {
+        if (data && data.length > 0) {
+          const mapped: ArticleItem[] = data.map((item) => ({
+            slug: item.slug,
+            title: item.title,
+            category: "RESEARCH",
+            author: item.author || "Posthuman Scholar",
+            date: item.publishedAt ? new Date(item.publishedAt).toLocaleDateString() : "Recent",
+            excerpt: item.excerpt || "Research article published by the Posthuman Lab Network."
+          }));
+          setArticles(mapped);
+        }
+      })
+      .catch(() => {
+        // Fall back to mock articles
+      });
+  }, []);
 
   return (
     <ListingPageLayout
-      tag="Blog"
-      title="IDEAS & REFLECTIONS"
-      subtitle="Speculative writing, research diaries, conversations, and emerging perspectives from the Posthuman Lab Network."
-      filters={filters}
+      tag="Blog & Articles"
+      title="RESEARCH BLOG & ESSAYS"
+      subtitle="Critical writing, field logs, algorithmic audits, and community reflections from network contributors."
     >
-      {/* Editorial coming-soon disclaimer banner */}
-      <div className="col-span-12">
-        <div className="p-4 rounded-lg bg-carbon-900 border border-bone-200/5 text-[10px] font-mono text-bone-200/40 leading-relaxed max-w-xl">
-          💡 [DEMO FEED] Client articles and personal diaries will be published here soon. The templates below show planned formatting.
-        </div>
-      </div>
-
-      {filteredArticles.map((post) => (
-        <StaggerItem key={post.id}>
-          <ContentCard className="border border-bone-200/5 bg-carbon-900/10 h-full flex flex-col justify-between p-6">
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <div className="flex justify-between items-center text-[9px] font-mono tracking-widest text-moss-500 uppercase font-semibold">
-                  <span>{post.category}</span>
-                  <span className="text-bone-200/30">{post.readTime}</span>
-                </div>
-                <span className="font-mono text-[8px] text-bone-200/30 uppercase tracking-widest block">
-                  By {post.author} — {post.date}
-                </span>
-                <h3 className="font-serif text-lg font-bold text-bone-100">
-                  {post.title}
-                </h3>
-                <p className="font-sans text-xs text-bone-200/60 leading-relaxed">
-                  {post.summary}
-                </p>
+      {articles.map((item) => (
+        <StaggerItem key={item.slug}>
+          <ContentCard href={`/blog/${item.slug}`} className="border border-carbon-950/10 bg-white hover:bg-white shadow-md hover:shadow-xl hover:border-earth-600 transition-all duration-300 h-full flex flex-col justify-between p-6 md:p-8">
+            <div className="space-y-4">
+              <div className="flex justify-between items-center text-xs font-mono tracking-widest text-earth-600 uppercase font-bold">
+                <span>{item.category}</span>
+                <span className="text-carbon-900 font-bold">{item.date}</span>
               </div>
 
-              <div className="pt-4">
-                <AnimatedLink href={`/blog/${post.slug}`}>
-                  Read Article
-                </AnimatedLink>
+              <h3 className="font-serif text-xl font-bold text-carbon-950 group-hover:text-earth-600 transition-colors leading-tight">
+                {item.title}
+              </h3>
+
+              <p className="font-sans text-xs md:text-sm text-carbon-800 leading-relaxed font-medium">
+                {item.excerpt}
+              </p>
+            </div>
+
+            <div className="pt-6 mt-6 border-t border-carbon-950/10 flex justify-between items-center text-xs font-sans font-bold tracking-wider text-carbon-950 uppercase group-hover:text-earth-600 transition-colors">
+              <span>Read Full Article</span>
+              <div className="p-2 bg-bone-50 group-hover:bg-earth-600 text-carbon-950 group-hover:text-bone-50 transition-colors rounded-full border border-carbon-950/10">
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </div>
           </ContentCard>
         </StaggerItem>
       ))}
-
-      {filteredArticles.length === 0 && (
-        <div className="col-span-12 text-center py-16">
-          <p className="font-mono text-xs text-bone-200/40 uppercase tracking-widest">
-            No items found under this concept category.
-          </p>
-        </div>
-      )}
     </ListingPageLayout>
   );
 }

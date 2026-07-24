@@ -11,6 +11,7 @@ import { ManifestoSection } from "@/components/home/ManifestoSection";
 import { VisionSection } from "@/components/home/VisionSection";
 import { ConversationsSection } from "@/components/home/ConversationsSection";
 import { LabsSection } from "@/components/home/LabsSection";
+import { Virtual360LabViewer } from "@/components/home/Virtual360LabViewer";
 import { FeaturedLectureSection } from "@/components/home/FeaturedLectureSection";
 import { UpcomingEventsSection } from "@/components/home/UpcomingEventsSection";
 import { LearningHubSection } from "@/components/home/LearningHubSection";
@@ -101,7 +102,7 @@ export default function HomePage() {
             >
               {/* Tooltip Label */}
               <span 
-                className={`mr-3 font-mono text-[9px] tracking-widest text-bone-100 uppercase transition-all duration-300 pointer-events-none select-none bg-carbon-950/80 px-2 py-0.5 border border-bone-200/5 rounded ${
+                className={`mr-3 font-mono text-[9px] tracking-widest text-carbon-950 uppercase transition-all duration-300 pointer-events-none select-none bg-bone-50/90 px-2 py-0.5 border border-carbon-950/8 rounded ${
                   isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"
                 }`}
               >
@@ -112,8 +113,8 @@ export default function HomePage() {
               <div 
                 className={`w-2.5 h-2.5 rounded-full border transition-all duration-300 ${
                   isActive 
-                    ? "bg-moss-500 border-moss-500 scale-110 shadow-lg shadow-moss-500/50" 
-                    : "border-bone-200/30 bg-transparent group-hover:border-bone-200"
+                    ? "bg-earth-500 border-earth-500 scale-110 shadow-lg shadow-earth-500/30" 
+                    : "border-carbon-950/20 bg-bone-50/40 group-hover:border-carbon-950/60"
                 }`}
                 aria-label={`Scroll to ${sec.label}`}
               />
@@ -138,6 +139,9 @@ export default function HomePage() {
 
         {/* 5. Exploration Labs Cards */}
         <LabsSection />
+
+        {/* 5.5 Interactive 360 Virtual Lab Tour */}
+        <Virtual360LabViewer />
 
         {/* 6. Cinematic Video Placeholder Lecture */}
         <FeaturedLectureSection />

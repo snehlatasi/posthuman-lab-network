@@ -11,9 +11,9 @@ export interface ContactResponseDto {
   id: number;
   name: string;
   email: string;
-  subject?: string;
+  subject: string;
   message: string;
-  status: "NEW" | "READ" | "ARCHIVED";
+  status: string;
   createdAt: string;
 }
 
@@ -22,5 +22,7 @@ export const contactApi = {
     fetchJson<ContactResponseDto>("/api/contact", {
       method: "POST",
       body: JSON.stringify(data)
-    })
+    }),
+  getAllMessages: () => fetchJson<ContactResponseDto[]>("/api/contact"),
+  deleteMessage: (id: number) => fetchJson<void>(`/api/contact/${id}`, { method: "DELETE" })
 };

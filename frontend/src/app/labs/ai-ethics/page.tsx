@@ -29,19 +29,19 @@ export default function AIEthicsLabPage() {
     >
       <div className="space-y-8 font-sans">
         <section className="space-y-4">
-          <h3 className="font-serif text-xl md:text-2xl font-bold text-bone-50 leading-tight">
+          <h3 className="font-serif text-xl md:text-2xl font-bold text-carbon-950 leading-tight">
             The Philosophy of Machine Symbiosis
           </h3>
-          <p className="text-sm md:text-base text-bone-200/70 leading-relaxed">
+          <p className="text-sm md:text-base text-carbon-800 leading-relaxed font-medium">
             We reject the narrative of a hostile AI takeover, as well as the standard corporate optimization models. We view artificial intelligence as a new category of nonhuman cognitive agency—a synthetic partner that reflects and reshapes human discourse. Our research frames machine learning models as collaborators in posthuman knowledge production.
           </p>
         </section>
 
         <section className="space-y-4">
-          <h3 className="font-serif text-xl md:text-2xl font-bold text-bone-50 leading-tight">
+          <h3 className="font-serif text-xl md:text-2xl font-bold text-carbon-950 leading-tight">
             Key Focus Area: Algorithmic Audits & Open Weights
           </h3>
-          <p className="text-sm md:text-base text-bone-200/70 leading-relaxed">
+          <p className="text-sm md:text-base text-carbon-800 leading-relaxed font-medium">
             We build open-source tools to inspect biases in generative neural nets and audit datasets for historical, cultural, and environmental bias. By promoting transparent weights and decentralized AI systems, we work to protect digital assets from corporate capture.
           </p>
         </section>

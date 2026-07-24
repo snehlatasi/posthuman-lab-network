@@ -17,25 +17,25 @@ export default function FoundersCollaboratorsPage() {
     >
       <div className="space-y-12">
         <Reveal className="max-w-2xl">
-          <p className="text-sm md:text-base text-bone-200/70 leading-relaxed">
+          <p className="text-sm md:text-base text-carbon-800 leading-relaxed font-medium">
             Our network functions horizontally. We are steered by a core operational team and an international advisory board of writers, researchers, and creative thinkers.
           </p>
         </Reveal>
 
         <Reveal className="grid grid-cols-1 gap-6 max-w-xl">
-          <ContentCard className="border border-bone-200/5 bg-carbon-900/10">
+          <ContentCard className="border border-carbon-950/8 bg-white/70 shadow-md">
             <div className="space-y-4 p-4 text-center">
-              <span className="font-mono text-xs text-moss-500 font-semibold uppercase tracking-widest block">
+              <span className="font-mono text-xs text-earth-600 font-bold uppercase tracking-widest block">
                 Operational Framework
               </span>
-              <h3 className="font-serif text-lg font-bold text-bone-50">
+              <h3 className="font-serif text-xl font-bold text-carbon-950">
                 Founders & Collaborators Index
               </h3>
-              <p className="text-xs text-bone-200/60 leading-relaxed">
+              <p className="text-xs md:text-sm text-carbon-800 leading-relaxed">
                 Specific founder biographies, collaborator portraits, and advisory roles will be updated by the Posthuman Lab Network team. The operational structure is designed to function horizontally, linking regional coordinators across educational cells.
               </p>
-              <p className="text-[10px] font-mono text-bone-200/40 leading-relaxed">
-                If you would like to volunteer or suggest an advisory affiliation, please query our coordinators using the <Link href="/contact/collaboration" className="text-moss-400 hover:text-moss-300 underline">Collaboration Contact Portal</Link>.
+              <p className="text-xs font-mono text-carbon-700 leading-relaxed pt-2 border-t border-carbon-950/8">
+                If you would like to volunteer or suggest an advisory affiliation, please query our coordinators using the <Link href="/contact/collaboration" className="text-earth-600 hover:text-earth-500 underline font-bold">Collaboration Contact Portal</Link>.
               </p>
             </div>
           </ContentCard>

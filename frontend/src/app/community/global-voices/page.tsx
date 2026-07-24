@@ -29,19 +29,19 @@ export default function GlobalVoicesPage() {
     >
       <div className="space-y-8 font-sans">
         <section className="space-y-4">
-          <h3 className="font-serif text-xl md:text-2xl font-bold text-bone-50 leading-tight">
+          <h3 className="font-serif text-xl md:text-2xl font-bold text-carbon-950 leading-tight">
             Milestone 1: The Colonization of Concrete
           </h3>
-          <p className="text-sm md:text-base text-bone-200/70 leading-relaxed">
+          <p className="text-sm md:text-base text-carbon-800 leading-relaxed font-medium">
             Concrete is often viewed as a symbol of human dominance over nature. Yet, on any highway barrier or city wall, micro-colonies of lichen and moss gradually dissolve the calcium carbonate, reclaiming the structure. This speculative diary monitors this slow, persistent bio-activity, exploring concrete as a host.
           </p>
         </section>
 
         <section className="space-y-4">
-          <h3 className="font-serif text-xl md:text-2xl font-bold text-bone-50 leading-tight">
+          <h3 className="font-serif text-xl md:text-2xl font-bold text-carbon-950 leading-tight">
             Lived Reflections
           </h3>
-          <p className="text-sm md:text-base text-bone-200/70 leading-relaxed">
+          <p className="text-sm md:text-base text-carbon-800 leading-relaxed font-medium">
             By shifting our attention from the fast speed of city traffic to the slow growth of local lichens, we explore alternative timescales, repositioning human life within deep geological epochs.
           </p>
         </section>

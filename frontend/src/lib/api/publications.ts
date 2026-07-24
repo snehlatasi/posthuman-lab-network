@@ -19,5 +19,28 @@ export const publicationsApi = {
     const query = type ? `?type=${type}` : "";
     return fetchJson<PublicationApiDto[]>(`/api/publications${query}`);
   },
-  getPublicationBySlug: (slug: string) => fetchJson<PublicationApiDto>(`/api/publications/slug/${slug}`)
+  getAllAdminPublications: () => fetchJson<PublicationApiDto[]>("/api/publications/admin/all"),
+  getPublicationBySlug: (slug: string) => fetchJson<PublicationApiDto>(`/api/publications/slug/${slug}`),
+  submitPublication: (data: Partial<PublicationApiDto>) => fetchJson<PublicationApiDto>("/api/publications/submit", {
+    method: "POST",
+    body: JSON.stringify(data)
+  }),
+  createPublication: (data: Partial<PublicationApiDto>) => fetchJson<PublicationApiDto>("/api/publications", {
+    method: "POST",
+    body: JSON.stringify(data)
+  }),
+  updatePublication: (id: number, data: Partial<PublicationApiDto>) => fetchJson<PublicationApiDto>(`/api/publications/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data)
+  }),
+  deletePublication: (id: number) => fetchJson<void>(`/api/publications/${id}`, {
+    method: "DELETE"
+  }),
+  publishPublication: (id: number) => fetchJson<PublicationApiDto>(`/api/publications/${id}/publish`, {
+    method: "PUT"
+  }),
+  unpublishPublication: (id: number) => fetchJson<PublicationApiDto>(`/api/publications/${id}/unpublish`, {
+    method: "PUT"
+  })
 };
+

@@ -81,16 +81,16 @@ export default function LabsPage() {
     >
       {filteredLabs.map((lab) => (
         <StaggerItem key={lab.name}>
-          <ContentCard className="border border-bone-200/5 bg-carbon-900/10">
-            <div className="space-y-6 h-full flex flex-col justify-between">
+          <ContentCard className="border border-carbon-950/10 bg-white shadow-md hover:shadow-xl hover:border-earth-600 transition-all duration-300">
+            <div className="space-y-6 h-full flex flex-col justify-between p-2">
               <div className="space-y-2">
-                <span className="font-mono text-[9px] text-moss-500 tracking-wider font-semibold uppercase">
+                <span className="font-mono text-xs text-earth-600 tracking-wider font-bold uppercase block">
                   {lab.tag}
                 </span>
-                <h3 className="font-serif text-lg font-bold text-bone-100">
+                <h3 className="font-serif text-xl font-bold text-carbon-950">
                   {lab.name}
                 </h3>
-                <p className="font-sans text-xs text-bone-200/60 leading-relaxed">
+                <p className="font-sans text-xs sm:text-sm text-carbon-800 leading-relaxed font-medium">
                   {lab.description}
                 </p>
               </div>

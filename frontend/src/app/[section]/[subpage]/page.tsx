@@ -89,10 +89,10 @@ export default async function DynamicSubpage({
 
           {page.editorialSections?.map((sec, idx) => (
             <section key={idx} className="space-y-4">
-              <h3 className="font-serif text-xl md:text-2xl font-bold text-bone-50 leading-tight">
+              <h3 className="font-serif text-xl md:text-2xl font-bold text-carbon-950 leading-tight">
                 {sec.heading}
               </h3>
-              <p className="font-sans text-sm md:text-base text-bone-200/70 leading-relaxed">
+              <p className="font-sans text-sm md:text-base text-carbon-800 leading-relaxed">
                 {sec.content}
               </p>
             </section>
@@ -119,16 +119,16 @@ export default async function DynamicSubpage({
 
         {page.items?.map((item, idx) => (
           <StaggerItem key={idx}>
-            <ContentCard className="border border-bone-200/5 bg-carbon-900/10 h-full flex flex-col justify-between p-6">
+            <ContentCard className="border border-carbon-950/10 bg-white hover:bg-white shadow-md hover:shadow-xl hover:border-earth-600 transition-all duration-300 h-full flex flex-col justify-between p-6">
               <div className="space-y-4">
-                <div className="flex justify-between items-center text-[9px] font-mono tracking-widest text-moss-500 uppercase font-semibold">
+                <div className="flex justify-between items-center text-xs font-mono tracking-widest text-earth-600 uppercase font-bold">
                   <span>{item.tag || "Index"}</span>
-                  {item.date && <span className="text-bone-200/30">{item.date}</span>}
+                  {item.date && <span className="text-carbon-900 font-bold">{item.date}</span>}
                 </div>
-                <h4 className="font-serif text-base font-bold text-bone-100 leading-tight">
+                <h4 className="font-serif text-xl font-bold text-carbon-950 leading-tight">
                   {item.title}
                 </h4>
-                <p className="font-sans text-xs text-bone-200/60 leading-relaxed">
+                <p className="font-sans text-xs md:text-sm text-carbon-800 leading-relaxed font-medium">
                   {item.description}
                 </p>
               </div>

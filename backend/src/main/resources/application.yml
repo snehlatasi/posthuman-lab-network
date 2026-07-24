@@ -6,7 +6,7 @@ spring:
     name: posthuman-lab-network
   
   datasource:
-    url: jdbc:h2:file:${DB_PATH:./data/posthuman_db};AUTO_SERVER=TRUE
+    url: jdbc:h2:file:${DB_PATH:./data/posthuman_db};DB_CLOSE_DELAY=-1
     username: ${DB_USER:sa}
     password: ${DB_PASS:}
     driver-class-name: org.h2.Driver
@@ -19,6 +19,7 @@ spring:
         web-allow-others: false
 
   jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
     show-sql: true

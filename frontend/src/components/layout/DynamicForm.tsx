@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ArrowRight, HelpCircle } from "lucide-react";
 import { contactApi } from "@/lib/api/contact";
 import { membershipApi } from "@/lib/api/membership";
+import { publicationsApi } from "@/lib/api/publications";
 
 interface DynamicFormProps {
   formType: "contact" | "collaboration" | "submission" | "membership";
@@ -55,20 +56,31 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
     e.preventDefault();
     if (!validate()) return;
 
-    if (formType === "submission") {
-      setStatusMsg(
-        "This form is currently a frontend prototype. Submission functionality will be enabled in a later backend phase when publication storage is integrated."
-      );
-      setIsSuccess(true);
-      return;
-    }
-
     setLoading(true);
     setStatusMsg(null);
     setIsSuccess(false);
 
     try {
-      if (formType === "membership") {
+      if (formType === "submission") {
+        const rawTitle = formData.title || "Untitled Paper";
+        const generatedSlug = rawTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+        
+        let typeVal: "ARTICLE" | "ESSAY" | "RESEARCH" | "CREATIVE_WORK" = "ARTICLE";
+        if (formData.category === "essays") typeVal = "ESSAY";
+        if (formData.category === "research") typeVal = "RESEARCH";
+        if (formData.category === "creative-work") typeVal = "CREATIVE_WORK";
+
+        await publicationsApi.submitPublication({
+          title: rawTitle,
+          slug: generatedSlug,
+          summary: formData.message || "Public draft submission.",
+          content: formData.message || "Submitted for peer review.",
+          authorDisplayName: formData.name,
+          publicationType: typeVal,
+          status: "DRAFT"
+        });
+        setStatusMsg("Your publication draft has been submitted to the editorial review pipeline.");
+      } else if (formType === "membership") {
         await membershipApi.submitMembershipInterest({
           name: formData.name,
           email: formData.email,
@@ -100,18 +112,18 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
   };
 
   return (
-    <div className="glass-panel p-8 rounded-xl max-w-xl mx-auto space-y-6 relative overflow-hidden">
+    <div className="bg-carbon-900 p-8 rounded-2xl border border-bone-200/20 shadow-2xl max-w-xl mx-auto space-y-6 relative overflow-hidden">
       {/* Decorative organic radial glow */}
       <div className="absolute top-[-30%] right-[-30%] w-[60%] h-[60%] organic-radial-glow opacity-30 pointer-events-none z-0" />
 
       <div className="relative z-10 space-y-2">
-        <h3 className="font-serif text-xl font-bold text-bone-50 uppercase tracking-wide">
+        <h3 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-wide">
           {formType === "contact" && "General Inquiry"}
           {formType === "collaboration" && "Collaboration Proposal"}
           {formType === "membership" && "Membership Inquiry"}
           {formType === "submission" && "Journal Submission"}
         </h3>
-        <p className="font-sans text-xs text-bone-200/50 leading-relaxed">
+        <p className="font-sans text-xs sm:text-sm text-bone-100 leading-relaxed font-normal">
           Provide your details below to engage with our distributed coordinators.
         </p>
       </div>
@@ -119,8 +131,8 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
       <form onSubmit={handleSubmit} className="relative z-10 space-y-5" noValidate>
         {/* Full Name */}
         <div className="space-y-1.5">
-          <label htmlFor="name" className="block text-[10px] font-mono tracking-widest uppercase font-semibold text-bone-200/60">
-            Full Name <span className="text-moss-500">*</span>
+          <label htmlFor="name" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
+            Full Name <span className="text-earth-400">*</span>
           </label>
           <input
             type="text"
@@ -131,13 +143,13 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
             aria-required="true"
             aria-invalid={!!errors.name}
             aria-describedby={errors.name ? "name-error" : undefined}
-            className={`w-full px-4 py-3 bg-carbon-950 border text-sm text-bone-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-moss-500/30 transition-colors ${
-              errors.name ? "border-earth-600/50" : "border-bone-200/10 focus:border-moss-500/30"
+            className={`w-full px-4 py-3 bg-carbon-950 border text-sm text-bone-50 placeholder-bone-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-earth-400 transition-colors ${
+              errors.name ? "border-earth-400" : "border-bone-200/20 focus:border-earth-400"
             }`}
             placeholder="Elena Rostova"
           />
           {errors.name && (
-            <span id="name-error" className="block text-[10px] font-mono text-earth-400">
+            <span id="name-error" className="block text-xs font-mono text-earth-400 font-bold">
               {errors.name}
             </span>
           )}
@@ -145,8 +157,8 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
 
         {/* Email Address */}
         <div className="space-y-1.5">
-          <label htmlFor="email" className="block text-[10px] font-mono tracking-widest uppercase font-semibold text-bone-200/60">
-            Email Address <span className="text-moss-500">*</span>
+          <label htmlFor="email" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
+            Email Address <span className="text-earth-400">*</span>
           </label>
           <input
             type="email"
@@ -157,13 +169,13 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
             aria-required="true"
             aria-invalid={!!errors.email}
             aria-describedby={errors.email ? "email-error" : undefined}
-            className={`w-full px-4 py-3 bg-carbon-950 border text-sm text-bone-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-moss-500/30 transition-colors ${
-              errors.email ? "border-earth-600/50" : "border-bone-200/10 focus:border-moss-500/30"
+            className={`w-full px-4 py-3 bg-carbon-950 border text-sm text-bone-50 placeholder-bone-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-earth-400 transition-colors ${
+              errors.email ? "border-earth-400" : "border-bone-200/20 focus:border-earth-400"
             }`}
             placeholder="elena@posthuman.net"
           />
           {errors.email && (
-            <span id="email-error" className="block text-[10px] font-mono text-earth-400">
+            <span id="email-error" className="block text-xs font-mono text-earth-400 font-bold">
               {errors.email}
             </span>
           )}
@@ -172,8 +184,8 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
         {/* Dynamic Fields by Form Type */}
         {formType === "collaboration" && (
           <div className="space-y-1.5">
-            <label htmlFor="organization" className="block text-[10px] font-mono tracking-widest uppercase font-semibold text-bone-200/60">
-              Organization / Collective <span className="text-moss-500">*</span>
+            <label htmlFor="organization" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
+              Organization / Collective <span className="text-earth-400">*</span>
             </label>
             <input
               type="text"
@@ -184,13 +196,13 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
               aria-required="true"
               aria-invalid={!!errors.organization}
               aria-describedby={errors.organization ? "org-error" : undefined}
-              className={`w-full px-4 py-3 bg-carbon-950 border text-sm text-bone-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-moss-500/30 transition-colors ${
-                errors.organization ? "border-earth-600/50" : "border-bone-200/10 focus:border-moss-500/30"
+              className={`w-full px-4 py-3 bg-carbon-950 border text-sm text-bone-50 placeholder-bone-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-earth-400 transition-colors ${
+                errors.organization ? "border-earth-400" : "border-bone-200/20 focus:border-earth-400"
               }`}
               placeholder="Symbiotic Labs Collective"
             />
             {errors.organization && (
-              <span id="org-error" className="block text-[10px] font-mono text-earth-400">
+              <span id="org-error" className="block text-xs font-mono text-earth-400 font-bold">
                 {errors.organization}
               </span>
             )}
@@ -200,8 +212,8 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
         {formType === "submission" && (
           <>
             <div className="space-y-1.5">
-              <label htmlFor="title" className="block text-[10px] font-mono tracking-widest uppercase font-semibold text-bone-200/60">
-                Paper / Artwork Title <span className="text-moss-500">*</span>
+              <label htmlFor="title" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
+                Paper / Artwork Title <span className="text-earth-400">*</span>
               </label>
               <input
                 type="text"
@@ -212,20 +224,20 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
                 aria-required="true"
                 aria-invalid={!!errors.title}
                 aria-describedby={errors.title ? "title-error" : undefined}
-                className={`w-full px-4 py-3 bg-carbon-950 border text-sm text-bone-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-moss-500/30 transition-colors ${
-                  errors.title ? "border-earth-600/50" : "border-bone-200/10 focus:border-moss-500/30"
+                className={`w-full px-4 py-3 bg-carbon-950 border text-sm text-bone-50 placeholder-bone-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-earth-400 transition-colors ${
+                  errors.title ? "border-earth-400" : "border-bone-200/20 focus:border-earth-400"
                 }`}
                 placeholder="Agential Topologies"
               />
               {errors.title && (
-                <span id="title-error" className="block text-[10px] font-mono text-earth-400">
+                <span id="title-error" className="block text-xs font-mono text-earth-400 font-bold">
                   {errors.title}
                 </span>
               )}
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="category" className="block text-[10px] font-mono tracking-widest uppercase font-semibold text-bone-200/60">
+              <label htmlFor="category" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
                 Submission Category
               </label>
               <select
@@ -233,7 +245,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
                 name="category"
                 value={formData.category || "articles"}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 bg-carbon-950 border border-bone-200/10 text-sm text-bone-200/70 rounded-lg focus:outline-none focus:ring-1 focus:ring-moss-500/30 focus:border-moss-500/30 transition-colors"
+                className="w-full px-4 py-3 bg-carbon-950 border border-bone-200/20 text-sm text-bone-50 rounded-lg focus:outline-none focus:ring-1 focus:ring-earth-400 focus:border-earth-400 transition-colors"
               >
                 <option value="articles">Academic Article</option>
                 <option value="essays">Speculative Essay</option>
@@ -246,7 +258,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
 
         {formType === "membership" && (
           <div className="space-y-1.5">
-            <label htmlFor="membershipType" className="block text-[10px] font-mono tracking-widest uppercase font-semibold text-bone-200/60">
+            <label htmlFor="membershipType" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
               Affiliation Type
             </label>
             <select
@@ -254,7 +266,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
               name="membershipType"
               value={formData.membershipType || "learner"}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 bg-carbon-950 border border-bone-200/10 text-sm text-bone-200/70 rounded-lg focus:outline-none focus:ring-1 focus:ring-moss-500/30 focus:border-moss-500/30 transition-colors"
+              className="w-full px-4 py-3 bg-carbon-950 border border-bone-200/20 text-sm text-bone-50 rounded-lg focus:outline-none focus:ring-1 focus:ring-earth-400 focus:border-earth-400 transition-colors"
             >
               <option value="learner">Learner Member</option>
               <option value="researcher">Researcher Member</option>
@@ -265,7 +277,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
 
         {/* Message / Scope Text Area */}
         <div className="space-y-1.5">
-          <label htmlFor="message" className="block text-[10px] font-mono tracking-widest uppercase font-semibold text-bone-200/60">
+          <label htmlFor="message" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
             Description / Context
           </label>
           <textarea
@@ -274,15 +286,15 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
             rows={4}
             value={formData.message || ""}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 bg-carbon-950 border border-bone-200/10 text-sm text-bone-100 rounded-lg focus:outline-none focus:ring-1 focus:ring-moss-500/30 focus:border-moss-500/30 transition-colors resize-none"
+            className="w-full px-4 py-3 bg-carbon-950 border border-bone-200/20 text-sm text-bone-50 placeholder-bone-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-earth-400 focus:border-earth-400 transition-colors resize-none"
             placeholder="Outline your research parameters or proposal goals here..."
           />
         </div>
 
         {/* Disclaimer / Info banner */}
-        <div className="p-4 rounded-lg bg-carbon-950 border border-bone-200/5 flex items-start space-x-3">
-          <HelpCircle className="w-4 h-4 text-moss-500 shrink-0 mt-0.5" />
-          <p className="text-[10px] font-sans text-bone-200/40 leading-relaxed">
+        <div className="p-4 rounded-lg bg-carbon-950 border border-bone-200/15 flex items-start space-x-3">
+          <HelpCircle className="w-4 h-4 text-moss-300 shrink-0 mt-0.5" />
+          <p className="text-xs font-sans text-bone-200 leading-relaxed font-normal">
             All submitted communications are processed horizontally by regional cell coordinators. No data is shared with external advertising entities.
           </p>
         </div>

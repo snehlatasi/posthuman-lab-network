@@ -1,8 +1,11 @@
 package org.posthumanlab.network.publication.controller;
 
+import jakarta.validation.Valid;
+import org.posthumanlab.network.publication.dto.PublicationRequest;
 import org.posthumanlab.network.publication.dto.PublicationResponse;
 import org.posthumanlab.network.publication.entity.PublicationType;
 import org.posthumanlab.network.publication.service.PublicationService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,13 +43,23 @@ public class PublicationController {
     }
 
     @PostMapping
-    public ResponseEntity<PublicationResponse> createPublication(@jakarta.validation.Valid @org.springframework.web.bind.annotation.RequestBody org.posthumanlab.network.publication.dto.PublicationRequest request) {
+    public ResponseEntity<PublicationResponse> createPublication(@Valid @RequestBody PublicationRequest request) {
         PublicationResponse created = publicationService.createPublication(request);
-        return new ResponseEntity<>(created, org.springframework.http.HttpStatus.CREATED);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/submit")
+    public ResponseEntity<PublicationResponse> submitPublicPublication(@Valid @RequestBody PublicationRequest request) {
+        // Ensure public submissions enter editorial pipeline as DRAFT
+        if (request.getStatus() == null || request.getStatus().isBlank()) {
+            request.setStatus("DRAFT");
+        }
+        PublicationResponse created = publicationService.createPublication(request);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PublicationResponse> updatePublication(@PathVariable("id") Long id, @jakarta.validation.Valid @org.springframework.web.bind.annotation.RequestBody org.posthumanlab.network.publication.dto.PublicationRequest request) {
+    public ResponseEntity<PublicationResponse> updatePublication(@PathVariable("id") Long id, @Valid @RequestBody PublicationRequest request) {
         return ResponseEntity.ok(publicationService.updatePublication(id, request));
     }
 
@@ -66,3 +79,4 @@ public class PublicationController {
         return ResponseEntity.ok(publicationService.setPublishStatus(id, false));
     }
 }
+

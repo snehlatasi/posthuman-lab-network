@@ -6,10 +6,9 @@ import org.posthumanlab.network.contact.dto.ContactResponse;
 import org.posthumanlab.network.contact.service.ContactService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/contact")
@@ -26,4 +25,16 @@ public class ContactController {
         ContactResponse response = contactService.saveMessage(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    @GetMapping
+    public ResponseEntity<List<ContactResponse>> getAllMessages() {
+        return ResponseEntity.ok(contactService.getAllMessages());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteMessage(@PathVariable("id") Long id) {
+        contactService.deleteMessage(id);
+        return ResponseEntity.noContent().build();
+    }
 }
+

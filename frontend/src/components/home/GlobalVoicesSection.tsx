@@ -17,13 +17,13 @@ const activeHubLocations = [
 
 export const GlobalVoicesSection: React.FC = () => {
   return (
-    <section className="py-24 md:py-32 border-t border-bone-200/5 bg-carbon-950/40 relative overflow-hidden">
+    <section className="py-24 md:py-32 border-t border-bone-200/10 bg-carbon-950 relative overflow-hidden">
       
       <Container className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         {/* Left column: Text */}
         <div className="lg:col-span-5 space-y-6">
           <Reveal className="space-y-4">
-            <span className="font-mono text-xs text-moss-500 font-semibold uppercase tracking-widest block">
+            <span className="font-mono text-xs text-moss-300 font-bold uppercase tracking-widest block">
               Global Connection
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-bone-50 leading-tight">
@@ -31,7 +31,7 @@ export const GlobalVoicesSection: React.FC = () => {
               <br />
               No Single Center.
             </h2>
-            <p className="font-sans text-sm text-bone-200/60 leading-relaxed pt-2">
+            <p className="font-sans text-sm md:text-base text-bone-100 leading-relaxed pt-2 font-normal">
               We operate as a distributed network. Our researchers and artists form localized chapters to conduct workshops, translate essays, and catalog ecological observations.
             </p>
           </Reveal>
@@ -39,10 +39,10 @@ export const GlobalVoicesSection: React.FC = () => {
           <Reveal delay={0.2}>
             <Link
               href="/community/global-voices"
-              className="group inline-flex items-center space-x-3 text-xs font-sans tracking-widest uppercase font-bold text-bone-100 hover:text-moss-400 transition-colors focus:outline-none"
+              className="group inline-flex items-center space-x-3 text-xs font-sans tracking-widest uppercase font-bold text-bone-50 hover:text-moss-300 transition-colors focus:outline-none"
             >
               <span>Explore Global Voices</span>
-              <div className="p-2.5 bg-carbon-900 group-hover:bg-moss-500 text-bone-200/30 group-hover:text-bone-50 transition-colors rounded-full">
+              <div className="p-2.5 bg-carbon-900 group-hover:bg-moss-500 text-bone-50 transition-colors rounded-full border border-bone-200/20">
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </Link>
@@ -51,7 +51,7 @@ export const GlobalVoicesSection: React.FC = () => {
 
         {/* Right column: Graphic placeholder map */}
         <div className="lg:col-span-7">
-          <Reveal className="relative aspect-video w-full rounded-xl bg-carbon-900/40 border border-bone-200/5 overflow-hidden flex items-center justify-center shadow-inner" yOffset={32}>
+          <Reveal className="relative aspect-video w-full rounded-xl bg-carbon-900/60 border border-bone-200/15 overflow-hidden flex items-center justify-center shadow-inner" yOffset={32}>
             {/* Subtle grid background */}
             <div className="absolute inset-0 digital-grid opacity-30 pointer-events-none" />
             
@@ -67,9 +67,9 @@ export const GlobalVoicesSection: React.FC = () => {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-moss-500 opacity-60"></span>
                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-moss-500"></span>
                 </div>
-                <div className="bg-carbon-950/80 backdrop-blur px-2.5 py-1 rounded border border-bone-200/5 group-hover:border-moss-500/25 transition-all text-left">
-                  <span className="font-serif text-[10px] font-bold text-bone-100 block">{hub.region}</span>
-                  <span className="font-mono text-[8px] text-bone-200/40 block leading-none">{hub.count}</span>
+                <div className="bg-carbon-950/90 backdrop-blur px-2.5 py-1 rounded border border-bone-200/20 group-hover:border-moss-300 transition-all text-left">
+                  <span className="font-serif text-[11px] font-bold text-bone-50 block">{hub.region}</span>
+                  <span className="font-mono text-[9px] text-bone-200 font-medium block leading-none">{hub.count}</span>
                 </div>
               </div>
             ))}

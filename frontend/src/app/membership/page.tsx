@@ -42,19 +42,19 @@ export default function MembershipMainPage() {
     >
       {membershipTiers.map((tier) => (
         <StaggerItem key={tier.name}>
-          <ContentCard className="border border-bone-200/5 bg-carbon-900/10">
-            <div className="space-y-6 h-full flex flex-col justify-between">
+          <ContentCard className="border border-carbon-950/10 bg-white shadow-md hover:shadow-xl hover:border-earth-600 transition-all duration-300">
+            <div className="space-y-6 h-full flex flex-col justify-between p-2">
               <div className="space-y-2">
-                <span className="font-mono text-[9px] text-moss-500 tracking-wider font-semibold uppercase block">
+                <span className="font-mono text-xs text-earth-600 tracking-wider font-bold uppercase block">
                   {tier.tag}
                 </span>
-                <span className="font-mono text-[8px] text-bone-200/30 uppercase tracking-widest block">
+                <span className="font-sans text-xs text-carbon-900 uppercase font-bold tracking-wider block">
                   {tier.role}
                 </span>
-                <h3 className="font-serif text-lg font-bold text-bone-100">
+                <h3 className="font-serif text-xl font-bold text-carbon-950">
                   {tier.name}
                 </h3>
-                <p className="font-sans text-xs text-bone-200/60 leading-relaxed">
+                <p className="font-sans text-xs sm:text-sm text-carbon-800 leading-relaxed font-medium">
                   {tier.description}
                 </p>
               </div>

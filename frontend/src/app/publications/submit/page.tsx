@@ -28,13 +28,13 @@ export default function SubmitWorkPage() {
         {/* Guidelines */}
         <div className="lg:col-span-6 space-y-6">
           <Reveal className="space-y-4">
-            <h2 className="font-serif text-2xl font-bold text-bone-50 leading-tight">
+            <h2 className="font-serif text-2xl md:text-3xl font-bold text-carbon-950 leading-tight">
               Submission Guidelines
             </h2>
-            <p className="text-xs md:text-sm text-bone-200/70 leading-relaxed font-sans">
+            <p className="text-xs md:text-sm text-carbon-800 leading-relaxed font-sans font-medium">
               We seek transdisciplinary writings bridging plant bio-communications, critical algorithms audits, cybernetic architecture, and eco-art aesthetics.
             </p>
-            <ul className="list-decimal pl-4 space-y-2 text-xs text-bone-200/50 leading-relaxed font-mono">
+            <ul className="list-decimal pl-4 space-y-2 text-xs text-carbon-900 leading-relaxed font-mono font-bold">
               <li>Open Access: Approved works are published under CC BY-NC 4.0.</li>
               <li>Boilerplates: Abstract must not exceed 250 words.</li>
               <li>Anonymity: Authors must submit clean files without names in text.</li>
@@ -44,21 +44,21 @@ export default function SubmitWorkPage() {
 
         {/* Submit Form */}
         <div className="lg:col-span-6">
-          <ContentCard className="border border-bone-200/5 bg-carbon-900/10">
+          <ContentCard className="border border-carbon-950/10 bg-white shadow-md hover:shadow-xl p-6">
             {submitted ? (
               <div className="space-y-4 text-center py-6">
-                <span className="font-mono text-xl text-moss-400">✓</span>
-                <h3 className="font-serif text-lg font-bold text-bone-50">Submission Received</h3>
-                <p className="text-xs text-bone-200/60 leading-relaxed font-sans">
+                <span className="font-mono text-2xl text-earth-600 font-bold">✓</span>
+                <h3 className="font-serif text-xl font-bold text-carbon-950">Submission Received</h3>
+                <p className="text-xs sm:text-sm text-carbon-800 leading-relaxed font-sans font-medium">
                   Your draft has been submitted to the editorial queue. You can track updates in your profile dashboard.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                <h3 className="font-serif text-lg font-bold text-bone-50">Upload Draft</h3>
+                <h3 className="font-serif text-xl font-bold text-carbon-950">Upload Draft</h3>
                 
                 <div className="space-y-2">
-                  <label htmlFor="pub-title" className="font-mono text-[10px] text-bone-200/50 uppercase tracking-widest block">
+                  <label htmlFor="pub-title" className="font-mono text-xs text-carbon-900 uppercase font-bold tracking-widest block">
                     Document Title
                   </label>
                   <input
@@ -68,12 +68,12 @@ export default function SubmitWorkPage() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="Enter title"
-                    className="w-full bg-carbon-950 border border-bone-200/10 rounded-lg px-4 py-2.5 text-xs text-bone-100 placeholder-bone-200/30 focus:border-moss-500/40 focus:outline-none"
+                    className="w-full bg-bone-50 border border-carbon-950/15 rounded-lg px-4 py-2.5 text-xs text-carbon-950 placeholder-carbon-700 font-medium focus:border-earth-600 focus:outline-none"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="pub-abstract" className="font-mono text-[10px] text-bone-200/50 uppercase tracking-widest block">
+                  <label htmlFor="pub-abstract" className="font-mono text-xs text-carbon-900 uppercase font-bold tracking-widest block">
                     Abstract / Summary
                   </label>
                   <textarea
@@ -83,13 +83,13 @@ export default function SubmitWorkPage() {
                     value={abstract}
                     onChange={(e) => setAbstract(e.target.value)}
                     placeholder="Enter abstract"
-                    className="w-full bg-carbon-950 border border-bone-200/10 rounded-lg px-4 py-2.5 text-xs text-bone-100 placeholder-bone-200/30 focus:border-moss-500/40 focus:outline-none resize-none"
+                    className="w-full bg-bone-50 border border-carbon-950/15 rounded-lg px-4 py-2.5 text-xs text-carbon-950 placeholder-carbon-700 font-medium focus:border-earth-600 focus:outline-none resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-3 text-xs font-sans tracking-widest uppercase font-semibold text-carbon-950 bg-bone-100 hover:bg-moss-500 hover:text-bone-50 transition-colors rounded-lg focus:outline-none"
+                  className="w-full py-3 text-xs font-sans tracking-widest uppercase font-bold text-bone-50 bg-carbon-950 hover:bg-earth-600 transition-colors rounded-lg focus:outline-none cursor-pointer shadow-md"
                 >
                   Submit Paper
                 </button>

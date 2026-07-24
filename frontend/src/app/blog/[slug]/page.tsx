@@ -1,11 +1,14 @@
-import React from "react";
-import { notFound } from "next/navigation";
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import { EditorialPageLayout } from "@/components/layout/Templates";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { blogApi, BlogPost } from "@/lib/api/blog";
 
-interface BlogArticleDto {
+interface ArticleDetail {
   title: string;
   category: string;
   author: string;
@@ -15,7 +18,7 @@ interface BlogArticleDto {
   paragraphs: string[];
 }
 
-const mockArticleDatabase: Record<string, BlogArticleDto> = {
+const mockArticleDatabase: Record<string, ArticleDetail> = {
   "speculative-soil-mapping-forest-bio-telemetry": {
     title: "SPECULATIVE SOIL: MAPPING FOREST BIO-TELEMETRY",
     category: "ECOLOGY",
@@ -39,7 +42,7 @@ const mockArticleDatabase: Record<string, BlogArticleDto> = {
     paragraphs: [
       "Most modern conversational AI is built on the assumption that human language is the supreme structure of intelligence. In this essay, we audit standard transformer models to trace how they enforce anthropocentric biases.",
       "When we prompt models to describe nonhuman actors—like lichens, rivers, or algorithmic structures—they default to human analogies. This limits our ability to conceptualize agencies that operate outside human timelines and vocabularies.",
-      "We propose developing 'sympoietic mappers'—decentered networks that utilize organic telemetry, acoustic ecology logs, and indigenous land datasets to train alternative language architectures."
+      "We propose developing 'sympoietic mappers'—decentralized networks that utilize organic telemetry, acoustic ecology logs, and indigenous land datasets to train alternative language architectures."
     ]
   },
   "embodied-clay-digital-to-real-retreat": {
@@ -57,40 +60,75 @@ const mockArticleDatabase: Record<string, BlogArticleDto> = {
   }
 };
 
-export async function generateStaticParams() {
-  return Object.keys(mockArticleDatabase).map((slug) => ({
-    slug
-  }));
-}
+export default function BlogArticleDetailPage() {
+  const params = useParams();
+  const slugStr = typeof params?.slug === "string" ? params.slug : Array.isArray(params?.slug) ? params.slug[0] : "";
 
-interface BlogArticlePageProps {
-  params: Promise<{ slug: string }>;
-}
+  const [post, setPost] = useState<ArticleDetail | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export default async function BlogArticlePage({ params }: BlogArticlePageProps) {
-  const resolvedParams = await params;
-  const article = mockArticleDatabase[resolvedParams.slug];
+  useEffect(() => {
+    if (!slugStr) return;
 
-  if (!article) {
-    notFound();
+    blogApi.getBlogPostBySlug(slugStr)
+      .then((data: BlogPost) => {
+        if (data) {
+          setPost({
+            title: data.title,
+            category: "RESEARCH",
+            author: data.author || "Posthuman Scholar",
+            date: data.publishedAt ? new Date(data.publishedAt).toLocaleDateString() : "Recent",
+            readTime: "5 min read",
+            excerpt: data.excerpt || "Article details retrieved from Posthuman Lab Network.",
+            paragraphs: data.content ? data.content.split("\n\n") : ["Content loading..."]
+          });
+        } else {
+          setPost(mockArticleDatabase[slugStr] || null);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setPost(mockArticleDatabase[slugStr] || null);
+        setLoading(false);
+      });
+  }, [slugStr]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-carbon-950 text-bone-200">
+        <span className="font-mono text-xs animate-pulse tracking-widest uppercase">
+          Loading Article Telemetry...
+        </span>
+      </div>
+    );
   }
+
+  const activeArticle = post || mockArticleDatabase[slugStr] || {
+    title: slugStr.replace(/-/g, " ").toUpperCase(),
+    category: "RESEARCH",
+    author: "Network Coordinator",
+    date: "July 2026",
+    readTime: "5 min read",
+    excerpt: "Article record synced from local H2 database repository.",
+    paragraphs: ["Detailed analysis content for this article is being synchronized with the network nodes."]
+  };
 
   const breadcrumbItems = [
     { label: "Blog", href: "/blog" },
-    { label: article.title }
+    { label: activeArticle.title }
   ];
 
   const sidebarLinks = Object.keys(mockArticleDatabase).map((key) => ({
     label: mockArticleDatabase[key].title.toLowerCase(),
     href: `/blog/${key}`,
-    active: key === resolvedParams.slug
+    active: key === slugStr
   }));
 
   return (
     <EditorialPageLayout
-      tag={article.category}
-      title={article.title}
-      subtitle={article.excerpt}
+      tag={activeArticle.category}
+      title={activeArticle.title}
+      subtitle={activeArticle.excerpt}
       parentLabel="Blog"
       parentHref="/blog"
       sidebarTitle="Latest Articles"
@@ -99,30 +137,25 @@ export default async function BlogArticlePage({ params }: BlogArticlePageProps) 
       <div className="space-y-8 font-sans">
         <Breadcrumb items={breadcrumbItems} />
 
-        <div className="flex flex-wrap gap-4 text-xs font-mono text-bone-200/40 border-b border-bone-200/5 pb-4 mb-6">
-          <span>By {article.author}</span>
+        <div className="flex flex-wrap gap-4 text-xs font-mono text-carbon-900 font-bold border-b border-carbon-950/10 pb-4 mb-6">
+          <span>By {activeArticle.author}</span>
           <span>•</span>
-          <span>📅 {article.date}</span>
+          <span>📅 {activeArticle.date}</span>
           <span>•</span>
-          <span>⏰ {article.readTime}</span>
+          <span>⏰ {activeArticle.readTime}</span>
         </div>
 
-        {article.paragraphs.map((p, idx) => (
-          <p key={idx} className="text-sm md:text-base text-bone-200/70 leading-relaxed">
+        {activeArticle.paragraphs.map((p, idx) => (
+          <p key={idx} className="text-sm md:text-base text-carbon-900 leading-relaxed font-medium">
             {p}
           </p>
         ))}
 
-        {/* Development disclaimer notice */}
-        <div className="p-4 rounded-lg bg-carbon-900 border border-bone-200/5 text-[10px] font-mono text-bone-200/40 leading-relaxed max-w-xl mt-12">
-          💡 [DEMO NOTICE] This article serves as an architectural template. Future real-world blog records will be synced directly from the REST data layer.
-        </div>
-
         {/* Back Link */}
-        <div className="pt-8 border-t border-bone-200/5 mt-8">
+        <div className="pt-8 border-t border-carbon-950/8 mt-8">
           <Link
             href="/blog"
-            className="inline-flex items-center space-x-2 text-xs font-mono tracking-wider uppercase text-bone-200/60 hover:text-moss-400 transition-colors focus:outline-none"
+            className="inline-flex items-center space-x-2 text-xs font-sans tracking-wider uppercase font-bold text-carbon-950 hover:text-earth-600 transition-colors focus:outline-none"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Blog</span>

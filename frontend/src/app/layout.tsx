@@ -1,18 +1,22 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "./globals.css";
 import { ScrollControls } from "@/components/layout/ScrollControls";
+import { AuthProvider } from "@/context/AuthContext";
+import { AdminLoginModal } from "@/components/admin/AdminLoginModal";
+import { AdminBannerBar } from "@/components/admin/AdminBannerBar";
 
-const inter = Inter({
-  variable: "--font-inter",
+const manrope = Manrope({
+  variable: "--font-manrope",
   subsets: ["latin"],
   display: "swap",
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
   display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -36,19 +40,21 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} h-full antialiased`}
+      className={`${manrope.variable} ${cormorant.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-carbon-950 text-bone-100 selection:bg-moss-500 selection:text-bone-50">
-        {/* Structural Background Canvas Grids & Glows */}
+      <body className="min-h-full flex flex-col text-carbon-950 selection:bg-earth-500 selection:text-bone-50">
         <div className="fixed inset-0 digital-grid pointer-events-none z-0" />
-        <div className="fixed top-[-20%] left-[-10%] w-[70%] h-[70%] organic-radial-glow pointer-events-none z-0" />
-        <div className="fixed bottom-[-10%] right-[-10%] w-[60%] h-[60%] clay-radial-glow pointer-events-none z-0" />
-        
-        {/* Main layout container */}
-        <div className="relative z-10 flex flex-col min-h-screen">
-          {children}
-          <ScrollControls />
-        </div>
+        <div className="fixed top-[-18%] left-[-8%] w-[64%] h-[64%] organic-radial-glow pointer-events-none z-0" />
+        <div className="fixed bottom-[-12%] right-[-8%] w-[56%] h-[56%] clay-radial-glow pointer-events-none z-0" />
+
+        <AuthProvider>
+          <div className="relative z-10 flex flex-col min-h-screen">
+            <AdminBannerBar />
+            {children}
+            <AdminLoginModal />
+            <ScrollControls />
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );
