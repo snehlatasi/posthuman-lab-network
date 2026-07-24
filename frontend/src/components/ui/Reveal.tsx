@@ -139,7 +139,7 @@ export const SplitText: React.FC<SplitTextProps> = ({
   as: Component = "h2"
 }) => {
   const shouldReduceMotion = useSafeReducedMotion();
-  const Tag = Component as any;
+  const Tag = Component as React.ElementType<{ className?: string; children?: React.ReactNode }>;
 
   if (shouldReduceMotion) {
     return <Tag className={className}>{text}</Tag>;

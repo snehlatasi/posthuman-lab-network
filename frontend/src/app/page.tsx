@@ -47,7 +47,6 @@ export default function HomePage() {
             const el = document.getElementById(sec.id);
             if (el) {
               const rect = el.getBoundingClientRect();
-              // Section is active if it covers the vertical center of viewport
               if (rect.top <= winHeight / 2 && rect.bottom >= winHeight / 2) {
                 currentActive = sec.id;
                 break;
@@ -62,7 +61,7 @@ export default function HomePage() {
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // run on initial mount
+    handleScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
@@ -102,7 +101,7 @@ export default function HomePage() {
             >
               {/* Tooltip Label */}
               <span 
-                className={`mr-3 font-mono text-[9px] tracking-widest text-carbon-950 uppercase transition-all duration-300 pointer-events-none select-none bg-bone-50/90 px-2 py-0.5 border border-carbon-950/8 rounded ${
+                className={`mr-3 font-mono text-[9px] tracking-widest text-carbon-950 dark:text-bone-100 uppercase transition-all duration-300 pointer-events-none select-none bg-bone-50/90 dark:bg-carbon-900/90 px-2 py-0.5 border border-carbon-950/8 dark:border-bone-50/15 rounded shadow-sm ${
                   isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"
                 }`}
               >
@@ -114,7 +113,7 @@ export default function HomePage() {
                 className={`w-2.5 h-2.5 rounded-full border transition-all duration-300 ${
                   isActive 
                     ? "bg-earth-500 border-earth-500 scale-110 shadow-lg shadow-earth-500/30" 
-                    : "border-carbon-950/20 bg-bone-50/40 group-hover:border-carbon-950/60"
+                    : "border-carbon-950/20 dark:border-bone-50/30 bg-bone-50/40 dark:bg-carbon-900/40 group-hover:border-carbon-950/60 dark:group-hover:border-bone-50/70"
                 }`}
                 aria-label={`Scroll to ${sec.label}`}
               />
@@ -123,18 +122,18 @@ export default function HomePage() {
         })}
       </div>
 
-      {/* Main Page Layout / Scroll Storytelling */}
+      {/* Main Page Layout */}
       <main className="flex-grow">
         {/* 1. Immersive Interactive Node-Network Hero */}
         <HeroSection />
 
-        {/* 2. Who We Are Section (Nature Portal) */}
+        {/* 2. Who We Are Section */}
         <ManifestoSection />
 
-        {/* 3. Our Pillars Section (Building Future) */}
+        {/* 3. Our Pillars Section */}
         <VisionSection />
 
-        {/* 4. Interactive Conversation Themes (AI, Ecology, Nonhumans) */}
+        {/* 4. Interactive Conversation Themes */}
         <ConversationsSection />
 
         {/* 5. Exploration Labs Cards */}
