@@ -5,6 +5,8 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Play } from "lucide-react";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
+import { MagneticButton } from "../ui/Magnetic";
+import { SplitText } from "../ui/Reveal";
 import dynamic from "next/dynamic";
 import { Container } from "../layout/Primitives";
 
@@ -39,13 +41,6 @@ export const HeroSection: React.FC = () => {
       <div className="absolute inset-0 organic-mesh opacity-40 z-0 pointer-events-none" />
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-bone-100 via-bone-100/70 to-transparent z-10 pointer-events-none" />
 
-      {!shouldReduceMotion && (
-        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-[10%] left-[8%] w-[45vw] h-[45vw] rounded-full bg-earth-400/25 blur-[120px] animate-glow-1" />
-          <div className="absolute top-[20%] right-[10%] w-[40vw] h-[40vw] rounded-full bg-moss-400/20 blur-[130px] animate-glow-2" />
-        </div>
-      )}
-
       <ImmersiveHero3D />
 
       <div className="absolute inset-0 bg-gradient-to-r from-bone-50/85 via-bone-50/20 to-transparent z-10 pointer-events-none" />
@@ -75,15 +70,13 @@ export const HeroSection: React.FC = () => {
               A GLOBAL COLLABORATIVE SPACE FOR
             </motion.span>
 
-            <motion.h1
-              variants={elementVariants}
-              initial="hidden"
-              animate="visible"
-              custom={0.25}
-              className="font-serif text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-carbon-950 leading-[0.94] uppercase"
-            >
-              POSTHUMAN<br />FUTURES
-            </motion.h1>
+            <SplitText
+              text="POSTHUMAN FUTURES"
+              as="h1"
+              delay={0.2}
+              stagger={0.06}
+              className="font-serif-display text-5xl sm:text-6xl md:text-7xl font-bold text-carbon-950 leading-[0.92] tracking-tight uppercase"
+            />
 
             <motion.p
               variants={elementVariants}
@@ -102,28 +95,32 @@ export const HeroSection: React.FC = () => {
               custom={0.55}
               className="pt-6 flex flex-wrap gap-4 items-center"
             >
-              <Link
-                href="/about"
-                className="inline-flex items-center justify-center px-6 py-3.5 text-xs font-sans tracking-widest uppercase font-semibold text-bone-50 bg-carbon-950 hover:bg-earth-600 hover:text-bone-50 transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-earth-500/50 shadow-[0_18px_46px_-24px_rgba(23,20,18,0.38)]"
-              >
-                Explore the Network
-              </Link>
+              <MagneticButton strength={0.35}>
+                <Link
+                  href="/about"
+                  className="inline-flex items-center justify-center px-6 py-3.5 text-xs font-sans tracking-widest uppercase font-semibold text-bone-50 bg-carbon-950 hover:bg-earth-600 hover:text-bone-50 transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-earth-500/50 shadow-[0_18px_46px_-24px_rgba(23,20,18,0.38)]"
+                >
+                  Explore the Network
+                </Link>
+              </MagneticButton>
               
-              <button
-                type="button"
-                onClick={() => {
-                  const target = document.getElementById("about-us");
-                  if (target) {
-                    target.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth" });
-                  }
-                }}
-                className="inline-flex items-center space-x-2.5 px-6 py-3.5 text-xs font-sans tracking-widest uppercase font-semibold text-carbon-950 hover:text-earth-600 transition-colors focus:outline-none"
-              >
-                <div className="p-2 border border-carbon-950/12 rounded-full bg-white/70 shadow-[0_10px_26px_-18px_rgba(23,20,18,0.35)]">
-                  <Play className="w-3 h-3 fill-carbon-950 text-carbon-950" />
-                </div>
-                <span>Watch Intro</span>
-              </button>
+              <MagneticButton strength={0.25}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const target = document.getElementById("about-us");
+                    if (target) {
+                      target.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth" });
+                    }
+                  }}
+                  className="inline-flex items-center space-x-2.5 px-6 py-3.5 text-xs font-sans tracking-widest uppercase font-semibold text-carbon-950 hover:text-earth-600 transition-colors focus:outline-none cursor-pointer"
+                >
+                  <div className="p-2 border border-carbon-950/12 rounded-full bg-white/70 shadow-[0_10px_26px_-18px_rgba(23,20,18,0.35)]">
+                    <Play className="w-3 h-3 fill-carbon-950 text-carbon-950" />
+                  </div>
+                  <span>Watch Intro</span>
+                </button>
+              </MagneticButton>
             </motion.div>
           </div>
 

@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { SplitText } from "../ui/Reveal";
 
 // Container component
 export const Container: React.FC<{ children: React.ReactNode; className?: string }> = ({
@@ -30,12 +31,14 @@ export const Section: React.FC<{
               </span>
             )}
             {title && (
-              <h2 className="font-serif text-4xl md:text-5xl font-semibold tracking-tight text-carbon-950 text-balance">
-                {title}
-              </h2>
+              <SplitText
+                text={title}
+                as="h2"
+                className="font-serif-display text-4xl md:text-5xl font-semibold tracking-tight text-carbon-950 text-balance leading-[1.02]"
+              />
             )}
             {description && (
-              <p className="font-sans text-sm md:text-lg text-carbon-700 leading-relaxed">
+              <p className="font-sans text-sm md:text-lg text-carbon-700 leading-relaxed font-medium">
                 {description}
               </p>
             )}
@@ -72,9 +75,13 @@ export const PageHeader: React.FC<{
           <span className="text-earth-600 font-bold">{tag}</span>
         </div>
 
-        <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-carbon-950 max-w-4xl leading-[0.98] text-balance">
-          {title}
-        </h1>
+        <SplitText
+          text={title}
+          as="h1"
+          delay={0.1}
+          stagger={0.04}
+          className="font-serif-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-carbon-950 max-w-4xl leading-[0.96] text-balance uppercase"
+        />
         
         {subtitle && (
           <p className="font-sans text-base md:text-xl text-carbon-800 leading-relaxed max-w-2xl pt-2 font-medium">

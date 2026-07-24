@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ListingPageLayout } from "@/components/layout/Templates";
 import { ContentCard, AnimatedLink } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";
@@ -15,29 +15,36 @@ export default function PublicationsMainPage() {
 
   // Admin Create Publication Modal State
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newPub, setNewPub] = useState({
+  const [newPub, setNewPub] = useState<{
+    title: string;
+    summary: string;
+    content: string;
+    authorDisplayName: string;
+    publicationType: PublicationApiDto["publicationType"];
+  }>({
     title: "",
     summary: "",
     content: "",
     authorDisplayName: "Lab Fellow",
-    publicationType: "ARTICLE" as const
+    publicationType: "ARTICLE"
   });
 
-  const loadPubs = () => {
-    setLoading(true);
+  const loadPubs = useCallback(() => {
     publicationsApi.getPublishedPublications()
       .then((data) => {
         setPublications(data);
-        setLoading(false);
       })
       .catch(() => {
+        // Fallback or error handling
+      })
+      .finally(() => {
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     loadPubs();
-  }, []);
+  }, [loadPubs]);
 
   const fallbackPublications: PublicationApiDto[] = [
     {
@@ -207,7 +214,7 @@ export default function PublicationsMainPage() {
               />
               <select
                 value={newPub.publicationType}
-                onChange={(e) => setNewPub({ ...newPub, publicationType: e.target.value as any })}
+                onChange={(e) => setNewPub({ ...newPub, publicationType: e.target.value as PublicationApiDto["publicationType"] })}
                 className="w-full p-3 bg-carbon-900 border border-bone-200/10 rounded-lg text-bone-100 focus:outline-none"
               >
                 <option value="ARTICLE">Academic Article</option>

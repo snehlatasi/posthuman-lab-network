@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ListingPageLayout } from "@/components/layout/Templates";
 import { ContentCard, AnimatedLink } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";
@@ -53,8 +53,7 @@ export default function EventsMainPage() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newEvent, setNewEvent] = useState({ title: "", description: "", eventType: "Workshop", location: "Online Webcast" });
 
-  const loadEvents = () => {
-    setLoading(true);
+  const loadEvents = useCallback(() => {
     eventsApi.getUpcomingEvents()
       .then((data: EventApiDto[]) => {
         if (data && data.length > 0) {
@@ -70,17 +69,18 @@ export default function EventsMainPage() {
         } else {
           setEventsList(fallbackEvents);
         }
-        setLoading(false);
       })
       .catch(() => {
         setEventsList(fallbackEvents);
+      })
+      .finally(() => {
         setLoading(false);
       });
-  };
+  }, []);
 
   useEffect(() => {
     loadEvents();
-  }, []);
+  }, [loadEvents]);
 
   const handleDelete = async (id?: number) => {
     if (id && confirm("Delete this event entry?")) {
@@ -132,7 +132,15 @@ export default function EventsMainPage() {
         </div>
       )}
 
-      {eventsList.map((event, idx) => (
+      {loading && (
+        <div className="col-span-12 text-center py-12">
+          <span className="font-mono text-xs text-bone-200/40 animate-pulse uppercase tracking-widest block">
+            Retrieving scheduled events...
+          </span>
+        </div>
+      )}
+
+      {!loading && eventsList.map((event, idx) => (
         <StaggerItem key={event.id || idx}>
           <ContentCard className="border border-carbon-950/10 bg-white shadow-md hover:shadow-xl hover:border-earth-600 transition-all duration-300">
             <div className="space-y-6 h-full flex flex-col justify-between p-2">

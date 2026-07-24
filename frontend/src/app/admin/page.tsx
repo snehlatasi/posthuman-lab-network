@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { getStoredToken, fetchJson } from "@/lib/api/apiClient";
 import { authApi } from "@/lib/api/auth";
@@ -17,13 +17,9 @@ import {
   Calendar,
   BookOpen,
   Mail,
-  Handshake,
   LogOut,
   Plus,
   Trash2,
-  CheckCircle,
-  XCircle,
-  Eye,
   RefreshCw
 } from "lucide-react";
 
@@ -40,7 +36,12 @@ interface AdminStats {
 
 export default function AdminDashboardPage() {
   const router = useRouter();
-  const [authorized, setAuthorized] = useState(false);
+  const [authorized] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return !!getStoredToken();
+    }
+    return false;
+  });
   const [activeTab, setActiveTab] = useState<"stats" | "memberships" | "blog" | "events" | "publications" | "messages">("stats");
 
   const [stats, setStats] = useState<AdminStats | null>(null);
@@ -60,20 +61,16 @@ export default function AdminDashboardPage() {
   const [newEvent, setNewEvent] = useState({ title: "", description: "", eventType: "Workshop", startDateTime: "", endDateTime: "", location: "Online Webcast", online: true });
 
   const [showNewPubModal, setShowNewPubModal] = useState(false);
-  const [newPub, setNewPub] = useState({ title: "", summary: "", content: "", authorDisplayName: "Admin Researcher", publicationType: "ARTICLE" as const });
+  const [newPub, setNewPub] = useState<{
+    title: string;
+    summary: string;
+    content: string;
+    authorDisplayName: string;
+    publicationType: PublicationApiDto["publicationType"];
+  }>({ title: "", summary: "", content: "", authorDisplayName: "Admin Researcher", publicationType: "ARTICLE" });
 
-  useEffect(() => {
-    const token = getStoredToken();
-    if (!token) {
-      router.push("/admin/login");
-      return;
-    }
-    setAuthorized(true);
-    loadAllAdminData();
-  }, [router]);
-
-  const loadAllAdminData = async () => {
-    setLoading(true);
+  const loadAllAdminData = useCallback(async (showLoadingState = false) => {
+    if (showLoadingState) setLoading(true);
     try {
       const statsRes = await fetchJson<AdminStats>("/api/admin/stats").catch(() => null);
       if (statsRes) setStats(statsRes);
@@ -100,7 +97,25 @@ export default function AdminDashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    const token = getStoredToken();
+    if (!token) {
+      router.push("/admin/login");
+      return;
+    }
+    let ignore = false;
+    (async () => {
+      await Promise.resolve();
+      if (!ignore) {
+        loadAllAdminData();
+      }
+    })();
+    return () => {
+      ignore = true;
+    };
+  }, [router, loadAllAdminData]);
 
   const handleLogout = () => {
     authApi.logout();
@@ -122,7 +137,7 @@ export default function AdminDashboardPage() {
 
         <div className="flex items-center space-x-4">
           <button
-            onClick={loadAllAdminData}
+            onClick={() => loadAllAdminData(true)}
             className="p-2 rounded-lg bg-carbon-900 hover:bg-carbon-800 text-bone-200/70 hover:text-bone-50 transition-colors border border-bone-200/10 cursor-pointer"
             title="Refresh Telemetry"
           >
@@ -765,7 +780,7 @@ export default function AdminDashboardPage() {
                 />
                 <select
                   value={newPub.publicationType}
-                  onChange={(e) => setNewPub({ ...newPub, publicationType: e.target.value as any })}
+                  onChange={(e) => setNewPub({ ...newPub, publicationType: e.target.value as PublicationApiDto["publicationType"] })}
                   className="w-full p-3 bg-carbon-900 border border-bone-200/10 rounded-lg text-bone-100 focus:outline-none"
                 >
                   <option value="ARTICLE">Academic Article</option>

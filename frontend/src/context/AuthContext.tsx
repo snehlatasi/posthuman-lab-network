@@ -1,7 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { getStoredToken, setStoredToken } from "@/lib/api/apiClient";
+import React, { createContext, useContext, useState } from "react";
+import { getStoredToken } from "@/lib/api/apiClient";
 import { authApi, LoginRequestDto } from "@/lib/api/auth";
 
 interface AuthContextType {
@@ -27,19 +27,20 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [adminEmail, setAdminEmail] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-
-  useEffect(() => {
-    const token = getStoredToken();
-    if (token) {
-      setIsAdmin(true);
-      setAdminEmail(localStorage.getItem("posthuman_admin_email") || "admin@posthumanlab.org");
+  const [isAdmin, setIsAdmin] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return !!getStoredToken();
     }
-    setLoading(false);
-  }, []);
+    return false;
+  });
+  const [adminEmail, setAdminEmail] = useState<string | null>(() => {
+    if (typeof window !== "undefined" && getStoredToken()) {
+      return localStorage.getItem("posthuman_admin_email") || "admin@posthumanlab.org";
+    }
+    return null;
+  });
+  const [loading] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const login = async (credentials: LoginRequestDto) => {
     const res = await authApi.login(credentials);

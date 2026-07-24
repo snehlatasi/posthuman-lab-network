@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { latestPublicationsList } from "@/data/homepage";
 import { Container } from "../layout/Primitives";
-import { Reveal, StaggerItem } from "../ui/Reveal";
+import { Reveal, StaggerItem, SplitText } from "../ui/Reveal";
 
 export const PublicationsSection: React.FC = () => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
@@ -19,9 +20,10 @@ export const PublicationsSection: React.FC = () => {
             <span className="font-mono text-xs text-earth-600 font-bold uppercase tracking-widest block">
               Recent Writing
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-carbon-950">
-              Latest Publications
-            </h2>
+            <SplitText
+              text="Latest Publications"
+              className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-carbon-950"
+            />
           </div>
           <Link
             href="/publications"
@@ -42,16 +44,31 @@ export const PublicationsSection: React.FC = () => {
                   href={pub.href}
                   onMouseEnter={() => setHoveredIdx(idx)}
                   onMouseLeave={() => setHoveredIdx(null)}
-                  className="flex flex-col md:flex-row md:items-center justify-between py-6 px-6 my-3 rounded-2xl bg-white border border-carbon-950/10 shadow-sm hover:shadow-md hover:border-earth-600 transition-all duration-300 group focus:outline-none relative"
+                  className="flex flex-col md:flex-row md:items-center justify-between py-6 px-6 my-3 rounded-2xl bg-white border border-carbon-950/10 shadow-sm hover:shadow-md hover:border-earth-600 transition-all duration-300 group focus:outline-none relative overflow-hidden"
                 >
                   {/* Left: Category & title */}
-                  <div className="space-y-1 md:max-w-2xl">
+                  <div className="space-y-1 md:max-w-2xl relative">
                     <span className="font-mono text-[10px] text-earth-600 tracking-wider font-bold uppercase block">
                       {pub.category}
                     </span>
-                    <h3 className="font-serif text-lg md:text-xl font-bold text-carbon-950 group-hover:text-earth-600 group-hover:translate-x-1 transition-all duration-300">
-                      {pub.title}
-                    </h3>
+                    <div className="relative inline-block">
+                      <motion.h3 
+                        animate={{ 
+                          letterSpacing: isHovered ? "0.012em" : "-0.01em",
+                          color: isHovered ? "#7b3e27" : "#120e0c"
+                        }}
+                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                        className="font-serif text-lg md:text-xl font-bold leading-snug"
+                      >
+                        {pub.title}
+                      </motion.h3>
+                      <motion.span
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: isHovered ? 1 : 0 }}
+                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                        className="absolute bottom-0 left-0 h-[1.5px] w-full bg-earth-600 origin-left block"
+                      />
+                    </div>
                   </div>
 
                   {/* Center: Author & Date */}

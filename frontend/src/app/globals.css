@@ -32,6 +32,13 @@
   --shadow-card: 0 18px 44px -26px rgba(41, 25, 17, 0.24);
 }
 
+.font-serif-display {
+  font-family: var(--font-cormorant), Georgia, serif;
+  letter-spacing: -0.025em;
+  line-height: 0.98;
+  font-optical-sizing: auto;
+}
+
 html {
   scroll-behavior: smooth;
 }

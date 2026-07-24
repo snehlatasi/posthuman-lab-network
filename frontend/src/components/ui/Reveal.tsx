@@ -120,3 +120,83 @@ export const StaggerItem: React.FC<{ children: React.ReactNode; className?: stri
     </motion.div>
   );
 };
+
+interface SplitTextProps {
+  text: string;
+  className?: string;
+  mode?: "words" | "chars";
+  delay?: number;
+  stagger?: number;
+  as?: keyof React.JSX.IntrinsicElements;
+}
+
+export const SplitText: React.FC<SplitTextProps> = ({
+  text,
+  className = "",
+  mode = "words",
+  delay = 0.1,
+  stagger = 0.04,
+  as: Component = "h2"
+}) => {
+  const shouldReduceMotion = useSafeReducedMotion();
+  const Tag = Component as any;
+
+  if (shouldReduceMotion) {
+    return <Tag className={className}>{text}</Tag>;
+  }
+
+  const items = mode === "chars" ? text.split("") : text.split(" ");
+
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: stagger,
+        delayChildren: delay
+      }
+    }
+  };
+
+  const childVariants = {
+    hidden: {
+      opacity: 0,
+      y: "115%",
+      rotateX: -12
+    },
+    visible: {
+      opacity: 1,
+      y: "0%",
+      rotateX: 0,
+      transition: {
+        duration: 0.85,
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number]
+      }
+    }
+  };
+
+  return (
+    <Tag className={className}>
+      <motion.span
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-10% 0px" }}
+        className="inline-block flex-wrap"
+      >
+        {items.map((item, index) => (
+          <span
+            key={index}
+            className="inline-block overflow-hidden pb-1 -mb-1 align-top mr-[0.25em] last:mr-0"
+          >
+            <motion.span
+              variants={childVariants}
+              className="inline-block origin-bottom-left"
+            >
+              {item === "" ? "\u00A0" : item}
+            </motion.span>
+          </span>
+        ))}
+      </motion.span>
+    </Tag>
+  );
+};

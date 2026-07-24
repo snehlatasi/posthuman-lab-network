@@ -5,7 +5,6 @@ import { ListingPageLayout } from "@/components/layout/Templates";
 import { ContentCard } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";
 import { blogApi, BlogPost } from "@/lib/api/blog";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 interface ArticleItem {

@@ -4,7 +4,8 @@ import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container } from "../layout/Primitives";
-import { Reveal } from "../ui/Reveal";
+import { Reveal, SplitText } from "../ui/Reveal";
+import { MagneticButton } from "../ui/Magnetic";
 
 export const JoinNetworkSection: React.FC = () => {
   return (
@@ -19,11 +20,13 @@ export const JoinNetworkSection: React.FC = () => {
           </span>
         </Reveal>
 
-        <Reveal delay={0.25} yOffset={28}>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-bone-50 leading-[1.1] uppercase">
-            The Network Grows Through Participation.
-          </h2>
-        </Reveal>
+        <SplitText
+          text="The Network Grows Through Participation."
+          as="h2"
+          delay={0.2}
+          stagger={0.05}
+          className="font-serif-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-bone-50 leading-[1.05] uppercase"
+        />
 
         <Reveal delay={0.35} yOffset={28}>
           <p className="font-sans text-sm md:text-base text-bone-100 leading-relaxed max-w-xl mx-auto font-normal">
@@ -32,13 +35,15 @@ export const JoinNetworkSection: React.FC = () => {
         </Reveal>
 
         <Reveal delay={0.5} className="pt-4">
-          <Link
-            href="/membership/become-a-member"
-            className="group inline-flex items-center justify-center px-8 py-4 text-xs font-sans tracking-widest uppercase font-bold text-carbon-950 bg-bone-50 hover:bg-earth-600 hover:text-bone-50 transition-colors rounded-full focus:outline-none shadow-xl"
-          >
-            <span>Join the Network</span>
-            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+          <MagneticButton strength={0.35}>
+            <Link
+              href="/membership/become-a-member"
+              className="group inline-flex items-center justify-center px-8 py-4 text-xs font-sans tracking-widest uppercase font-bold text-carbon-950 bg-bone-50 hover:bg-earth-600 hover:text-bone-50 transition-colors rounded-full focus:outline-none shadow-xl"
+            >
+              <span>Join the Network</span>
+              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          </MagneticButton>
         </Reveal>
       </Container>
     </section>
