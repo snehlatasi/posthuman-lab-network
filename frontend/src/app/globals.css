@@ -65,10 +65,7 @@
   --hero-bg-to: #eadfcd;
   --hero-bottom-fade: linear-gradient(to top, #fbf7ef, rgba(251, 247, 239, 0.7), transparent);
 
-  --section-gradient-from: #f9f3e9;
-  --section-gradient-to: #f3eadb;
-  --support-gradient-from: #f3eadb;
-  --support-gradient-to: #efe4d4;
+  --homepage-bg: var(--background-body);
 }
 
 .dark {
@@ -108,12 +105,9 @@
   --hero-bg-from: rgba(16, 18, 15, 0.96);
   --hero-bg-via: #141713;
   --hero-bg-to: #181c17;
-  --hero-bottom-fade: linear-gradient(to top, #131612, rgba(19, 22, 18, 0.7), transparent);
+  --hero-bottom-fade: linear-gradient(to top, transparent, transparent);
 
-  --section-gradient-from: #121411;
-  --section-gradient-to: #151814;
-  --support-gradient-from: #141713;
-  --support-gradient-to: #111310;
+  --homepage-bg: var(--background-body);
 }
 
 .font-serif-display {

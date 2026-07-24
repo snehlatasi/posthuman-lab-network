@@ -74,25 +74,25 @@ export default function BlogIndexPage() {
     >
       {articles.map((item) => (
         <StaggerItem key={item.slug}>
-          <ContentCard href={`/blog/${item.slug}`} className="border border-carbon-950/10 bg-white hover:bg-white shadow-md hover:shadow-xl hover:border-earth-600 transition-all duration-300 h-full flex flex-col justify-between p-6 md:p-8">
+          <ContentCard href={`/blog/${item.slug}`} className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 h-full flex flex-col justify-between p-6 md:p-8">
             <div className="space-y-4">
-              <div className="flex justify-between items-center text-xs font-mono tracking-widest text-earth-600 uppercase font-bold">
+              <div className="flex justify-between items-center text-xs font-mono tracking-widest text-earth-600 dark:text-earth-400 uppercase font-bold">
                 <span>{item.category}</span>
-                <span className="text-carbon-900 font-bold">{item.date}</span>
+                <span className="text-carbon-900 dark:text-bone-200 font-bold">{item.date}</span>
               </div>
 
-              <h3 className="font-serif text-xl font-bold text-carbon-950 group-hover:text-earth-600 transition-colors leading-tight">
+              <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50 group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors leading-tight">
                 {item.title}
               </h3>
 
-              <p className="font-sans text-xs md:text-sm text-carbon-800 leading-relaxed font-medium">
+              <p className="font-sans text-xs md:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
                 {item.excerpt}
               </p>
             </div>
 
-            <div className="pt-6 mt-6 border-t border-carbon-950/10 flex justify-between items-center text-xs font-sans font-bold tracking-wider text-carbon-950 uppercase group-hover:text-earth-600 transition-colors">
+            <div className="pt-6 mt-6 border-t border-carbon-950/10 dark:border-bone-50/12 flex justify-between items-center text-xs font-sans font-bold tracking-wider text-carbon-950 dark:text-bone-100 uppercase group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
               <span>Read Full Article</span>
-              <div className="p-2 bg-bone-50 group-hover:bg-earth-600 text-carbon-950 group-hover:text-bone-50 transition-colors rounded-full border border-carbon-950/10">
+              <div className="p-2 bg-bone-50 dark:bg-carbon-950 group-hover:bg-earth-600 dark:group-hover:bg-earth-500 text-carbon-950 dark:text-bone-50 group-hover:text-bone-50 transition-colors rounded-full border border-carbon-950/10 dark:border-bone-50/15">
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
               </div>
             </div>

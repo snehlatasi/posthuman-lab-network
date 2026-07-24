@@ -30,20 +30,18 @@ const spaces = [
 
 export const Virtual360LabViewer: React.FC = () => {
   return (
-    <section className="py-24 relative overflow-hidden border-t border-carbon-950/8 dark:border-bone-50/12 transition-colors duration-300">
-      <div className="absolute inset-0 bg-gradient-to-b from-[var(--section-gradient-from)] via-transparent to-[var(--section-gradient-to)] pointer-events-none" />
-      <Container>
+    <section className="py-24 relative overflow-hidden border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent transition-colors duration-300">
+      <Container className="relative z-10">
         <Reveal>
-          <div className="max-w-3xl space-y-4 mb-12">
-            <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-[0.24em] block">
-              03.5 • Spaces of Practice
+          <div className="max-w-xl space-y-4 mb-12">
+            <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-[0.25em] block">
+              SPACES OF PRACTICE
             </span>
-            <h2 className="font-serif text-4xl md:text-5xl font-bold tracking-tight text-carbon-950 dark:text-bone-100 text-balance">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 leading-tight uppercase">
               THE NETWORK LIVES IN REAL SPACES, NOT JUST INTERFACES
             </h2>
-            <p className="font-sans text-base md:text-lg text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-              Instead of an abstract 360 demo, this section now shows the two environments that actually shape the project:
-              the studio for study and discussion, and the retreat for embodied, ecological work.
+            <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium max-w-xl">
+              Showing the core environments that shape the project: the studio for study and discussion, and the retreat for embodied, ecological work.
             </p>
           </div>
         </Reveal>

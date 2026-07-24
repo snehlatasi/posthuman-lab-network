@@ -148,19 +148,19 @@ export default function PublicationsMainPage() {
 
       {!loading && activePublications.map((pub) => (
         <StaggerItem key={pub.id}>
-          <ContentCard className="border border-carbon-950/10 bg-white shadow-md hover:shadow-xl hover:border-earth-600 transition-all duration-300 h-full">
+          <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 h-full">
             <div className="space-y-6 h-full flex flex-col justify-between p-2">
               <div className="space-y-2">
-                <span className="font-mono text-xs text-earth-600 tracking-wider font-bold uppercase block">
+                <span className="font-mono text-xs text-earth-600 dark:text-earth-400 tracking-wider font-bold uppercase block">
                   Volume 04 — {pub.publicationType}
                 </span>
-                <span className="font-sans text-xs text-carbon-900 uppercase font-bold tracking-wider block">
+                <span className="font-sans text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-wider block">
                   By {pub.authorDisplayName}
                 </span>
-                <h3 className="font-serif text-xl font-bold text-carbon-950">
+                <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
                   {pub.title}
                 </h3>
-                <p className="font-sans text-xs sm:text-sm text-carbon-800 leading-relaxed font-medium">
+                <p className="font-sans text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
                   {pub.summary}
                 </p>
               </div>
@@ -173,7 +173,7 @@ export default function PublicationsMainPage() {
                 {isAdmin && (
                   <button
                     onClick={() => handleDelete(pub.id)}
-                    className="p-1.5 rounded bg-earth-500/20 text-earth-600 hover:text-earth-500 hover:bg-earth-500/40 transition-colors cursor-pointer"
+                    className="p-1.5 rounded bg-earth-500/20 text-earth-600 dark:text-earth-400 hover:text-earth-500 hover:bg-earth-500/40 transition-colors cursor-pointer"
                     title="Delete Publication"
                   >
                     <Trash2 className="w-3.5 h-3.5" />

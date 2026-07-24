@@ -95,7 +95,7 @@ export default function BlogArticleDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-carbon-950 text-bone-200">
+      <div className="min-h-screen flex items-center justify-center bg-bone-50 dark:bg-carbon-950 text-carbon-950 dark:text-bone-100">
         <span className="font-mono text-xs animate-pulse tracking-widest uppercase">
           Loading Article Telemetry...
         </span>
@@ -137,7 +137,7 @@ export default function BlogArticleDetailPage() {
       <div className="space-y-8 font-sans">
         <Breadcrumb items={breadcrumbItems} />
 
-        <div className="flex flex-wrap gap-4 text-xs font-mono text-carbon-900 font-bold border-b border-carbon-950/10 pb-4 mb-6">
+        <div className="flex flex-wrap gap-4 text-xs font-mono text-carbon-900 dark:text-bone-200 font-bold border-b border-carbon-950/10 dark:border-bone-50/15 pb-4 mb-6">
           <span>By {activeArticle.author}</span>
           <span>•</span>
           <span>📅 {activeArticle.date}</span>
@@ -146,16 +146,16 @@ export default function BlogArticleDetailPage() {
         </div>
 
         {activeArticle.paragraphs.map((p, idx) => (
-          <p key={idx} className="text-sm md:text-base text-carbon-900 leading-relaxed font-medium">
+          <p key={idx} className="text-sm md:text-base text-carbon-900 dark:text-bone-200 leading-relaxed font-medium">
             {p}
           </p>
         ))}
 
         {/* Back Link */}
-        <div className="pt-8 border-t border-carbon-950/8 mt-8">
+        <div className="pt-8 border-t border-carbon-950/8 dark:border-bone-50/12 mt-8">
           <Link
             href="/blog"
-            className="inline-flex items-center space-x-2 text-xs font-sans tracking-wider uppercase font-bold text-carbon-950 hover:text-earth-600 transition-colors focus:outline-none"
+            className="inline-flex items-center space-x-2 text-xs font-sans tracking-wider uppercase font-bold text-carbon-950 dark:text-bone-50 hover:text-earth-600 dark:hover:text-earth-400 transition-colors focus:outline-none"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>Back to Blog</span>

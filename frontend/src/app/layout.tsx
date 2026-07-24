@@ -77,7 +77,7 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="min-h-full flex flex-col text-carbon-950 selection:bg-earth-500 selection:text-bone-50 relative">
+      <body className="min-h-full flex flex-col text-carbon-950 dark:text-bone-100 selection:bg-earth-500 selection:text-bone-50 relative">
         <ThemeProvider>
           <AuthProvider>
             <CustomCursor />

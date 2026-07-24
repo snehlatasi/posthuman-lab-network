@@ -142,19 +142,19 @@ export default function EventsMainPage() {
 
       {!loading && eventsList.map((event, idx) => (
         <StaggerItem key={event.id || idx}>
-          <ContentCard className="border border-carbon-950/10 bg-white shadow-md hover:shadow-xl hover:border-earth-600 transition-all duration-300">
+          <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300">
             <div className="space-y-6 h-full flex flex-col justify-between p-2">
               <div className="space-y-2">
-                <span className="font-mono text-xs text-earth-600 tracking-wider font-bold uppercase block">
+                <span className="font-mono text-xs text-earth-600 dark:text-earth-400 tracking-wider font-bold uppercase block">
                   {event.type} — {event.date}
                 </span>
-                <span className="font-sans text-xs text-carbon-900 uppercase font-bold tracking-wider block">
+                <span className="font-sans text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-wider block">
                   📍 {event.location}
                 </span>
-                <h3 className="font-serif text-xl font-bold text-carbon-950">
+                <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
                   {event.title}
                 </h3>
-                <p className="font-sans text-xs sm:text-sm text-carbon-800 leading-relaxed font-medium">
+                <p className="font-sans text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
                   {event.description}
                 </p>
               </div>
@@ -166,7 +166,7 @@ export default function EventsMainPage() {
                 {isAdmin && event.id && (
                   <button
                     onClick={() => handleDelete(event.id)}
-                    className="p-1.5 rounded bg-earth-500/20 text-earth-600 hover:text-earth-500 hover:bg-earth-500/40 transition-colors cursor-pointer"
+                    className="p-1.5 rounded bg-earth-500/20 text-earth-600 dark:text-earth-400 hover:text-earth-500 hover:bg-earth-500/40 transition-colors cursor-pointer"
                     title="Delete Event"
                   >
                     <Trash2 className="w-3.5 h-3.5" />

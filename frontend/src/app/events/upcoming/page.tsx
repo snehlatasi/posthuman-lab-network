@@ -95,22 +95,22 @@ export default function UpcomingEventsPage() {
             )}
 
             {activeEvents.map((evt) => (
-              <div key={evt.id} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start border-b border-carbon-950/10 pb-12 last:border-0 last:pb-0">
+              <div key={evt.id} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start border-b border-carbon-950/10 dark:border-bone-50/12 pb-12 last:border-0 last:pb-0">
                 {/* Event Detail */}
                 <div className="lg:col-span-7 space-y-6">
                   <Reveal className="space-y-4">
-                    <span className="font-mono text-xs text-earth-600 font-bold uppercase tracking-widest block">
+                    <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-widest block">
                       {evt.eventType}
                     </span>
-                    <h2 className="font-serif text-2xl md:text-3xl font-bold text-carbon-950 leading-tight">
+                    <h2 className="font-serif text-2xl md:text-3xl font-bold text-carbon-950 dark:text-bone-50 leading-tight">
                       {evt.title}
                     </h2>
-                    <div className="flex flex-wrap gap-4 text-xs font-mono text-carbon-900 font-bold">
+                    <div className="flex flex-wrap gap-4 text-xs font-mono text-carbon-900 dark:text-bone-200 font-bold">
                       <span>📅 {formatDate(evt.startDateTime)}</span>
                       <span>•</span>
                       <span>📍 {evt.location || (evt.online ? "Online Webcast" : "Physical Venue")}</span>
                     </div>
-                    <p className="font-sans text-sm md:text-base text-carbon-800 leading-relaxed font-medium pt-2">
+                    <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium pt-2">
                       {evt.description}
                     </p>
                   </Reveal>
@@ -118,21 +118,21 @@ export default function UpcomingEventsPage() {
 
                 {/* Booking Form */}
                 <div className="lg:col-span-5">
-                  <ContentCard className="border border-carbon-950/10 bg-white shadow-md hover:shadow-xl p-6">
+                  <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 shadow-md hover:shadow-xl p-6">
                     {isBooked ? (
                       <div className="space-y-4 text-center py-6">
-                        <span className="font-mono text-2xl text-earth-600 font-bold">✓</span>
-                        <h3 className="font-serif text-xl font-bold text-carbon-950">Registration Confirmed</h3>
-                        <p className="text-xs sm:text-sm text-carbon-800 leading-relaxed font-medium">
+                        <span className="font-mono text-2xl text-earth-600 dark:text-earth-400 font-bold">✓</span>
+                        <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">Registration Confirmed</h3>
+                        <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
                           Thank you for booking. The access links and setup instructions have been sent to your email.
                         </p>
                       </div>
                     ) : (
                       <form onSubmit={handleRegister} className="space-y-6">
-                        <h3 className="font-serif text-xl font-bold text-carbon-950">Reserve Your Spot</h3>
+                        <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">Reserve Your Spot</h3>
                         
                         <div className="space-y-2">
-                          <label htmlFor={`name-field-${evt.id}`} className="font-mono text-xs text-carbon-900 uppercase font-bold tracking-widest block">
+                          <label htmlFor={`name-field-${evt.id}`} className="font-mono text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-widest block">
                             Full Name
                           </label>
                           <input
@@ -142,12 +142,12 @@ export default function UpcomingEventsPage() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Enter name"
-                            className="w-full bg-bone-50 border border-carbon-950/15 rounded-lg px-4 py-2.5 text-xs text-carbon-950 placeholder-carbon-700 font-medium focus:border-earth-600 focus:outline-none"
+                            className="w-full bg-bone-50 dark:bg-carbon-950 border border-carbon-950/15 dark:border-bone-50/20 rounded-lg px-4 py-2.5 text-xs text-carbon-950 dark:text-bone-100 placeholder-carbon-700 dark:placeholder-bone-300 font-medium focus:border-earth-600 focus:outline-none"
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <label htmlFor={`email-field-${evt.id}`} className="font-mono text-xs text-carbon-900 uppercase font-bold tracking-widest block">
+                          <label htmlFor={`email-field-${evt.id}`} className="font-mono text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-widest block">
                             Email Address
                           </label>
                           <input
@@ -157,13 +157,13 @@ export default function UpcomingEventsPage() {
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter email"
-                            className="w-full bg-bone-50 border border-carbon-950/15 rounded-lg px-4 py-2.5 text-xs text-carbon-950 placeholder-carbon-700 font-medium focus:border-earth-600 focus:outline-none"
+                            className="w-full bg-bone-50 dark:bg-carbon-950 border border-carbon-950/15 dark:border-bone-50/20 rounded-lg px-4 py-2.5 text-xs text-carbon-950 dark:text-bone-100 placeholder-carbon-700 dark:placeholder-bone-300 font-medium focus:border-earth-600 focus:outline-none"
                           />
                         </div>
 
                         <button
                           type="submit"
-                          className="w-full py-3 text-xs font-sans tracking-widest uppercase font-bold text-bone-50 bg-carbon-950 hover:bg-earth-600 transition-colors rounded-lg focus:outline-none cursor-pointer shadow-md"
+                          className="w-full py-3 text-xs font-sans tracking-widest uppercase font-bold text-bone-50 bg-[#120e0c] dark:bg-earth-600 hover:bg-earth-600 dark:hover:bg-earth-500 transition-colors rounded-lg focus:outline-none cursor-pointer shadow-md"
                         >
                           Book My Ticket
                         </button>

@@ -50,18 +50,18 @@ export const VisionSection: React.FC = () => {
   return (
     <section 
       id="pillars"
-      className="py-24 md:py-32 border-t border-bone-200/10 relative bg-carbon-950"
+      className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 relative bg-transparent transition-colors duration-300"
     >
       <Container className="space-y-16">
         {/* Top Header */}
         <div className="max-w-2xl">
           <Reveal delay={0.1}>
-            <span className="font-mono text-xs text-earth-400 font-bold uppercase tracking-[0.25em] block mb-3">
+            <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-[0.25em] block mb-3">
               OUR PILLARS
             </span>
           </Reveal>
           <Reveal delay={0.25}>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-bone-50 leading-tight uppercase">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 leading-tight uppercase">
               Building the Posthuman Future Together
             </h2>
           </Reveal>
@@ -75,28 +75,26 @@ export const VisionSection: React.FC = () => {
                 href={pillar.href}
                 className="group block h-full focus:outline-none"
               >
-                <ContentCard className="border border-bone-200/30 bg-carbon-900 hover:bg-carbon-800 hover:border-earth-400 transition-all duration-300 flex flex-col justify-between h-full p-6 group-hover:-translate-y-1 shadow-2xl">
+                <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 flex flex-col justify-between h-full p-6 group-hover:-translate-y-1 shadow-md hover:shadow-xl">
                   <div className="space-y-6">
                     {/* Icon Box */}
-                    <div className="p-3 bg-carbon-950 rounded-lg w-fit border border-bone-200/30 group-hover:border-earth-400 transition-all duration-300">
+                    <div className="w-10 h-10 rounded-xl bg-bone-100 dark:bg-carbon-950 border border-carbon-950/10 dark:border-bone-50/15 flex items-center justify-center transition-colors">
                       {pillar.icon}
                     </div>
 
-                    <div className="space-y-3">
-                      <h3 className="font-serif text-sm md:text-base font-bold tracking-wider text-bone-50 group-hover:text-earth-400 transition-colors uppercase">
+                    <div className="space-y-2">
+                      <h3 className="font-serif text-base font-bold text-carbon-950 dark:text-bone-50 group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors tracking-tight">
                         {pillar.title}
                       </h3>
-                      <p className="font-sans text-xs sm:text-sm text-bone-100 group-hover:text-white transition-colors leading-relaxed font-semibold">
+                      <p className="font-sans text-xs text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
                         {pillar.description}
                       </p>
                     </div>
                   </div>
 
-                  {/* Arrow CTA */}
-                  <div className="pt-6 flex justify-end">
-                    <div className="p-2 bg-carbon-950 rounded-full border border-bone-200/30 group-hover:bg-earth-500 group-hover:text-bone-50 text-bone-50 transition-all duration-300">
-                      <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-                    </div>
+                  <div className="pt-6 mt-6 border-t border-carbon-950/10 dark:border-bone-50/12 flex items-center justify-between text-[11px] font-sans font-bold tracking-wider text-carbon-950 dark:text-bone-100 group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
+                    <span>EXPLORE</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </div>
                 </ContentCard>
               </Link>

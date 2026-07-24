@@ -37,16 +37,14 @@ export const HeroSection: React.FC = () => {
       id="hero"
       className="min-h-screen flex flex-col justify-between relative overflow-hidden pt-28 pb-12 transition-colors duration-300"
     >
-      {/* Dynamic Theme Atmospheric Background Layers */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#fbf7ef] via-[#f7efe1] to-[#eadfcd] dark:from-[#10120f] dark:via-[#141713] dark:to-[#181c17] z-0 pointer-events-none transition-colors duration-500" />
+      {/* Dynamic Theme Atmospheric Background Overlay */}
       <div className="absolute inset-0 organic-mesh opacity-40 z-0 pointer-events-none" />
-      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#fbf7ef] via-[#fbf7ef]/70 to-transparent dark:from-[#131612] dark:via-[#131612]/70 dark:to-transparent z-10 pointer-events-none transition-colors duration-500" />
 
       {/* Interactive 3D Canvas Visual */}
       <ImmersiveHero3D />
 
-      {/* Side Gradient Mask */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#fbf7ef]/90 via-[#fbf7ef]/30 to-transparent dark:from-[#10120f]/90 dark:via-[#10120f]/30 dark:to-transparent z-10 pointer-events-none transition-colors duration-500" />
+      {/* Side Gradient Mask for text legibility */}
+      <div className="absolute inset-0 bg-gradient-to-r from-bone-100/80 via-bone-100/20 to-transparent dark:from-[#10120f]/80 dark:via-[#10120f]/20 to-transparent z-10 pointer-events-none transition-colors duration-500" />
 
       {/* Vertical Scroll Indicator */}
       <div className="absolute left-6 bottom-24 hidden xl:flex flex-col items-center space-y-4 z-20 select-none pointer-events-none">

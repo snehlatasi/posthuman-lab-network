@@ -9,15 +9,15 @@ import { Reveal, StaggerItem } from "../ui/Reveal";
 
 export const LabsSection: React.FC = () => {
   return (
-    <section id="labs" className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-gradient-to-b from-[var(--section-gradient-from)] to-[var(--section-gradient-to)] relative transition-colors duration-300">
+    <section id="labs" className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300">
       <Container className="space-y-16">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-5xl">
           <div className="space-y-4">
-            <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-widest block">
-              Active Cells
+            <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-[0.25em] block">
+              ACTIVE CELLS
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl font-bold tracking-tight text-carbon-950 dark:text-bone-100">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 leading-tight uppercase">
               Explore Our Labs
             </h2>
             <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed max-w-xl font-medium">
@@ -26,10 +26,10 @@ export const LabsSection: React.FC = () => {
           </div>
           <Link
             href="/labs"
-            className="group inline-flex items-center space-x-2 text-xs font-sans font-bold tracking-wider uppercase text-carbon-950 dark:text-bone-100 hover:text-earth-600 dark:hover:text-earth-400 transition-colors focus:outline-none"
+            className="group inline-flex items-center space-x-2 text-xs font-sans font-bold tracking-wider uppercase text-carbon-950 dark:text-bone-50 hover:text-earth-600 dark:hover:text-earth-400 transition-colors focus:outline-none"
           >
             <span>View All Labs</span>
-            <ArrowRight className="w-4 h-4 text-carbon-950 dark:text-bone-100 group-hover:text-earth-600 dark:group-hover:text-earth-400 group-hover:translate-x-1 transition-all" />
+            <ArrowRight className="w-4 h-4 text-carbon-950 dark:text-bone-50 group-hover:text-earth-600 dark:group-hover:text-earth-400 group-hover:translate-x-1 transition-all" />
           </Link>
         </div>
 
@@ -44,16 +44,16 @@ export const LabsSection: React.FC = () => {
                     <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-wider block">
                       {lab.tag}
                     </span>
-                    <span className="font-mono text-lg font-bold text-carbon-950 dark:text-bone-100">
+                    <span className="font-mono text-lg font-bold text-carbon-950 dark:text-bone-50">
                       {lab.number}
                     </span>
                   </div>
 
                   <div className="space-y-2">
-                    <h3 className="font-serif text-xl md:text-2xl font-bold text-carbon-950 dark:text-bone-100 group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
+                    <h3 className="font-serif text-xl md:text-2xl font-bold text-carbon-950 dark:text-bone-50 group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
                       {lab.name}
                     </h3>
-                    <p className="font-sans text-xs md:text-sm text-carbon-900 dark:text-bone-200 leading-relaxed font-semibold">
+                    <p className="font-sans text-xs md:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
                       {lab.description}
                     </p>
                   </div>

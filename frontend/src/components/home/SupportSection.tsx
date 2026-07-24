@@ -8,15 +8,15 @@ import { Reveal } from "../ui/Reveal";
 
 export const SupportSection: React.FC = () => {
   return (
-    <section className="py-20 md:py-24 border-t border-carbon-950/8 dark:border-bone-50/12 bg-gradient-to-b from-[var(--support-gradient-from)] to-[var(--support-gradient-to)] relative transition-colors duration-300">
+    <section className="py-20 md:py-24 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300">
       <Container className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
         {/* Description text */}
         <div className="md:col-span-8 space-y-3">
-          <Reveal className="space-y-1">
-            <span className="font-mono text-[10px] text-earth-600 dark:text-earth-400 font-bold uppercase tracking-widest block">
-              Sustainability
+          <Reveal className="space-y-2">
+            <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-[0.25em] block">
+              SUSTAINABILITY
             </span>
-            <h3 className="font-serif text-2xl font-bold text-carbon-950 dark:text-bone-100 leading-tight">
+            <h3 className="font-serif text-2xl md:text-3xl font-bold text-carbon-950 dark:text-bone-50 leading-tight uppercase">
               Help keep knowledge open and accessible.
             </h3>
             <p className="font-sans text-xs md:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed max-w-lg font-medium">

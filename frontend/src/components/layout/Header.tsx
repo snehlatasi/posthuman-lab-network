@@ -79,8 +79,8 @@ export const Header: React.FC = () => {
           : "bg-transparent py-4 md:py-6"
       }`}
     >
-      <div className="w-full max-w-[1440px] mx-auto px-3 sm:px-5 lg:px-6 xl:px-8 2xl:px-10 flex items-center justify-between gap-1.5 xl:gap-3 2xl:gap-4">
-        {/* Zone 1: Brand Logo */}
+      <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 flex items-center justify-between gap-3 xl:gap-4 2xl:gap-6">
+        {/* Group 1: Brand Logo */}
         <Link
           href="/"
           className="group flex flex-col focus:outline-none shrink-0"
@@ -95,9 +95,9 @@ export const Header: React.FC = () => {
           </span>
         </Link>
 
-        {/* Zone 2: Main Desktop Navigation */}
+        {/* Group 2: Main Desktop Primary Navigation */}
         <nav
-          className="hidden lg:flex items-center space-x-0.5 xl:space-x-1 2xl:space-x-2 shrink min-w-0"
+          className="hidden xl:flex items-center space-x-1 xl:space-x-1.5 2xl:space-x-2.5 shrink-0 whitespace-nowrap"
           role="navigation"
           aria-label="Main Desktop Navigation"
         >
@@ -111,15 +111,14 @@ export const Header: React.FC = () => {
               { label: "MEDIA", href: "/media" },
               { label: "COMMUNITY", href: "/community" },
               { label: "BLOG", href: "/blog" },
-              { label: "SUPPORT", href: "/support" },
-              { label: "CONTACT", href: "/contact" }
+              { label: "SUPPORT", href: "/support" }
             ].map((link) => {
               const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
               return (
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`px-1.5 xl:px-2 2xl:px-2.5 py-1 text-[10.5px] xl:text-[11px] 2xl:text-xs font-sans tracking-wider uppercase transition-all duration-200 relative whitespace-nowrap ${
+                  className={`px-1.5 xl:px-2 2xl:px-2.5 py-1 text-[11px] xl:text-[11.5px] 2xl:text-xs font-sans tracking-wider uppercase transition-all duration-200 relative whitespace-nowrap ${
                     isActive
                       ? "text-earth-600 dark:text-earth-400 font-bold"
                       : "text-[#1b1613] dark:text-[#d5d0c4] font-semibold hover:text-earth-600 dark:hover:text-earth-400"
@@ -165,15 +164,15 @@ export const Header: React.FC = () => {
           )}
         </nav>
 
-        {/* Zone 3: Right Controls (Theme Selector + Admin Login + Join CTA + Mobile Toggle) */}
-        <div className="flex items-center space-x-1.5 xl:space-x-2.5 2xl:space-x-3 shrink-0">
+        {/* Group 3: Header Actions (Theme Selector + Admin Login + Join CTA + Mobile Toggle) */}
+        <div className="flex items-center space-x-2 xl:space-x-3 2xl:space-x-4 shrink-0">
           {/* Segmented Theme Preference Control */}
           <ThemeSelector variant="pills" />
 
           {!isAdmin && (
             <button
               onClick={openLoginModal}
-              className="hidden xl:inline-flex items-center space-x-1 px-2 py-1 xl:px-2.5 xl:py-1.5 2xl:px-3 2xl:py-2 text-[10px] xl:text-[11px] 2xl:text-xs font-mono tracking-wider uppercase text-[#3a2e28] dark:text-[#d5d0c4] hover:text-earth-600 dark:hover:text-earth-400 border border-[#120e0c]/15 dark:border-bone-50/20 hover:border-earth-500/40 rounded-full transition-colors cursor-pointer bg-bone-100/80 dark:bg-carbon-900/80 whitespace-nowrap shrink-0"
+              className="hidden xl:inline-flex items-center space-x-1 px-2.5 py-1.5 2xl:px-3 2xl:py-2 text-[10.5px] xl:text-[11px] 2xl:text-xs font-mono tracking-wider uppercase text-[#3a2e28] dark:text-[#d5d0c4] hover:text-earth-600 dark:hover:text-earth-400 border border-[#120e0c]/15 dark:border-bone-50/20 hover:border-earth-500/40 rounded-full transition-colors cursor-pointer bg-bone-100/80 dark:bg-carbon-900/80 whitespace-nowrap shrink-0"
             >
               <ShieldCheck className="w-3 h-3 xl:w-3.5 xl:h-3.5" />
               <span>Admin Login</span>
@@ -183,7 +182,7 @@ export const Header: React.FC = () => {
           <Link
             href="/membership/become-a-member"
             onClick={() => setActiveGroup(null)}
-            className="hidden sm:inline-flex items-center justify-center px-3 py-1.5 xl:px-3.5 xl:py-1.5 2xl:px-4.5 2xl:py-2 text-[10px] xl:text-[11px] 2xl:text-xs font-sans tracking-widest uppercase font-semibold text-bone-50 bg-[#120e0c] dark:bg-earth-600 hover:bg-earth-600 dark:hover:bg-earth-500 transition-all duration-200 rounded-full focus:outline-none focus:ring-2 focus:ring-earth-500/40 shadow-sm shrink-0 whitespace-nowrap"
+            className="hidden sm:inline-flex items-center justify-center px-3.5 py-1.5 xl:px-4 xl:py-1.5 2xl:px-5 2xl:py-2 text-[10.5px] xl:text-[11px] 2xl:text-xs font-sans tracking-widest uppercase font-semibold text-bone-50 bg-[#120e0c] dark:bg-earth-600 hover:bg-earth-600 dark:hover:bg-earth-500 transition-all duration-200 rounded-full focus:outline-none focus:ring-2 focus:ring-earth-500/40 shadow-sm shrink-0 whitespace-nowrap"
           >
             Join the Network
           </Link>
@@ -192,7 +191,7 @@ export const Header: React.FC = () => {
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
             aria-label="Toggle Mobile Menu"
-            className="lg:hidden p-1.5 text-[#120e0c] dark:text-bone-100 hover:text-earth-600 focus:outline-none rounded-md hover:bg-bone-200/50 dark:hover:bg-carbon-900/80 cursor-pointer"
+            className="xl:hidden p-1.5 text-[#120e0c] dark:text-bone-100 hover:text-earth-600 focus:outline-none rounded-md hover:bg-bone-200/50 dark:hover:bg-carbon-900/80 cursor-pointer"
           >
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -207,13 +206,13 @@ export const Header: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={shouldReduceMotion ? {} : { opacity: 0, y: -8 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden lg:block absolute top-full left-0 right-0 bg-bone-50/95 dark:bg-carbon-950/95 backdrop-blur-xl border-b border-carbon-950/10 dark:border-bone-50/15 shadow-xl overflow-hidden z-40"
+            className="hidden xl:block absolute top-full left-0 right-0 bg-bone-50/95 dark:bg-carbon-950/95 backdrop-blur-xl border-b border-carbon-950/10 dark:border-bone-50/15 shadow-xl overflow-hidden z-40"
             onMouseEnter={() => {
               if (timeoutRef.current) clearTimeout(timeoutRef.current);
             }}
             onMouseLeave={handleMouseLeave}
           >
-            <div className="w-full max-w-[1440px] mx-auto px-8 xl:px-10 py-12 grid grid-cols-12 gap-8">
+            <div className="w-full max-w-[1720px] mx-auto px-8 xl:px-10 py-12 grid grid-cols-12 gap-8">
               <div className="col-span-4 border-r border-carbon-950/10 dark:border-bone-50/10 pr-8">
                 {navigationConfig.map((group) => {
                   if (group.label !== activeGroup) return null;
@@ -271,7 +270,7 @@ export const Header: React.FC = () => {
             animate={{ opacity: 1, height: "100vh" }}
             exit={shouldReduceMotion ? {} : { opacity: 0, height: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden fixed top-[60px] left-0 right-0 bottom-0 bg-bone-50/98 dark:bg-carbon-950/98 backdrop-blur-xl border-t border-carbon-950/10 dark:border-bone-50/15 overflow-y-auto z-40"
+            className="xl:hidden fixed top-[60px] left-0 right-0 bottom-0 bg-bone-50/98 dark:bg-carbon-950/98 backdrop-blur-xl border-t border-carbon-950/10 dark:border-bone-50/15 overflow-y-auto z-40"
           >
             <div className="px-6 py-8 space-y-6">
               {/* Theme Preference in Mobile Drawer */}

@@ -29,19 +29,19 @@ export default function EcologicalFuturesLabPage() {
     >
       <div className="space-y-8 font-sans">
         <section className="space-y-4">
-          <h3 className="font-serif text-xl md:text-2xl font-bold text-carbon-950 leading-tight">
+          <h3 className="font-serif text-xl md:text-2xl font-bold text-carbon-950 dark:text-bone-50 leading-tight">
             Active Project: Flora-Signal Transducers
           </h3>
-          <p className="text-sm md:text-base text-carbon-800 leading-relaxed font-medium">
+          <p className="text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
             Our current research investigates plant communication. By deploying ultra-low frequency voltage sensor nodes in local woodland soils, we track electrochemical spikes in root systems caused by moisture shifts, light changes, or human proximity. This raw data is mapped into modular sound environments and virtual models.
           </p>
         </section>
 
         <section className="space-y-4">
-          <h3 className="font-serif text-xl md:text-2xl font-bold text-carbon-950 leading-tight">
+          <h3 className="font-serif text-xl md:text-2xl font-bold text-carbon-950 dark:text-bone-50 leading-tight">
             Decolonizing Technology from Extraction
           </h3>
-          <p className="text-sm md:text-base text-carbon-800 leading-relaxed font-medium">
+          <p className="text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
             Most modern tech is designed around extraction—extracting data from users, minerals from the earth. The Ecological Futures Lab seeks to design collaborative devices that exist as co-inhabitants of their ecosystem, using local solar-kinetic grids and non-polluting materials.
           </p>
         </section>
