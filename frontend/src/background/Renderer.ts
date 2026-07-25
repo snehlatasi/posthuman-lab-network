@@ -204,17 +204,25 @@ export class UniverseRenderer {
 
   setVisible(value: boolean) {
     this.visible = value;
-    if (value && this.animationId === null) this.start();
+    if (value) {
+      if (this.animationId === null) this.start();
+      return;
+    }
+
+    if (this.animationId !== null) {
+      cancelAnimationFrame(this.animationId);
+      this.animationId = null;
+    }
   }
 
   start() {
-    if (this.animationId !== null) return;
+    if (this.animationId !== null || !this.visible) return;
     const tick = () => {
-      this.animationId = requestAnimationFrame(tick);
       if (!this.visible) return;
       this.render();
+      this.animationId = requestAnimationFrame(tick);
     };
-    tick();
+    this.animationId = requestAnimationFrame(tick);
   }
 
   dispose() {

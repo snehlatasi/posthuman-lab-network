@@ -8,7 +8,7 @@ import { ThemeProvider } from "@/context/ThemeContext";
 import { AdminLoginModal } from "@/components/admin/AdminLoginModal";
 import { AdminBannerBar } from "@/components/admin/AdminBannerBar";
 import { CustomCursor } from "@/components/ui/CustomCursor";
-import { AnimatedUniverse } from "@/background/AnimatedUniverse";
+import { UniverseLayer } from "@/background/UniverseLayer";
 
 import { MemberProvider } from "@/context/MemberContext";
 
@@ -88,7 +88,7 @@ export default function RootLayout({
           <AuthProvider>
             <MemberProvider>
               <CustomCursor />
-              <AnimatedUniverse />
+              <UniverseLayer />
               <div className="fixed inset-0 z-0 pointer-events-none digital-grid opacity-20" />
 
               <div className="relative z-10 flex flex-col min-h-screen">
