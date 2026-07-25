@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Link from "next/link";
 import { navigationConfig } from "@/lib/navigation";
-import { ArrowRight, Github, Twitter, Youtube, Globe } from "lucide-react";
+import { ArrowRight, Facebook, Instagram, Youtube } from "lucide-react";
 
 export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -81,15 +81,15 @@ export const Footer: React.FC = () => {
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs font-sans text-carbon-900 dark:text-bone-200 font-medium">
           <div className="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-2">
             <span>© {currentYear} Posthuman Lab Network. All rights reserved.</span>
-            <span>•</span>
+            <span>/</span>
             <span className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors cursor-pointer">
               Ethical Guidelines
             </span>
-            <span>•</span>
+            <span>/</span>
             <span className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors cursor-pointer">
               Open-Access Policy
             </span>
-            <span>•</span>
+            <span>/</span>
             <Link
               href="/admin"
               className="text-earth-600 dark:text-earth-400 font-mono uppercase tracking-wider hover:underline"
@@ -100,22 +100,24 @@ export const Footer: React.FC = () => {
 
           <div className="flex items-center space-x-4">
             <a
-              href="https://github.com"
+              href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="GitHub Repository"
+              aria-label="Instagram Profile"
               className="p-2.5 bg-white/70 dark:bg-carbon-900/70 text-carbon-950 dark:text-bone-100 rounded-full border border-carbon-950/8 dark:border-bone-50/15 hover:border-earth-500/30 hover:text-earth-600 dark:hover:text-earth-400 transition-colors"
             >
-              <Github className="w-3.5 h-3.5" />
+              <Instagram className="w-3.5 h-3.5" />
             </a>
             <a
-              href="https://twitter.com"
+              href="https://x.com"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Twitter Profile"
+              aria-label="X Profile"
               className="p-2.5 bg-white/70 dark:bg-carbon-900/70 text-carbon-950 dark:text-bone-100 rounded-full border border-carbon-950/8 dark:border-bone-50/15 hover:border-earth-500/30 hover:text-earth-600 dark:hover:text-earth-400 transition-colors"
             >
-              <Twitter className="w-3.5 h-3.5" />
+              <span className="block h-3.5 w-3.5 text-center font-sans text-[11px] font-black leading-[14px]">
+                X
+              </span>
             </a>
             <a
               href="https://youtube.com"
@@ -127,11 +129,13 @@ export const Footer: React.FC = () => {
               <Youtube className="w-3.5 h-3.5" />
             </a>
             <a
-              href="#"
-              aria-label="Global Networks Directory"
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook Page"
               className="p-2.5 bg-white/70 dark:bg-carbon-900/70 text-carbon-950 dark:text-bone-100 rounded-full border border-carbon-950/8 dark:border-bone-50/15 hover:border-earth-500/30 hover:text-earth-600 dark:hover:text-earth-400 transition-colors"
             >
-              <Globe className="w-3.5 h-3.5" />
+              <Facebook className="w-3.5 h-3.5" />
             </a>
           </div>
         </div>

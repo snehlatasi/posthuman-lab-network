@@ -1,4 +1,4 @@
-export interface NetworkLocation {
+﻿export interface NetworkLocation {
   id: string;
   name: string;
   country: string;

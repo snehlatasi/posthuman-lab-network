@@ -3,6 +3,9 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { geoEquirectangular, geoGraticule10, geoPath } from "d3-geo";
+import { feature, mesh } from "topojson-client";
+import countriesTopologyJson from "world-atlas/countries-110m.json";
 import {
   ZoomIn,
   ZoomOut,
@@ -14,6 +17,8 @@ import {
   X,
   Check,
 } from "lucide-react";
+import type { FeatureCollection, GeoJsonProperties, Geometry } from "geojson";
+import type { GeometryCollection, Topology } from "topojson-specification";
 import type { NetworkLocation } from "@/lib/data/locations";
 import { networkLocations, geoToSvg } from "@/lib/data/locations";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
@@ -103,6 +108,79 @@ const NETWORK_CONNECTIONS = [
   { from: "europe", to: "africa" },
 ];
 
+const MAP_WIDTH = 1000;
+const MAP_HEIGHT = 500;
+
+type CountriesTopology = Topology<{
+  countries: GeometryCollection;
+}>;
+
+const countriesTopology = countriesTopologyJson as unknown as CountriesTopology;
+const countriesFeatureCollection = feature(
+  countriesTopology,
+  countriesTopology.objects.countries
+) as FeatureCollection<Geometry, GeoJsonProperties>;
+const countryBorderGeometry = mesh(
+  countriesTopology,
+  countriesTopology.objects.countries,
+  (a, b) => a !== b
+) as Geometry;
+const mapProjection = geoEquirectangular().fitExtent(
+  [
+    [0, 2],
+    [MAP_WIDTH, MAP_HEIGHT - 4],
+  ],
+  { type: "Sphere" }
+);
+const mapPath = geoPath(mapProjection);
+const countryPaths = countriesFeatureCollection.features
+  .map((country, index) => ({
+    id: String(country.id ?? index),
+    name: String(country.properties?.name ?? "Country"),
+    path: mapPath(country) ?? "",
+  }))
+  .filter((country) => country.path.length > 0);
+const countryBorderPath = mapPath(countryBorderGeometry) ?? "";
+const graticulePath = mapPath(geoGraticule10()) ?? "";
+
+const MAP_LABELS = [
+  { name: "Canada", lat: 57, lng: -106 },
+  { name: "United States", lat: 38, lng: -97 },
+  { name: "Mexico", lat: 23, lng: -102 },
+  { name: "Greenland", lat: 72, lng: -42 },
+  { name: "Iceland", lat: 65, lng: -19 },
+  { name: "United Kingdom", lat: 55, lng: -3 },
+  { name: "France", lat: 46, lng: 2 },
+  { name: "Germany", lat: 51, lng: 10 },
+  { name: "Norway", lat: 61, lng: 8 },
+  { name: "Sweden", lat: 62, lng: 15 },
+  { name: "Finland", lat: 64, lng: 26 },
+  { name: "Russia", lat: 61, lng: 82 },
+  { name: "China", lat: 35, lng: 103 },
+  { name: "India", lat: 22, lng: 78 },
+  { name: "Japan", lat: 38, lng: 139 },
+  { name: "Brazil", lat: -10, lng: -53 },
+  { name: "Argentina", lat: -38, lng: -64 },
+  { name: "Algeria", lat: 28, lng: 2 },
+  { name: "Egypt", lat: 27, lng: 30 },
+  { name: "Saudi Arabia", lat: 24, lng: 45 },
+  { name: "Iran", lat: 32, lng: 53 },
+  { name: "Kenya", lat: 0, lng: 37 },
+  { name: "South Africa", lat: -30, lng: 24 },
+  { name: "Indonesia", lat: -3, lng: 118 },
+  { name: "Australia", lat: -25, lng: 134 },
+  { name: "New Zealand", lat: -41, lng: 174 },
+];
+
+const projectGeoPoint = (latitude: number, longitude: number): { x: number; y: number } => {
+  const projected = mapProjection([longitude, latitude]);
+  if (projected) {
+    return { x: projected[0], y: projected[1] };
+  }
+
+  return geoToSvg(latitude, longitude, MAP_WIDTH, MAP_HEIGHT);
+};
+
 interface WorldMapSvgProps {
   onSelectLocation?: (loc: NetworkLocation) => void;
   selectedLocationId?: string | null;
@@ -123,16 +201,16 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
   const [copiedLink, setCopiedLink] = useState(false);
 
   // SVG ViewBox Zoom/Pan State
-  const defaultViewBox = { x: 0, y: 0, w: 1000, h: 500 };
+  const defaultViewBox = { x: 0, y: 0, w: MAP_WIDTH, h: MAP_HEIGHT };
   const [viewBox, setViewBox] = useState(defaultViewBox);
   const [isZoomed, setIsZoomed] = useState(false);
 
   const focusLocation = useCallback((loc: NetworkLocation) => {
-    const { x, y } = geoToSvg(loc.latitude, loc.longitude);
+    const { x, y } = projectGeoPoint(loc.latitude, loc.longitude);
     const zoomWidth = 400;
     const zoomHeight = 200;
-    const targetX = Math.max(0, Math.min(1000 - zoomWidth, x - zoomWidth / 2));
-    const targetY = Math.max(0, Math.min(500 - zoomHeight, y - zoomHeight / 2));
+    const targetX = Math.max(0, Math.min(MAP_WIDTH - zoomWidth, x - zoomWidth / 2));
+    const targetY = Math.max(0, Math.min(MAP_HEIGHT - zoomHeight, y - zoomHeight / 2));
 
     setViewBox({ x: targetX, y: targetY, w: zoomWidth, h: zoomHeight });
     setIsZoomed(true);
@@ -167,8 +245,8 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
     setViewBox((prev) => {
       const nw = Math.max(250, prev.w * 0.75);
       const nh = Math.max(125, prev.h * 0.75);
-      const nx = Math.max(0, Math.min(1000 - nw, prev.x + (prev.w - nw) / 2));
-      const ny = Math.max(0, Math.min(500 - nh, prev.y + (prev.h - nh) / 2));
+      const nx = Math.max(0, Math.min(MAP_WIDTH - nw, prev.x + (prev.w - nw) / 2));
+      const ny = Math.max(0, Math.min(MAP_HEIGHT - nh, prev.y + (prev.h - nh) / 2));
       return { x: nx, y: ny, w: nw, h: nh };
     });
     setIsZoomed(true);
@@ -176,11 +254,11 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
 
   const zoomOut = () => {
     setViewBox((prev) => {
-      const nw = Math.min(1000, prev.w * 1.33);
-      const nh = Math.min(500, prev.h * 1.33);
+      const nw = Math.min(MAP_WIDTH, prev.w * 1.33);
+      const nh = Math.min(MAP_HEIGHT, prev.h * 1.33);
       if (nw >= 950) return defaultViewBox;
-      const nx = Math.max(0, Math.min(1000 - nw, prev.x - (nw - prev.w) / 2));
-      const ny = Math.max(0, Math.min(500 - nh, prev.y - (nh - prev.h) / 2));
+      const nx = Math.max(0, Math.min(MAP_WIDTH - nw, prev.x - (nw - prev.w) / 2));
+      const ny = Math.max(0, Math.min(MAP_HEIGHT - nh, prev.y - (nh - prev.h) / 2));
       return { x: nx, y: ny, w: nw, h: nh };
     });
   };
@@ -208,17 +286,23 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
   return (
     <div className="space-y-6 w-full">
       {/* Map Container Box */}
-      <div className="relative aspect-[16/9] sm:aspect-[2/1] w-full rounded-2xl bg-[#0b0e0c] dark:bg-[#0b0e0c] border border-bone-200/15 dark:border-bone-50/15 overflow-hidden shadow-2xl transition-all duration-500 group select-none">
+      <div className="relative aspect-[16/10] sm:aspect-[2/1] w-full rounded-lg bg-[#020812]/72 border border-[#e0b86c]/24 overflow-hidden shadow-[0_34px_120px_-50px_rgba(0,0,0,0.94),0_0_44px_rgba(159,248,255,0.1)] backdrop-blur-[3px] transition-all duration-500 group select-none">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_38%_48%,rgba(159,248,255,0.18),transparent_32%),radial-gradient(circle_at_68%_34%,rgba(224,184,108,0.12),transparent_30%),linear-gradient(135deg,rgba(255,255,255,0.12),transparent_28%,rgba(0,0,0,0.52))] pointer-events-none z-10" />
+        <div className="absolute inset-0 ring-1 ring-inset ring-bone-50/10 pointer-events-none z-20" />
+        <div className="absolute left-4 top-4 z-20 h-8 w-8 border-l border-t border-[#e0b86c]/45 pointer-events-none" />
+        <div className="absolute right-4 top-4 z-20 h-8 w-8 border-r border-t border-[#e0b86c]/45 pointer-events-none" />
+        <div className="absolute bottom-4 left-4 z-20 h-8 w-8 border-b border-l border-[#e0b86c]/45 pointer-events-none" />
+        <div className="absolute bottom-4 right-4 z-20 h-8 w-8 border-b border-r border-[#e0b86c]/45 pointer-events-none" />
         {/* Fine Digital Grid Overlay */}
-        <div className="absolute inset-0 digital-grid opacity-25 pointer-events-none z-0" />
+        <div className="absolute inset-0 digital-grid opacity-20 pointer-events-none z-0" />
 
         {/* Top-Right Vertical Circular Map Controls */}
-        <div className="absolute bottom-6 right-6 z-30 flex flex-col items-center space-y-2">
+        <div className="absolute bottom-5 right-5 z-30 flex flex-col items-center space-y-2">
           <button
             onClick={zoomIn}
             aria-label="Zoom In"
             title="Zoom In"
-            className="w-9 h-9 rounded-full bg-carbon-950/80 backdrop-blur-md border border-bone-50/15 text-bone-200 hover:text-earth-400 hover:border-earth-500/40 flex items-center justify-center transition-all cursor-pointer shadow-md"
+            className="w-10 h-10 rounded-md bg-[#07111c]/78 backdrop-blur-md border border-[#e0b86c]/24 text-bone-100 hover:text-[#9ff8ff] hover:border-[#9ff8ff]/45 flex items-center justify-center transition-all cursor-pointer shadow-md"
           >
             <ZoomIn className="w-4 h-4" />
           </button>
@@ -226,7 +310,7 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
             onClick={zoomOut}
             aria-label="Zoom Out"
             title="Zoom Out"
-            className="w-9 h-9 rounded-full bg-carbon-950/80 backdrop-blur-md border border-bone-50/15 text-bone-200 hover:text-earth-400 hover:border-earth-500/40 flex items-center justify-center transition-all cursor-pointer shadow-md"
+            className="w-10 h-10 rounded-md bg-[#07111c]/78 backdrop-blur-md border border-[#e0b86c]/24 text-bone-100 hover:text-[#9ff8ff] hover:border-[#9ff8ff]/45 flex items-center justify-center transition-all cursor-pointer shadow-md"
           >
             <ZoomOut className="w-4 h-4" />
           </button>
@@ -235,7 +319,7 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
               onClick={resetView}
               aria-label="Reset World View"
               title="Reset World View"
-              className="w-9 h-9 rounded-full bg-carbon-950/80 backdrop-blur-md border border-earth-500/40 text-earth-400 hover:text-earth-300 flex items-center justify-center transition-all cursor-pointer shadow-md"
+              className="w-10 h-10 rounded-md bg-[#07111c]/78 backdrop-blur-md border border-[#e0b86c]/40 text-[#e0b86c] hover:text-earth-200 flex items-center justify-center transition-all cursor-pointer shadow-md"
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
@@ -250,59 +334,127 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
         >
           <defs>
             {/* Ambient Radial Gradient */}
-            <radialGradient id="oceanGlow" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="#0e1511" stopOpacity="0.9" />
-              <stop offset="100%" stopColor="#080c09" stopOpacity="1" />
+            <radialGradient id="oceanGlow" cx="52%" cy="45%" r="72%">
+              <stop offset="0%" stopColor="#0c2b39" stopOpacity="0.72" />
+              <stop offset="52%" stopColor="#061724" stopOpacity="0.78" />
+              <stop offset="100%" stopColor="#020611" stopOpacity="0.92" />
             </radialGradient>
 
+            <linearGradient id="landFill" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#153d42" stopOpacity="0.78" />
+              <stop offset="55%" stopColor="#102c31" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#0a191f" stopOpacity="0.82" />
+            </linearGradient>
+
+            <linearGradient id="landStroke" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#d8fff8" stopOpacity="0.92" />
+              <stop offset="58%" stopColor="#9ff8ff" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#e0b86c" stopOpacity="0.42" />
+            </linearGradient>
+
             {/* Marker Glow Filter */}
-            <filter id="orangeGlow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="2.5" result="blur" />
+            <filter id="orangeGlow" x="-80%" y="-80%" width="260%" height="260%">
+              <feGaussianBlur stdDeviation="2.8" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+
+            <filter id="routeGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
             </filter>
           </defs>
 
           {/* Ocean Background */}
-          <rect width="1000" height="500" fill="url(#oceanGlow)" />
+          <rect width={MAP_WIDTH} height={MAP_HEIGHT} fill="url(#oceanGlow)" />
 
-          {/* Faint Gridlines (3% opacity) */}
-          <g stroke="#1e2e23" strokeWidth="0.5" strokeDasharray="2 4" opacity="0.15">
-            <line x1="0" y1="125" x2="1000" y2="125" />
-            <line x1="0" y1="250" x2="1000" y2="250" />
-            <line x1="0" y1="375" x2="1000" y2="375" />
-            <line x1="250" y1="0" x2="250" y2="500" />
-            <line x1="500" y1="0" x2="500" y2="500" />
-            <line x1="750" y1="0" x2="750" y2="500" />
-          </g>
+          <path
+            d={graticulePath}
+            fill="none"
+            stroke="#9ff8ff"
+            strokeWidth="0.45"
+            strokeDasharray="3 4"
+            opacity="0.18"
+          />
 
           {/* Continents & Landmasses SVG Paths */}
           <g
-            fill="#142017"
-            stroke="#223527"
-            strokeWidth="1"
+            stroke="url(#landStroke)"
+            strokeWidth="0.72"
             strokeLinejoin="round"
             strokeLinecap="round"
           >
-            {WORLD_LANDMASS_PATHS.map((land) => (
-              <path
-                key={land.name}
-                d={land.path}
-                className="transition-colors duration-300 hover:fill-[#192a1e]"
-              >
-                <title>{land.name}</title>
-              </path>
-            ))}
+            {countryPaths.length > 0
+              ? countryPaths.map((country) => (
+                  <path
+                    key={country.id}
+                    d={country.path}
+                    fill="url(#landFill)"
+                    className="transition-all duration-300 hover:fill-[#1e5154]"
+                  >
+                    <title>{country.name}</title>
+                  </path>
+                ))
+              : WORLD_LANDMASS_PATHS.map((land) => (
+                  <path
+                    key={land.name}
+                    d={land.path}
+                    fill="url(#landFill)"
+                    className="transition-all duration-300 hover:fill-[#1e5154]"
+                  >
+                    <title>{land.name}</title>
+                  </path>
+                ))}
+          </g>
+
+          <path
+            d={countryBorderPath}
+            fill="none"
+            stroke="#e7dcc4"
+            strokeWidth="0.38"
+            strokeDasharray="2 2.8"
+            opacity="0.32"
+          />
+
+          <g className="pointer-events-none select-none">
+            {MAP_LABELS.map((label) => {
+              const { x, y } = projectGeoPoint(label.lat, label.lng);
+              return (
+                <text
+                  key={label.name}
+                  x={x}
+                  y={y}
+                  textAnchor="middle"
+                  fill="#f3ebd9"
+                  fontSize="10.5"
+                  fontWeight="650"
+                  fontFamily="var(--font-manrope), sans-serif"
+                  letterSpacing="0"
+                  opacity="0.58"
+                >
+                  {label.name}
+                </text>
+              );
+            })}
           </g>
 
           {/* Network Interconnection Arcs (Subtle Copper lines) */}
-          <g stroke="#ea580c" strokeWidth="0.8" opacity="0.15" strokeDasharray="2 4">
+          <g
+            stroke="#e0b86c"
+            strokeWidth="0.95"
+            opacity="0.36"
+            strokeDasharray="3 6"
+            filter="url(#routeGlow)"
+          >
             {NETWORK_CONNECTIONS.map((conn, idx) => {
               const fromLoc = networkLocations.find((l) => l.id === conn.from);
               const toLoc = networkLocations.find((l) => l.id === conn.to);
               if (!fromLoc || !toLoc) return null;
 
-              const p1 = geoToSvg(fromLoc.latitude, fromLoc.longitude);
-              const p2 = geoToSvg(toLoc.latitude, toLoc.longitude);
+              const p1 = projectGeoPoint(fromLoc.latitude, fromLoc.longitude);
+              const p2 = projectGeoPoint(toLoc.latitude, toLoc.longitude);
 
               const midX = (p1.x + p2.x) / 2;
               const midY = (p1.y + p2.y) / 2 - 35;
@@ -319,7 +471,7 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
 
           {/* Interactive Network Location Markers */}
           {networkLocations.map((loc) => {
-            const { x, y } = geoToSvg(loc.latitude, loc.longitude);
+            const { x, y } = projectGeoPoint(loc.latitude, loc.longitude);
             const isSelected = selectedLoc?.id === loc.id;
             const isHovered = hoveredLoc?.id === loc.id;
 
@@ -346,7 +498,7 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
                   <circle
                     r="14"
                     fill="none"
-                    stroke="#ea580c"
+                    stroke="#e0b86c"
                     strokeWidth="1.2"
                     opacity="0.6"
                     className="animate-ping"
@@ -356,16 +508,16 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
                 {/* Halo Ring */}
                 <circle
                   r={isSelected ? "12" : isHovered ? "9" : "6"}
-                  fill={isSelected ? "#ea580c" : isHovered ? "#ea580c" : "#2a4232"}
-                  opacity={isSelected ? "0.3" : isHovered ? "0.4" : "0.2"}
+                  fill={isSelected ? "#e0b86c" : isHovered ? "#e0b86c" : "#9ff8ff"}
+                  opacity={isSelected ? "0.3" : isHovered ? "0.34" : "0.22"}
                   className="transition-all duration-300"
                 />
 
                 {/* Solid Core Dot */}
                 <circle
                   r={isSelected ? "6" : isHovered ? "4.5" : "3.5"}
-                  fill={isSelected ? "#ea580c" : isHovered ? "#ea580c" : "#4ade80"}
-                  stroke={isSelected ? "#f3ebd9" : "#142017"}
+                  fill={isSelected ? "#e0b86c" : isHovered ? "#e0b86c" : "#9ff8ff"}
+                  stroke={isSelected ? "#fffaf2" : "#071923"}
                   strokeWidth={isSelected ? "1.5" : "1"}
                   filter={isSelected || isHovered ? "url(#orangeGlow)" : undefined}
                   className="transition-all duration-300"
@@ -375,12 +527,13 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
                 <text
                   x="9"
                   y="3.5"
-                  fill={isSelected ? "#ea580c" : isHovered ? "#f3ebd9" : "#d5d0c4"}
-                  fontSize={isSelected ? "10.5" : "9"}
-                  fontWeight={isSelected ? "600" : "500"}
+                  fill={isSelected ? "#ffe0a8" : isHovered ? "#ffffff" : "#dcefed"}
+                  fontSize={isSelected ? "10" : "8.3"}
+                  fontWeight={isSelected ? "700" : "650"}
                   fontFamily="var(--font-manrope), sans-serif"
-                  letterSpacing="0.02em"
-                  className="pointer-events-none select-none transition-all duration-300 drop-shadow"
+                  letterSpacing="0"
+                  opacity={isSelected || isHovered ? "0.95" : "0.68"}
+                  className="pointer-events-none select-none transition-all duration-300"
                 >
                   {loc.country}
                 </text>

@@ -53,7 +53,7 @@ export default function AdminMembershipsPage() {
             Membership Applications
           </h2>
           <p className="font-sans text-xs text-bone-200 font-medium">
-            Review, approve, or reject incoming Google scholar applications.
+            Review, approve, or reject incoming verified member applications.
           </p>
         </div>
         <span className="font-mono text-xs text-earth-400 font-bold uppercase">

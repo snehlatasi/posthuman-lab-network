@@ -1,6 +1,7 @@
 package org.posthumanlab.network.domain;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.posthumanlab.network.contact.dto.ContactRequest;
@@ -28,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@SpringBootTest(properties = "app.member-auth.expose-otp=true")
 @AutoConfigureMockMvc
 @Transactional
 public class DomainControllersTest {
@@ -204,6 +205,85 @@ public class DomainControllersTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testMemberSignupOtpAndApplicationSubmission() throws Exception {
+        String signupPayload = """
+                {
+                  "fullName": "Priya Sen",
+                  "email": "priya@example.com",
+                  "password": "MemberPass123!"
+                }
+                """;
+
+        String challengeJson = mockMvc.perform(post("/api/members/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(signupPayload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.email", is("priya@example.com")))
+                .andExpect(jsonPath("$.devOtp", matchesPattern("\\d{6}")))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        JsonNode challenge = objectMapper.readTree(challengeJson);
+        String otp = challenge.get("devOtp").asText();
+
+        String verifyPayload = """
+                {
+                  "email": "priya@example.com",
+                  "otp": "%s"
+                }
+                """.formatted(otp);
+
+        String authJson = mockMvc.perform(post("/api/members/auth/verify-otp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(verifyPayload))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is("NOT_APPLIED")))
+                .andExpect(jsonPath("$.accountSubjectId", startsWith("member-account-")))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        JsonNode auth = objectMapper.readTree(authJson);
+        String accountSubjectId = auth.get("accountSubjectId").asText();
+
+        String applicationPayload = """
+                {
+                  "googleSubjectId": "%s",
+                  "email": "priya@example.com",
+                  "fullName": "Priya Sen",
+                  "role": "Researcher",
+                  "country": "India",
+                  "areasOfInterest": "technology ethics"
+                }
+                """.formatted(accountSubjectId);
+
+        mockMvc.perform(post("/api/members/apply")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(applicationPayload))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.email", is("priya@example.com")))
+                .andExpect(jsonPath("$.status", is("PENDING")));
+    }
+
+    @Test
+    public void testMemberApplicationRequiresVerifiedAccount() throws Exception {
+        String applicationPayload = """
+                {
+                  "googleSubjectId": "member-account-9999",
+                  "email": "intruder@example.com",
+                  "fullName": "Intruder",
+                  "areasOfInterest": "unauthorized access"
+                }
+                """;
+
+        mockMvc.perform(post("/api/members/apply")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(applicationPayload))
+                .andExpect(status().isUnauthorized());
     }
 
     // ----------------------------------------------------

@@ -1,17 +1,32 @@
 import { fetchJson } from "./apiClient";
 
-export interface GoogleAuthRequestDto {
-  googleSubjectId: string;
-  email: string;
+export interface MemberSignupRequestDto {
   fullName: string;
-  profileImageUrl?: string;
-  idToken?: string;
+  email: string;
+  password: string;
 }
 
-export interface GoogleAuthResponseDto {
+export interface MemberSigninRequestDto {
+  email: string;
+  password: string;
+}
+
+export interface MemberOtpVerifyRequestDto {
+  email: string;
+  otp: string;
+}
+
+export interface MemberOtpChallengeResponseDto {
+  email: string;
+  message: string;
+  devOtp?: string;
+}
+
+export interface MemberAuthResponseDto {
   status: "NOT_APPLIED" | "PENDING" | "APPROVED" | "REJECTED";
   applicationId?: number;
   memberId?: number;
+  accountSubjectId: string;
   email: string;
   fullName: string;
   profileImageUrl?: string;
@@ -75,8 +90,20 @@ export interface PublicMemberDto {
 }
 
 export const memberAuthApi = {
-  verifyGoogleIdentity: (data: GoogleAuthRequestDto) =>
-    fetchJson<GoogleAuthResponseDto>("/api/members/auth/google", {
+  signup: (data: MemberSignupRequestDto) =>
+    fetchJson<MemberOtpChallengeResponseDto>("/api/members/auth/signup", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  signin: (data: MemberSigninRequestDto) =>
+    fetchJson<MemberOtpChallengeResponseDto>("/api/members/auth/signin", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  verifyOtp: (data: MemberOtpVerifyRequestDto) =>
+    fetchJson<MemberAuthResponseDto>("/api/members/auth/verify-otp", {
       method: "POST",
       body: JSON.stringify(data),
     }),

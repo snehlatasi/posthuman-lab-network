@@ -56,7 +56,7 @@ export default function AdminSettingsPage() {
             </div>
             <div className="flex justify-between py-1 border-b border-bone-50/10">
               <span>Member Auth Mode:</span>
-              <span className="text-earth-400 font-bold">Google OAuth 2.0 Only</span>
+              <span className="text-earth-400 font-bold">Email Password + OTP</span>
             </div>
           </div>
         </div>

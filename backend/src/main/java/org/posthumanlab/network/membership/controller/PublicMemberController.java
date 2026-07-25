@@ -3,6 +3,7 @@ package org.posthumanlab.network.membership.controller;
 import jakarta.validation.Valid;
 import org.posthumanlab.network.membership.dto.*;
 import org.posthumanlab.network.membership.entity.MembershipApplication;
+import org.posthumanlab.network.membership.service.MemberAccountAuthService;
 import org.posthumanlab.network.membership.service.MembershipApplicationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +16,26 @@ import java.util.List;
 public class PublicMemberController {
 
     private final MembershipApplicationService applicationService;
+    private final MemberAccountAuthService accountAuthService;
 
-    public PublicMemberController(MembershipApplicationService applicationService) {
+    public PublicMemberController(MembershipApplicationService applicationService, MemberAccountAuthService accountAuthService) {
         this.applicationService = applicationService;
+        this.accountAuthService = accountAuthService;
     }
 
-    @PostMapping("/auth/google")
-    public ResponseEntity<GoogleAuthResponse> verifyGoogleIdentity(@Valid @RequestBody GoogleAuthRequest req) {
-        return ResponseEntity.ok(applicationService.verifyGoogleIdentity(req));
+    @PostMapping("/auth/signup")
+    public ResponseEntity<MemberOtpChallengeResponse> signup(@Valid @RequestBody MemberSignupRequest req) {
+        return ResponseEntity.ok(accountAuthService.signup(req));
+    }
+
+    @PostMapping("/auth/signin")
+    public ResponseEntity<MemberOtpChallengeResponse> signin(@Valid @RequestBody MemberSigninRequest req) {
+        return ResponseEntity.ok(accountAuthService.signin(req));
+    }
+
+    @PostMapping("/auth/verify-otp")
+    public ResponseEntity<MemberAuthResponse> verifyOtp(@Valid @RequestBody MemberOtpVerifyRequest req) {
+        return ResponseEntity.ok(accountAuthService.verifyOtp(req));
     }
 
     @PostMapping("/apply")

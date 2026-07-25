@@ -217,7 +217,7 @@ export const Header: FC = () => {
             </button>
           )}
 
-          {/* Google Member State Indicator */}
+          {/* Member State Indicator */}
           {mounted && member && (
             <Link
               href="/membership/become-a-member"

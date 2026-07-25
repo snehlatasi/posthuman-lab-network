@@ -1,20 +1,21 @@
 package org.posthumanlab.network.membership.dto;
 
-public class GoogleAuthResponse {
-
-    private String status; // "NOT_APPLIED", "PENDING", "APPROVED", "REJECTED"
+public class MemberAuthResponse {
+    private String status;
     private Long applicationId;
     private Long memberId;
+    private String accountSubjectId;
     private String email;
     private String fullName;
     private String profileImageUrl;
 
-    public GoogleAuthResponse() {}
+    public MemberAuthResponse() {}
 
-    public GoogleAuthResponse(String status, Long applicationId, Long memberId, String email, String fullName, String profileImageUrl) {
+    public MemberAuthResponse(String status, Long applicationId, Long memberId, String accountSubjectId, String email, String fullName, String profileImageUrl) {
         this.status = status;
         this.applicationId = applicationId;
         this.memberId = memberId;
+        this.accountSubjectId = accountSubjectId;
         this.email = email;
         this.fullName = fullName;
         this.profileImageUrl = profileImageUrl;
@@ -28,6 +29,9 @@ public class GoogleAuthResponse {
 
     public Long getMemberId() { return memberId; }
     public void setMemberId(Long memberId) { this.memberId = memberId; }
+
+    public String getAccountSubjectId() { return accountSubjectId; }
+    public void setAccountSubjectId(String accountSubjectId) { this.accountSubjectId = accountSubjectId; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }

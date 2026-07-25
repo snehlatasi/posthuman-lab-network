@@ -14,70 +14,39 @@ import java.util.stream.Collectors;
 @Service
 public class MembershipApplicationService {
 
+    private static final String ACCOUNT_SUBJECT_PREFIX = "member-account-";
+
     private final MembershipApplicationRepository applicationRepository;
     private final MemberRepository memberRepository;
-    private final GoogleTokenVerifierService tokenVerifier;
+    private final MemberAccountRepository accountRepository;
 
     public MembershipApplicationService(
             MembershipApplicationRepository applicationRepository,
             MemberRepository memberRepository,
-            GoogleTokenVerifierService tokenVerifier) {
+            MemberAccountRepository accountRepository) {
         this.applicationRepository = applicationRepository;
         this.memberRepository = memberRepository;
-        this.tokenVerifier = tokenVerifier;
-    }
-
-    public GoogleAuthResponse verifyGoogleIdentity(GoogleAuthRequest req) {
-        // 1. Perform cryptographic Google ID token verification
-        GoogleTokenVerifierService.VerifiedGoogleToken verified = tokenVerifier.verify(
-                req.getIdToken(),
-                req.getGoogleSubjectId(),
-                req.getEmail(),
-                req.getFullName(),
-                req.getProfileImageUrl()
-        );
-
-        String subjectId = verified.getSubjectId();
-        String email = verified.getEmail();
-
-        // 2. Check if user is already an approved member
-        Optional<Member> existingMember = memberRepository.findByGoogleSubjectId(subjectId);
-        if (!existingMember.isPresent()) {
-            existingMember = memberRepository.findByEmail(email);
-        }
-
-        if (existingMember.isPresent()) {
-            Member m = existingMember.get();
-            return new GoogleAuthResponse("APPROVED", null, m.getId(), m.getEmail(), m.getFullName(), m.getProfileImageUrl());
-        }
-
-        // 3. Check if user has an existing application
-        Optional<MembershipApplication> existingApp = applicationRepository.findByGoogleSubjectId(subjectId);
-        if (!existingApp.isPresent()) {
-            existingApp = applicationRepository.findByEmail(email);
-        }
-
-        if (existingApp.isPresent()) {
-            MembershipApplication app = existingApp.get();
-            return new GoogleAuthResponse(app.getStatus().name(), app.getId(), null, app.getEmail(), app.getFullName(), app.getProfileImageUrl());
-        }
-
-        // 4. Not applied yet
-        return new GoogleAuthResponse("NOT_APPLIED", null, null, email, verified.getName(), verified.getPictureUrl());
+        this.accountRepository = accountRepository;
     }
 
     @Transactional
     public MembershipApplication submitApplication(MembershipApplicationRequest req) {
+        MemberAccount account = resolveVerifiedAccount(req);
+
         // Prevent duplicates
         Optional<MembershipApplication> existing = applicationRepository.findByGoogleSubjectId(req.getGoogleSubjectId());
         if (existing.isPresent()) {
             return existing.get();
         }
+        existing = applicationRepository.findByEmail(account.getEmail());
+        if (existing.isPresent()) {
+            return existing.get();
+        }
 
         MembershipApplication app = new MembershipApplication();
-        app.setGoogleSubjectId(req.getGoogleSubjectId());
-        app.setEmail(req.getEmail());
-        app.setFullName(req.getFullName());
+        app.setGoogleSubjectId(accountSubjectId(account));
+        app.setEmail(account.getEmail());
+        app.setFullName(account.getFullName());
         app.setProfileImageUrl(req.getProfileImageUrl());
         app.setAffiliation(req.getAffiliation());
         app.setRole(req.getRole());
@@ -89,6 +58,33 @@ public class MembershipApplicationService {
         app.setStatus(MembershipApplicationStatus.PENDING);
 
         return applicationRepository.save(app);
+    }
+
+    private MemberAccount resolveVerifiedAccount(MembershipApplicationRequest req) {
+        String subjectId = req.getGoogleSubjectId();
+        if (subjectId == null || !subjectId.startsWith(ACCOUNT_SUBJECT_PREFIX)) {
+            throw new SecurityException("A verified member account is required before applying.");
+        }
+
+        Long accountId;
+        try {
+            accountId = Long.parseLong(subjectId.substring(ACCOUNT_SUBJECT_PREFIX.length()));
+        } catch (NumberFormatException ex) {
+            throw new SecurityException("A verified member account is required before applying.", ex);
+        }
+
+        MemberAccount account = accountRepository.findById(accountId)
+                .orElseThrow(() -> new SecurityException("A verified member account is required before applying."));
+
+        if (!account.isEmailVerified() || !account.getEmail().equalsIgnoreCase(req.getEmail())) {
+            throw new SecurityException("A verified member account is required before applying.");
+        }
+
+        return account;
+    }
+
+    private String accountSubjectId(MemberAccount account) {
+        return ACCOUNT_SUBJECT_PREFIX + account.getId();
     }
 
     public List<MembershipApplication> getAllApplications() {

@@ -33,7 +33,22 @@ Important production settings:
 - `H2_CONSOLE_ENABLED=false` in production.
 - `JPA_SHOW_SQL=false` in production.
 - `FRONTEND_ORIGIN` must match the deployed frontend origin.
+- `MEMBER_AUTH_EXPOSE_OTP=false` in production so verification codes are never returned by the API.
 - Use a production database profile before multi-user or multi-instance deployment.
+
+## Member Sign-In
+
+Member applicants create an email/password account, verify a one-time code, submit an application, and wait for admin approval.
+
+Local development values:
+
+```env
+MEMBER_AUTH_EXPOSE_OTP=true
+MEMBER_AUTH_OTP_TTL_MINUTES=10
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080
+```
+
+With `MEMBER_AUTH_EXPOSE_OTP=true`, the API response includes the OTP so local development can complete the verification flow without email infrastructure. Keep it disabled in production and deliver OTPs through a mail provider.
 
 ## Backend
 

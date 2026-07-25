@@ -7,11 +7,29 @@ import { useMember } from "@/context/MemberContext";
 import { memberAuthApi } from "@/lib/api/memberAuth";
 import { ShieldCheck, Clock, XCircle, LogOut, ArrowRight, UserCheck } from "lucide-react";
 
+type AuthMode = "signup" | "signin";
+
+interface AuthForm {
+  fullName: string;
+  email: string;
+  password: string;
+  otp: string;
+}
+
 export default function BecomeMemberPage() {
-  const { member, loginWithGoogle, logoutMember, updateMemberStatus } = useMember();
+  const { member, signup, signin, verifyOtp, logoutMember, updateMemberStatus } = useMember();
+  const [authMode, setAuthMode] = useState<AuthMode>("signup");
+  const [otpRequested, setOtpRequested] = useState(false);
+  const [devOtp, setDevOtp] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [authForm, setAuthForm] = useState<AuthForm>({
+    fullName: "",
+    email: "",
+    password: "",
+    otp: "",
+  });
 
   // Application Form State
   const [formData, setFormData] = useState({
@@ -25,20 +43,67 @@ export default function BecomeMemberPage() {
     agreeToTerms: false,
   });
 
-  const handleSimulatedGoogleSignIn = async () => {
+  const handleAuthSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!authForm.email.trim() || !authForm.password) {
+      setFormError("Enter your email and password to continue.");
+      return;
+    }
+
+    if (authMode === "signup" && !authForm.fullName.trim()) {
+      setFormError("Enter your full name to create your member account.");
+      return;
+    }
+
     setLoading(true);
     setFormError(null);
+    setDevOtp(null);
+
     try {
-      // Simulate/trigger verified Google Identity sign-in
-      const mockGoogleIdentity = {
-        googleSubjectId: "google-sub-" + Math.floor(100000 + Math.random() * 900000),
-        email: "scholar@university.edu",
-        fullName: "Dr. Alex Rivera",
-        profileImageUrl: "",
-      };
-      await loginWithGoogle(mockGoogleIdentity);
-    } catch {
-      setFormError("Google authentication failed. Please try again.");
+      const response =
+        authMode === "signup"
+          ? await signup({
+              fullName: authForm.fullName.trim(),
+              email: authForm.email.trim(),
+              password: authForm.password,
+            })
+          : await signin({
+              email: authForm.email.trim(),
+              password: authForm.password,
+            });
+
+      setOtpRequested(true);
+      setDevOtp(response.devOtp || null);
+    } catch (error) {
+      setFormError(
+        error instanceof Error ? error.message : "Unable to continue. Please try again."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOtpSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!authForm.otp.trim()) {
+      setFormError("Enter the 6-digit OTP sent to your email.");
+      return;
+    }
+
+    setLoading(true);
+    setFormError(null);
+
+    try {
+      await verifyOtp({
+        email: authForm.email.trim(),
+        otp: authForm.otp.trim(),
+      });
+    } catch (error) {
+      setFormError(
+        error instanceof Error ? error.message : "Unable to verify OTP. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -48,7 +113,7 @@ export default function BecomeMemberPage() {
     e.preventDefault();
     if (!member) return;
 
-    if (!formData.areasOfInterest || !formData.agreeToTerms) {
+    if (!formData.areasOfInterest.trim() || !formData.agreeToTerms) {
       setFormError("Please state your areas of interest and accept community terms.");
       return;
     }
@@ -58,17 +123,17 @@ export default function BecomeMemberPage() {
 
     try {
       await memberAuthApi.submitApplication({
-        googleSubjectId: member.googleSubjectId,
+        googleSubjectId: member.accountSubjectId,
         email: member.email,
         fullName: member.fullName,
         profileImageUrl: member.profileImageUrl,
-        affiliation: formData.affiliation,
+        affiliation: formData.affiliation.trim(),
         role: formData.role,
-        country: formData.country,
-        areasOfInterest: formData.areasOfInterest,
-        bio: formData.bio,
-        motivation: formData.motivation,
-        website: formData.website,
+        country: formData.country.trim(),
+        areasOfInterest: formData.areasOfInterest.trim(),
+        bio: formData.bio.trim(),
+        motivation: formData.motivation.trim(),
+        website: formData.website.trim(),
       });
       updateMemberStatus("PENDING");
     } catch {
@@ -87,7 +152,7 @@ export default function BecomeMemberPage() {
       parentHref="/membership"
     >
       <div className="max-w-3xl mx-auto space-y-8 font-sans">
-        {/* STEP 1: Not Authenticated with Google */}
+        {/* STEP 1: Member account authentication */}
         {!member && (
           <div className="bg-white dark:bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15 p-8 sm:p-10 rounded-3xl shadow-xl space-y-6 text-center">
             <div className="w-14 h-14 mx-auto rounded-2xl bg-earth-600/10 dark:bg-earth-500/20 border border-earth-500/30 flex items-center justify-center text-earth-600 dark:text-earth-400">
@@ -96,13 +161,35 @@ export default function BecomeMemberPage() {
 
             <div className="space-y-2">
               <h2 className="font-serif text-2xl sm:text-3xl font-bold text-carbon-950 dark:text-bone-50 uppercase">
-                Authentication Required
+                Member Account Required
               </h2>
               <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed max-w-lg mx-auto font-medium">
-                To begin your Posthuman Lab Network application, please sign in with Google. Member
-                authentication is managed exclusively through verified Google Identity.
+                Create an account or sign in with email and password. We verify your email with a
+                one-time code before opening the membership application.
               </p>
             </div>
+
+            {!otpRequested && (
+              <div className="grid grid-cols-2 gap-2 rounded-2xl bg-bone-100 p-1 dark:bg-carbon-950">
+                {(["signup", "signin"] as AuthMode[]).map((mode) => (
+                  <button
+                    key={mode}
+                    type="button"
+                    onClick={() => {
+                      setAuthMode(mode);
+                      setFormError(null);
+                    }}
+                    className={`rounded-xl px-4 py-2.5 text-xs font-bold uppercase tracking-widest transition ${
+                      authMode === mode
+                        ? "bg-earth-600 text-bone-50 shadow-md"
+                        : "text-carbon-700 hover:text-carbon-950 dark:text-bone-200/70 dark:hover:text-bone-50"
+                    }`}
+                  >
+                    {mode === "signup" ? "Sign Up" : "Sign In"}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {formError && (
               <div className="p-3.5 rounded-xl bg-earth-600/15 border border-earth-600/30 text-earth-600 dark:text-earth-400 text-xs font-medium">
@@ -110,28 +197,118 @@ export default function BecomeMemberPage() {
               </div>
             )}
 
-            <div className="pt-2">
-              <button
-                onClick={handleSimulatedGoogleSignIn}
-                disabled={loading}
-                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-[#120e0c] dark:bg-earth-600 hover:bg-earth-600 dark:hover:bg-earth-500 text-bone-50 transition-all duration-200 font-sans text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg cursor-pointer disabled:opacity-50 space-x-3"
-              >
-                {/* Google Icon SVG */}
-                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                  <path d="M12.24 10.285V13.4h6.887c-.58 3.407-3.418 5.86-6.887 5.86-4.14 0-7.5-3.36-7.5-7.5s3.36-7.5 7.5-7.5c1.82 0 3.48.65 4.77 1.73l2.36-2.36C17.47 1.95 15.02 1 12.24 1 6.14 1 1.2 5.94 1.2 12s4.94 11 11.04 11c6.33 0 10.53-4.45 10.53-10.72 0-.72-.08-1.42-.2-2.005H12.24z" />
-                </svg>
-                <span>{loading ? "VERIFYING GOOGLE IDENTITY..." : "CONTINUE WITH GOOGLE"}</span>
-              </button>
-            </div>
+            {!otpRequested ? (
+              <form onSubmit={handleAuthSubmit} className="space-y-4 text-left" noValidate>
+                {authMode === "signup" && (
+                  <label className="space-y-1.5 block">
+                    <span className="block text-[10px] font-mono font-bold uppercase tracking-widest text-carbon-700 dark:text-bone-200/70">
+                      Full Name
+                    </span>
+                    <input
+                      type="text"
+                      value={authForm.fullName}
+                      onChange={(event) =>
+                        setAuthForm((current) => ({ ...current, fullName: event.target.value }))
+                      }
+                      className="w-full rounded-xl border border-carbon-950/10 bg-bone-100 p-3 text-xs text-carbon-950 focus:border-earth-400 focus:outline-none dark:border-bone-50/15 dark:bg-carbon-950 dark:text-bone-50"
+                      placeholder="Your full name"
+                    />
+                  </label>
+                )}
+
+                <label className="space-y-1.5">
+                  <span className="block text-[10px] font-mono font-bold uppercase tracking-widest text-carbon-700 dark:text-bone-200/70">
+                    Email
+                  </span>
+                  <input
+                    type="email"
+                    value={authForm.email}
+                    onChange={(event) =>
+                      setAuthForm((current) => ({ ...current, email: event.target.value }))
+                    }
+                    className="w-full rounded-xl border border-carbon-950/10 bg-bone-100 p-3 text-xs text-carbon-950 focus:border-earth-400 focus:outline-none dark:border-bone-50/15 dark:bg-carbon-950 dark:text-bone-50"
+                    placeholder="you@example.com"
+                  />
+                </label>
+
+                <label className="space-y-1.5 block">
+                  <span className="block text-[10px] font-mono font-bold uppercase tracking-widest text-carbon-700 dark:text-bone-200/70">
+                    Password
+                  </span>
+                  <input
+                    type="password"
+                    value={authForm.password}
+                    onChange={(event) =>
+                      setAuthForm((current) => ({ ...current, password: event.target.value }))
+                    }
+                    className="w-full rounded-xl border border-carbon-950/10 bg-bone-100 p-3 text-xs text-carbon-950 focus:border-earth-400 focus:outline-none dark:border-bone-50/15 dark:bg-carbon-950 dark:text-bone-50"
+                    placeholder="Minimum 8 characters"
+                  />
+                </label>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full inline-flex items-center justify-center px-8 py-4 bg-[#120e0c] dark:bg-earth-600 hover:bg-earth-600 dark:hover:bg-earth-500 text-bone-50 transition-all duration-200 font-sans text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg cursor-pointer disabled:opacity-50"
+                >
+                  {loading ? "SENDING VERIFICATION CODE..." : "CONTINUE"}
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleOtpSubmit} className="space-y-4 text-left" noValidate>
+                <label className="space-y-1.5 block">
+                  <span className="block text-[10px] font-mono font-bold uppercase tracking-widest text-carbon-700 dark:text-bone-200/70">
+                    One-Time Code
+                  </span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={6}
+                    value={authForm.otp}
+                    onChange={(event) =>
+                      setAuthForm((current) => ({ ...current, otp: event.target.value }))
+                    }
+                    className="w-full rounded-xl border border-carbon-950/10 bg-bone-100 p-3 text-center font-mono text-lg tracking-[0.35em] text-carbon-950 focus:border-earth-400 focus:outline-none dark:border-bone-50/15 dark:bg-carbon-950 dark:text-bone-50"
+                    placeholder="000000"
+                  />
+                </label>
+
+                {devOtp && (
+                  <div className="rounded-xl border border-earth-500/25 bg-earth-500/10 p-3 text-center font-mono text-xs font-bold uppercase tracking-widest text-earth-600 dark:text-earth-400">
+                    Local OTP: {devOtp}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full inline-flex items-center justify-center px-8 py-4 bg-earth-600 hover:bg-earth-500 text-bone-50 transition-all duration-200 font-sans text-xs font-bold uppercase tracking-widest rounded-xl shadow-lg cursor-pointer disabled:opacity-50"
+                >
+                  {loading ? "VERIFYING CODE..." : "VERIFY AND CONTINUE"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOtpRequested(false);
+                    setAuthForm((current) => ({ ...current, otp: "" }));
+                    setDevOtp(null);
+                    setFormError(null);
+                  }}
+                  className="w-full text-center text-xs font-mono font-bold uppercase tracking-widest text-carbon-600 hover:text-earth-600 dark:text-bone-200/60 dark:hover:text-earth-400"
+                >
+                  Use a different email
+                </button>
+              </form>
+            )}
 
             <p className="text-[11px] font-mono text-carbon-600 dark:text-bone-200/50 pt-2">
-              Google OAuth 2.0 • Your email is used solely for identity verification and membership
-              telemetry.
+              Passwords are encrypted and email access is verified before application submission.
             </p>
           </div>
         )}
 
-        {/* STEP 2: Authenticated with Google — NOT APPLIED YET */}
+        {/* STEP 2: Authenticated member account — NOT APPLIED YET */}
         {member && member.status === "NOT_APPLIED" && (
           <div className="bg-white dark:bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15 p-8 sm:p-10 rounded-3xl shadow-xl space-y-6">
             <div className="flex items-center justify-between border-b border-carbon-950/10 dark:border-bone-50/10 pb-4">
@@ -144,7 +321,7 @@ export default function BecomeMemberPage() {
                     {member.fullName}
                   </span>
                   <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-medium block">
-                    {member.email} • Verified Google Identity
+                    {member.email} • OTP Verified
                   </span>
                 </div>
               </div>

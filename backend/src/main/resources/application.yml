@@ -37,9 +37,9 @@ app:
   jwt:
     secret: ${JWT_SECRET:PosthumanLabNetworkDevEnvSigningKey2026Minimum32BytesSecure!}
     expiration-ms: 86400000
-  google:
-    client-id: ${GOOGLE_CLIENT_ID:}
-    verify-tokens: ${GOOGLE_VERIFY_TOKENS:false}
+  member-auth:
+    expose-otp: ${MEMBER_AUTH_EXPOSE_OTP:true}
+    otp-ttl-minutes: ${MEMBER_AUTH_OTP_TTL_MINUTES:10}
   cors:
     allowed-origins:
       - ${FRONTEND_ORIGIN:http://localhost:3000}

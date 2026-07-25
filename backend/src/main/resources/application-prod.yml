@@ -6,5 +6,5 @@ spring:
     show-sql: false
 
 app:
-  google:
-    verify-tokens: true
+  member-auth:
+    expose-otp: false
