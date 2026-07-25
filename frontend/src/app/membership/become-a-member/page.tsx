@@ -22,7 +22,7 @@ export default function BecomeMemberPage() {
     bio: "",
     motivation: "",
     website: "",
-    agreeToTerms: false
+    agreeToTerms: false,
   });
 
   const handleSimulatedGoogleSignIn = async () => {
@@ -34,7 +34,7 @@ export default function BecomeMemberPage() {
         googleSubjectId: "google-sub-" + Math.floor(100000 + Math.random() * 900000),
         email: "scholar@university.edu",
         fullName: "Dr. Alex Rivera",
-        profileImageUrl: ""
+        profileImageUrl: "",
       };
       await loginWithGoogle(mockGoogleIdentity);
     } catch {
@@ -68,7 +68,7 @@ export default function BecomeMemberPage() {
         areasOfInterest: formData.areasOfInterest,
         bio: formData.bio,
         motivation: formData.motivation,
-        website: formData.website
+        website: formData.website,
       });
       updateMemberStatus("PENDING");
     } catch {
@@ -99,7 +99,8 @@ export default function BecomeMemberPage() {
                 Authentication Required
               </h2>
               <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed max-w-lg mx-auto font-medium">
-                To begin your Posthuman Lab Network application, please sign in with Google. Member authentication is managed exclusively through verified Google Identity.
+                To begin your Posthuman Lab Network application, please sign in with Google. Member
+                authentication is managed exclusively through verified Google Identity.
               </p>
             </div>
 
@@ -124,7 +125,8 @@ export default function BecomeMemberPage() {
             </div>
 
             <p className="text-[11px] font-mono text-carbon-600 dark:text-bone-200/50 pt-2">
-              Google OAuth 2.0 • Your email is used solely for identity verification and membership telemetry.
+              Google OAuth 2.0 • Your email is used solely for identity verification and membership
+              telemetry.
             </p>
           </div>
         )}
@@ -161,7 +163,8 @@ export default function BecomeMemberPage() {
                 Membership Application Form
               </h2>
               <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-                Please complete your application details below. Your submission will be reviewed by the Posthuman Lab Network administration.
+                Please complete your application details below. Your submission will be reviewed by
+                the Posthuman Lab Network administration.
               </p>
             </div>
 
@@ -192,7 +195,9 @@ export default function BecomeMemberPage() {
                     <option value="Researcher">Researcher</option>
                     <option value="Student">Student</option>
                     <option value="Educator">Educator</option>
-                    <option value="Artist / Creative Practitioner">Artist / Creative Practitioner</option>
+                    <option value="Artist / Creative Practitioner">
+                      Artist / Creative Practitioner
+                    </option>
                     <option value="Independent Scholar">Independent Scholar</option>
                     <option value="Other">Other</option>
                   </select>
@@ -247,7 +252,10 @@ export default function BecomeMemberPage() {
                   onChange={(e) => setFormData({ ...formData, agreeToTerms: e.target.checked })}
                   className="w-4 h-4 rounded text-earth-600 focus:ring-earth-400 cursor-pointer"
                 />
-                <label htmlFor="agree-terms" className="text-xs text-carbon-800 dark:text-bone-200 font-sans cursor-pointer font-medium">
+                <label
+                  htmlFor="agree-terms"
+                  className="text-xs text-carbon-800 dark:text-bone-200 font-sans cursor-pointer font-medium"
+                >
                   I agree to the Posthuman Lab Network community guidelines & open-access charter.
                 </label>
               </div>
@@ -263,7 +271,9 @@ export default function BecomeMemberPage() {
                 disabled={submitting}
                 className="w-full py-4 bg-earth-600 hover:bg-earth-500 text-bone-50 font-sans text-xs font-bold uppercase tracking-widest rounded-xl transition-all shadow-lg flex items-center justify-center space-x-2 cursor-pointer disabled:opacity-50"
               >
-                <span>{submitting ? "SUBMITTING APPLICATION..." : "SUBMIT APPLICATION FOR REVIEW"}</span>
+                <span>
+                  {submitting ? "SUBMITTING APPLICATION..." : "SUBMIT APPLICATION FOR REVIEW"}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
@@ -285,13 +295,21 @@ export default function BecomeMemberPage() {
                 Application Received
               </h2>
               <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed max-w-lg mx-auto font-medium">
-                Thank you for applying to the Posthuman Lab Network, <span className="font-bold text-carbon-950 dark:text-bone-50">{member.fullName}</span>. Your application is currently under review by our administrative coordinators.
+                Thank you for applying to the Posthuman Lab Network,{" "}
+                <span className="font-bold text-carbon-950 dark:text-bone-50">
+                  {member.fullName}
+                </span>
+                . Your application is currently under review by our administrative coordinators.
               </p>
             </div>
 
             <div className="p-4 rounded-2xl bg-bone-100 dark:bg-carbon-950 border border-carbon-950/10 dark:border-bone-50/15 max-w-md mx-auto space-y-1 text-left">
-              <span className="font-mono text-[10px] text-earth-600 dark:text-earth-400 font-bold uppercase tracking-wider block">Application ID</span>
-              <span className="font-mono text-xs text-carbon-950 dark:text-bone-50 font-bold block">{member.email}</span>
+              <span className="font-mono text-[10px] text-earth-600 dark:text-earth-400 font-bold uppercase tracking-wider block">
+                Application ID
+              </span>
+              <span className="font-mono text-xs text-carbon-950 dark:text-bone-50 font-bold block">
+                {member.email}
+              </span>
             </div>
 
             <div className="pt-2 flex justify-center space-x-4">
@@ -320,7 +338,8 @@ export default function BecomeMemberPage() {
                 Welcome Back, {member.fullName}
               </h2>
               <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed max-w-lg mx-auto font-medium">
-                Your membership is active. You have full access to study materials, collaborative research calls, and live seminar discussions.
+                Your membership is active. You have full access to study materials, collaborative
+                research calls, and live seminar discussions.
               </p>
             </div>
 
@@ -353,7 +372,8 @@ export default function BecomeMemberPage() {
                 Application Status Update
               </h2>
               <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed max-w-lg mx-auto font-medium">
-                Thank you for your interest in the Posthuman Lab Network. At this time, our committee is unable to approve new applications for this cohort.
+                Thank you for your interest in the Posthuman Lab Network. At this time, our
+                committee is unable to approve new applications for this cohort.
               </p>
             </div>
 

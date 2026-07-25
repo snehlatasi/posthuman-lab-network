@@ -126,18 +126,22 @@ export const cmsApi = {
   getHomepageSummary: () => fetchJson<Record<string, unknown>>("/api/public/home"),
 
   // Admin Media APIs
-  addYouTubeVideo: (data: { url: string; title?: string; category?: string; description?: string }) =>
+  addYouTubeVideo: (data: {
+    url: string;
+    title?: string;
+    category?: string;
+    description?: string;
+  }) =>
     fetchJson<MediaAssetDto>("/api/admin/media/youtube", {
       method: "POST",
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }),
-  deleteMedia: (id: number) =>
-    fetchJson<void>(`/api/admin/media/${id}`, { method: "DELETE" }),
+  deleteMedia: (id: number) => fetchJson<void>(`/api/admin/media/${id}`, { method: "DELETE" }),
 
   createAlbum: (album: Partial<GalleryAlbumDto>) =>
     fetchJson<GalleryAlbumDto>("/api/admin/media/albums", {
       method: "POST",
-      body: JSON.stringify(album)
+      body: JSON.stringify(album),
     }),
 
   // Admin People APIs
@@ -145,22 +149,21 @@ export const cmsApi = {
   createPerson: (person: Partial<PersonDto>) =>
     fetchJson<PersonDto>("/api/admin/people", {
       method: "POST",
-      body: JSON.stringify(person)
+      body: JSON.stringify(person),
     }),
   updatePerson: (id: number, person: Partial<PersonDto>) =>
     fetchJson<PersonDto>(`/api/admin/people/${id}`, {
       method: "PUT",
-      body: JSON.stringify(person)
+      body: JSON.stringify(person),
     }),
-  deletePerson: (id: number) =>
-    fetchJson<void>(`/api/admin/people/${id}`, { method: "DELETE" }),
+  deletePerson: (id: number) => fetchJson<void>(`/api/admin/people/${id}`, { method: "DELETE" }),
 
   // Admin Conversations APIs
   getConversationsAdmin: () => fetchJson<ConversationDto[]>("/api/admin/conversations"),
   createConversation: (conv: Partial<ConversationDto>) =>
     fetchJson<ConversationDto>("/api/admin/conversations", {
       method: "POST",
-      body: JSON.stringify(conv)
+      body: JSON.stringify(conv),
     }),
   deleteConversation: (id: number) =>
     fetchJson<void>(`/api/admin/conversations/${id}`, { method: "DELETE" }),
@@ -170,7 +173,7 @@ export const cmsApi = {
   createLearningResource: (res: Partial<LearningResourceDto>) =>
     fetchJson<LearningResourceDto>("/api/admin/learning", {
       method: "POST",
-      body: JSON.stringify(res)
+      body: JSON.stringify(res),
     }),
   deleteLearningResource: (id: number) =>
     fetchJson<void>(`/api/admin/learning/${id}`, { method: "DELETE" }),
@@ -180,17 +183,16 @@ export const cmsApi = {
   createLab: (lab: Partial<LabContentDto>) =>
     fetchJson<LabContentDto>("/api/admin/labs", {
       method: "POST",
-      body: JSON.stringify(lab)
+      body: JSON.stringify(lab),
     }),
-  deleteLab: (id: number) =>
-    fetchJson<void>(`/api/admin/labs/${id}`, { method: "DELETE" }),
+  deleteLab: (id: number) => fetchJson<void>(`/api/admin/labs/${id}`, { method: "DELETE" }),
 
   // Admin Curation & Audit APIs
   getCurationSettings: () => fetchJson<HomepageCurationDto>("/api/admin/curation"),
   updateCurationSettings: (curation: HomepageCurationDto) =>
     fetchJson<HomepageCurationDto>("/api/admin/curation", {
       method: "PUT",
-      body: JSON.stringify(curation)
+      body: JSON.stringify(curation),
     }),
-  getAuditLogs: () => fetchJson<AuditLogDto[]>("/api/admin/audit")
+  getAuditLogs: () => fetchJson<AuditLogDto[]>("/api/admin/audit"),
 };

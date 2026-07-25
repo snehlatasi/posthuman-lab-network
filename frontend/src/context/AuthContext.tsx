@@ -2,7 +2,8 @@
 
 import React, { createContext, useContext, useState } from "react";
 import { getStoredToken } from "@/lib/api/apiClient";
-import { authApi, LoginRequestDto } from "@/lib/api/auth";
+import type { LoginRequestDto } from "@/lib/api/auth";
+import { authApi } from "@/lib/api/auth";
 
 interface AuthContextType {
   isAdmin: boolean;
@@ -23,7 +24,7 @@ const AuthContext = createContext<AuthContextType>({
   logout: () => {},
   showLoginModal: false,
   openLoginModal: () => {},
-  closeLoginModal: () => {}
+  closeLoginModal: () => {},
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -70,7 +71,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout,
         showLoginModal,
         openLoginModal: () => setShowLoginModal(true),
-        closeLoginModal: () => setShowLoginModal(false)
+        closeLoginModal: () => setShowLoginModal(false),
       }}
     >
       {children}

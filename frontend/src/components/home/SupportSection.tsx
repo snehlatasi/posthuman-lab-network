@@ -20,7 +20,8 @@ export const SupportSection: React.FC = () => {
               Help keep knowledge open and accessible.
             </h3>
             <p className="font-sans text-xs md:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed max-w-lg font-medium">
-              We operate as a CC-licensed non-commercial academy. Your contributions support carbon-offset hosting fees and emerging student research grants.
+              We operate as a CC-licensed non-commercial academy. Your contributions support
+              carbon-offset hosting fees and emerging student research grants.
             </p>
           </Reveal>
         </div>

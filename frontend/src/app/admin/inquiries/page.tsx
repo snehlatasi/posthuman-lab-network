@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { contactApi, ContactResponseDto } from "@/lib/api/contact";
-import { collaborationApi, CollaborationResponseDto } from "@/lib/api/collaboration";
+import type { ContactResponseDto } from "@/lib/api/contact";
+import { contactApi } from "@/lib/api/contact";
+import type { CollaborationResponseDto } from "@/lib/api/collaboration";
+import { collaborationApi } from "@/lib/api/collaboration";
 import { Trash2, AlertTriangle } from "lucide-react";
 
 export default function AdminInquiriesPage() {
@@ -85,7 +87,7 @@ export default function AdminInquiriesPage() {
                               await contactApi.deleteMessage(m.id);
                               triggerFeedback("Inquiry deleted.");
                               loadInquiries();
-                            }
+                            },
                           });
                         }}
                         className="p-1.5 text-earth-400 hover:text-earth-300 cursor-pointer"
@@ -97,7 +99,12 @@ export default function AdminInquiriesPage() {
                 ))}
                 {messages.length === 0 && !loading && (
                   <tr>
-                    <td colSpan={5} className="p-6 text-center font-mono text-xs text-bone-200/40 uppercase">No contact inquiries.</td>
+                    <td
+                      colSpan={5}
+                      className="p-6 text-center font-mono text-xs text-bone-200/40 uppercase"
+                    >
+                      No contact inquiries.
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -127,7 +134,9 @@ export default function AdminInquiriesPage() {
                 {collaborations.map((c) => (
                   <tr key={c.id} className="hover:bg-carbon-950/40 transition-colors">
                     <td className="p-4 font-semibold text-bone-50">{c.name}</td>
-                    <td className="p-4 text-earth-400 font-mono text-[10px] font-bold">{c.organization}</td>
+                    <td className="p-4 text-earth-400 font-mono text-[10px] font-bold">
+                      {c.organization}
+                    </td>
                     <td className="p-4 uppercase text-[10px] font-mono">{c.collaborationType}</td>
                     <td className="p-4 max-w-xs truncate text-bone-200/70">{c.message}</td>
                     <td className="p-4 text-right">
@@ -141,7 +150,7 @@ export default function AdminInquiriesPage() {
                               await collaborationApi.deleteRequest(c.id);
                               triggerFeedback("Proposal deleted.");
                               loadInquiries();
-                            }
+                            },
                           });
                         }}
                         className="p-1.5 text-earth-400 hover:text-earth-300 cursor-pointer"
@@ -153,7 +162,12 @@ export default function AdminInquiriesPage() {
                 ))}
                 {collaborations.length === 0 && !loading && (
                   <tr>
-                    <td colSpan={5} className="p-6 text-center font-mono text-xs text-bone-200/40 uppercase">No collaboration proposals.</td>
+                    <td
+                      colSpan={5}
+                      className="p-6 text-center font-mono text-xs text-bone-200/40 uppercase"
+                    >
+                      No collaboration proposals.
+                    </td>
                   </tr>
                 )}
               </tbody>
@@ -168,9 +182,13 @@ export default function AdminInquiriesPage() {
           <div className="bg-carbon-900 border border-bone-50/15 p-6 rounded-2xl max-w-md w-full space-y-4 shadow-2xl">
             <div className="flex items-center space-x-3 text-earth-400">
               <AlertTriangle className="w-6 h-6 shrink-0" />
-              <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">{confirmModal.title}</h3>
+              <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">
+                {confirmModal.title}
+              </h3>
             </div>
-            <p className="font-sans text-xs text-bone-200 leading-relaxed font-medium">{confirmModal.description}</p>
+            <p className="font-sans text-xs text-bone-200 leading-relaxed font-medium">
+              {confirmModal.description}
+            </p>
             <div className="flex justify-end space-x-3 pt-2">
               <button
                 onClick={() => setConfirmModal({ ...confirmModal, isOpen: false })}

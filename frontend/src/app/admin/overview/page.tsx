@@ -37,23 +37,54 @@ export default function AdminOverviewPage() {
           Welcome Back, Administrator
         </h2>
         <p className="font-sans text-xs sm:text-sm text-bone-200 leading-relaxed font-medium max-w-xl">
-          Real-time database metrics and operational telemetry for the Posthuman Lab Network console.
+          Real-time database metrics and operational telemetry for the Posthuman Lab Network
+          console.
         </p>
       </div>
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { title: "Blog Articles", val: stats?.totalBlogPosts ?? 0, sub: `${stats?.publishedBlogPosts ?? 0} Published`, icon: FileText, href: "/admin/blog" },
-          { title: "Scheduled Events", val: stats?.totalEvents ?? 0, sub: `${stats?.upcomingEvents ?? 0} Upcoming`, icon: Calendar, href: "/admin/events" },
-          { title: "Publications Catalog", val: stats?.totalPublications ?? 0, sub: "Peer Reviewed Papers", icon: BookOpen, href: "/admin/publications" },
-          { title: "Pending Memberships", val: stats?.pendingMemberships ?? 0, sub: "Applications Review", icon: Users, href: "/admin/memberships" }
+          {
+            title: "Blog Articles",
+            val: stats?.totalBlogPosts ?? 0,
+            sub: `${stats?.publishedBlogPosts ?? 0} Published`,
+            icon: FileText,
+            href: "/admin/blog",
+          },
+          {
+            title: "Scheduled Events",
+            val: stats?.totalEvents ?? 0,
+            sub: `${stats?.upcomingEvents ?? 0} Upcoming`,
+            icon: Calendar,
+            href: "/admin/events",
+          },
+          {
+            title: "Publications Catalog",
+            val: stats?.totalPublications ?? 0,
+            sub: "Peer Reviewed Papers",
+            icon: BookOpen,
+            href: "/admin/publications",
+          },
+          {
+            title: "Pending Memberships",
+            val: stats?.pendingMemberships ?? 0,
+            sub: "Applications Review",
+            icon: Users,
+            href: "/admin/memberships",
+          },
         ].map((s, idx) => {
           const Icon = s.icon;
           return (
-            <Link key={idx} href={s.href} className="p-6 rounded-2xl bg-carbon-900/90 border border-bone-50/15 hover:border-earth-500/50 shadow-md space-y-3 block transition-all group">
+            <Link
+              key={idx}
+              href={s.href}
+              className="p-6 rounded-2xl bg-carbon-900/90 border border-bone-50/15 hover:border-earth-500/50 shadow-md space-y-3 block transition-all group"
+            >
               <div className="flex justify-between items-center text-bone-200/50">
-                <span className="font-mono text-[10px] tracking-widest uppercase font-bold">{s.title}</span>
+                <span className="font-mono text-[10px] tracking-widest uppercase font-bold">
+                  {s.title}
+                </span>
                 <Icon className="w-4 h-4 text-earth-400 group-hover:scale-110 transition-transform" />
               </div>
               <div className="font-serif text-3xl font-bold text-bone-50">{s.val}</div>

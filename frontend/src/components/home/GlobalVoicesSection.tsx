@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "../layout/Primitives";
 import { Reveal } from "../ui/Reveal";
 import { WorldMapSvg } from "./WorldMapSvg";
-import { NetworkLocation } from "@/lib/data/locations";
+import type { NetworkLocation } from "@/lib/data/locations";
 
 export const GlobalVoicesSection: React.FC = () => {
   const [selectedLocId, setSelectedLocId] = useState<string | null>(null);
@@ -16,7 +16,10 @@ export const GlobalVoicesSection: React.FC = () => {
   };
 
   return (
-    <section id="global-connection" className="py-20 md:py-28 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative overflow-hidden transition-colors duration-300">
+    <section
+      id="global-connection"
+      className="py-20 md:py-28 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative overflow-hidden transition-colors duration-300"
+    >
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
           {/* Left Column: Asymmetric Editorial Content (38% width) */}
@@ -26,14 +29,20 @@ export const GlobalVoicesSection: React.FC = () => {
                 GLOBAL CONNECTION
               </span>
               <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 leading-[1.05] uppercase">
-                Many Voices.<br />
-                <span className="italic font-normal text-earth-600 dark:text-earth-400">No Single</span> Center.
+                Many Voices.
+                <br />
+                <span className="italic font-normal text-earth-600 dark:text-earth-400">
+                  No Single
+                </span>{" "}
+                Center.
               </h2>
             </Reveal>
 
             <Reveal delay={0.1}>
               <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium max-w-md">
-                We operate as a distributed research network. Our international chapters collaborate across geographical boundaries to conduct workshops, translate critical texts, and audit ecological bio-signals.
+                We operate as a distributed research network. Our international chapters collaborate
+                across geographical boundaries to conduct workshops, translate critical texts, and
+                audit ecological bio-signals.
               </p>
             </Reveal>
 

@@ -5,7 +5,7 @@ import { EditorialPageLayout } from "@/components/layout/Templates";
 
 const supportSidebar = [
   { label: "Why Support?", href: "/support/why-support", active: true },
-  { label: "Ways to Contribute", href: "/support/contribute" }
+  { label: "Ways to Contribute", href: "/support/contribute" },
 ];
 
 export default function WhySupportPage() {
@@ -27,7 +27,9 @@ export default function WhySupportPage() {
             Initial Operational Estimate
           </h3>
           <p className="text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-            The Posthuman Lab Network is currently in its foundational stage. To build a robust digital presence, coordinate interdisciplinary content, and host open-access meetings, we have calculated an initial estimated funding goal of **₹40,000 to ₹50,000**.
+            The Posthuman Lab Network is currently in its foundational stage. To build a robust
+            digital presence, coordinate interdisciplinary content, and host open-access meetings,
+            we have calculated an initial estimated funding goal of **₹40,000 to ₹50,000**.
           </p>
         </section>
 
@@ -36,15 +38,34 @@ export default function WhySupportPage() {
             Funding Priority Allocations
           </h3>
           <p className="text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-            All received support goes directly toward the operational components required to coordinate a horizontal global space:
+            All received support goes directly toward the operational components required to
+            coordinate a horizontal global space:
           </p>
           <ul className="list-disc pl-6 space-y-2 text-xs md:text-sm text-carbon-900 dark:text-bone-200 leading-relaxed font-medium">
-            <li><strong>Website Design & Development:</strong> Establishing our dynamic React, Tailwind, and Spring Boot laboratory frameworks.</li>
-            <li><strong>Domain & Hosting:</strong> Maintaining secure, low-latency, carbon-conscious server instances.</li>
-            <li><strong>Google Meet Premium & Recording:</strong> Facilitating and archiving monthly guest speaker events and international dialogues.</li>
-            <li><strong>Branding / Logo / Visual Identity:</strong> Laying down cohesive guidelines that communicate our digital-organic philosophy.</li>
-            <li><strong>Content Creation & Outreach:</strong> Formulating learning pathway manuals, reading maps, and translating core materials.</li>
-            <li><strong>Technical Support:</strong> Maintaining security, database backups, and local H2 persistence tools.</li>
+            <li>
+              <strong>Website Design & Development:</strong> Establishing our dynamic React,
+              Tailwind, and Spring Boot laboratory frameworks.
+            </li>
+            <li>
+              <strong>Domain & Hosting:</strong> Maintaining secure, low-latency, carbon-conscious
+              server instances.
+            </li>
+            <li>
+              <strong>Google Meet Premium & Recording:</strong> Facilitating and archiving monthly
+              guest speaker events and international dialogues.
+            </li>
+            <li>
+              <strong>Branding / Logo / Visual Identity:</strong> Laying down cohesive guidelines
+              that communicate our digital-organic philosophy.
+            </li>
+            <li>
+              <strong>Content Creation & Outreach:</strong> Formulating learning pathway manuals,
+              reading maps, and translating core materials.
+            </li>
+            <li>
+              <strong>Technical Support:</strong> Maintaining security, database backups, and local
+              H2 persistence tools.
+            </li>
           </ul>
         </section>
 
@@ -53,7 +74,10 @@ export default function WhySupportPage() {
             A Core Aspiration
           </h3>
           <p className="text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-            These estimations are focused entirely on grassroots maintenance and technical stability. They ensure that we can provide free learning resources, publish emerging scholars, and organize online events without commercial advertising or paywalls. No payment gateways or transaction scripts are active at this phase of implementation.
+            These estimations are focused entirely on grassroots maintenance and technical
+            stability. They ensure that we can provide free learning resources, publish emerging
+            scholars, and organize online events without commercial advertising or paywalls. No
+            payment gateways or transaction scripts are active at this phase of implementation.
           </p>
         </section>
       </div>

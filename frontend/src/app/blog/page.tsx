@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import { ListingPageLayout } from "@/components/layout/Templates";
 import { ContentCard } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";
-import { blogApi, BlogPost } from "@/lib/api/blog";
+import type { BlogPost } from "@/lib/api/blog";
+import { blogApi } from "@/lib/api/blog";
 import { ArrowRight } from "lucide-react";
 
 interface ArticleItem {
@@ -23,7 +24,8 @@ const mockArticles: ArticleItem[] = [
     category: "ECOLOGY",
     author: "Network Coordinator",
     date: "July 12, 2026",
-    excerpt: "Exploring the translation of underground mycelium voltage signals into interactive digital canvas networks."
+    excerpt:
+      "Exploring the translation of underground mycelium voltage signals into interactive digital canvas networks.",
   },
   {
     slug: "linguistic-gateways-in-machine-architectures",
@@ -31,7 +33,8 @@ const mockArticles: ArticleItem[] = [
     category: "AI & TECHNOLOGY",
     author: "Technical Coordinator",
     date: "June 28, 2026",
-    excerpt: "Auditing transformer neural weights for anthropocentric language limits and exploring nonhuman semantic patterns."
+    excerpt:
+      "Auditing transformer neural weights for anthropocentric language limits and exploring nonhuman semantic patterns.",
   },
   {
     slug: "embodied-clay-digital-to-real-retreat",
@@ -39,15 +42,17 @@ const mockArticles: ArticleItem[] = [
     category: "COMMUNITY",
     author: "Practice Coordinator",
     date: "May 19, 2026",
-    excerpt: "Reflections from our off-grid coding, sculpting, and listening retreat in the Black Forest."
-  }
+    excerpt:
+      "Reflections from our off-grid coding, sculpting, and listening retreat in the Black Forest.",
+  },
 ];
 
 export default function BlogIndexPage() {
   const [articles, setArticles] = useState<ArticleItem[]>(mockArticles);
 
   useEffect(() => {
-    blogApi.getPublishedBlogPosts()
+    blogApi
+      .getPublishedBlogPosts()
       .then((data: BlogPost[]) => {
         if (data && data.length > 0) {
           const mapped: ArticleItem[] = data.map((item) => ({
@@ -56,7 +61,7 @@ export default function BlogIndexPage() {
             category: "RESEARCH",
             author: item.author || "Posthuman Scholar",
             date: item.publishedAt ? new Date(item.publishedAt).toLocaleDateString() : "Recent",
-            excerpt: item.excerpt || "Research article published by the Posthuman Lab Network."
+            excerpt: item.excerpt || "Research article published by the Posthuman Lab Network.",
           }));
           setArticles(mapped);
         }
@@ -74,7 +79,10 @@ export default function BlogIndexPage() {
     >
       {articles.map((item) => (
         <StaggerItem key={item.slug}>
-          <ContentCard href={`/blog/${item.slug}`} className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 h-full flex flex-col justify-between p-6 md:p-8">
+          <ContentCard
+            href={`/blog/${item.slug}`}
+            className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 h-full flex flex-col justify-between p-6 md:p-8"
+          >
             <div className="space-y-4">
               <div className="flex justify-between items-center text-xs font-mono tracking-widest text-earth-600 dark:text-earth-400 uppercase font-bold">
                 <span>{item.category}</span>

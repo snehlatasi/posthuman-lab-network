@@ -18,48 +18,54 @@ const labsList: LabItem[] = [
     name: "Ecological Futures Lab",
     category: "applied",
     tag: "Applied / Ecology",
-    description: "Monitoring environmental changes and botanical communication pathways through creative biosensors.",
-    href: "/labs/ecological-futures"
+    description:
+      "Monitoring environmental changes and botanical communication pathways through creative biosensors.",
+    href: "/labs/ecological-futures",
   },
   {
     name: "AI Ethics & Technology Unit",
     category: "theory",
     tag: "Theory / AI",
-    description: "Philosophical audits on algorithmic biases, artificial agency, and synthetic consciousness.",
-    href: "/labs/ai-ethics"
+    description:
+      "Philosophical audits on algorithmic biases, artificial agency, and synthetic consciousness.",
+    href: "/labs/ai-ethics",
   },
   {
     name: "Experimental Media Studio",
     category: "creative",
     tag: "Creative / Audio-Visual",
     description: "Investigating sound art, new media aesthetics, and immersive virtual topologies.",
-    href: "/labs/experimental-media"
+    href: "/labs/experimental-media",
   },
   {
     name: "Collective Practice Network",
     category: "applied",
     tag: "Applied / Social",
-    description: "Designing frameworks for decentralized community action, citizen science, and open data.",
-    href: "/labs/collective-practice"
+    description:
+      "Designing frameworks for decentralized community action, citizen science, and open data.",
+    href: "/labs/collective-practice",
   },
   {
     name: "Creative Writing Sanctuary",
     category: "creative",
     tag: "Creative / Narrative",
     description: "Speculative fiction diaries, posthuman poetry, and collaborative scripts.",
-    href: "/community/global-voices"
+    href: "/community/global-voices",
   },
   {
     name: "Embodied Gatherings Council",
     category: "applied",
     tag: "Applied / Physical",
-    description: "Structuring outdoor workspace setups, sensory disconnect practices, and woodland workshops.",
-    href: "/practice/workshops"
-  }
+    description:
+      "Structuring outdoor workspace setups, sensory disconnect practices, and woodland workshops.",
+    href: "/practice/workshops",
+  },
 ];
 
 export default function LabsPage() {
-  const [activeFilter, setActiveFilter] = useState<"all" | "theory" | "creative" | "applied">("all");
+  const [activeFilter, setActiveFilter] = useState<"all" | "theory" | "creative" | "applied">(
+    "all"
+  );
 
   const filteredLabs = labsList.filter(
     (lab) => activeFilter === "all" || lab.category === activeFilter
@@ -67,9 +73,21 @@ export default function LabsPage() {
 
   const filters = [
     { label: "All Labs", active: activeFilter === "all", onClick: () => setActiveFilter("all") },
-    { label: "Theory & Ethics", active: activeFilter === "theory", onClick: () => setActiveFilter("theory") },
-    { label: "Creative & Media", active: activeFilter === "creative", onClick: () => setActiveFilter("creative") },
-    { label: "Applied & Social", active: activeFilter === "applied", onClick: () => setActiveFilter("applied") }
+    {
+      label: "Theory & Ethics",
+      active: activeFilter === "theory",
+      onClick: () => setActiveFilter("theory"),
+    },
+    {
+      label: "Creative & Media",
+      active: activeFilter === "creative",
+      onClick: () => setActiveFilter("creative"),
+    },
+    {
+      label: "Applied & Social",
+      active: activeFilter === "applied",
+      onClick: () => setActiveFilter("applied"),
+    },
   ];
 
   return (
@@ -94,11 +112,9 @@ export default function LabsPage() {
                   {lab.description}
                 </p>
               </div>
-              
+
               <div className="pt-4">
-                <AnimatedLink href={lab.href}>
-                  Enter Space
-                </AnimatedLink>
+                <AnimatedLink href={lab.href}>Enter Space</AnimatedLink>
               </div>
             </div>
           </ContentCard>

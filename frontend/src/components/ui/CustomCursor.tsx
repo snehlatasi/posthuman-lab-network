@@ -32,9 +32,7 @@ export const CustomCursor: React.FC = () => {
 
     const handleOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
-      if (
-        target?.closest("a, button, [role='button'], input, textarea, select, .cursor-pointer")
-      ) {
+      if (target?.closest("a, button, [role='button'], input, textarea, select, .cursor-pointer")) {
         setIsHovered(true);
       } else {
         setIsHovered(false);
@@ -61,12 +59,12 @@ export const CustomCursor: React.FC = () => {
       style={{
         left: x,
         top: y,
-        transform: "translate(-50%, -50%)"
+        transform: "translate(-50%, -50%)",
       }}
       animate={{
         scale: isHovered ? 2.2 : 1,
         borderColor: isHovered ? "rgba(152, 78, 50, 0.65)" : "rgba(70, 91, 64, 0.35)",
-        backgroundColor: isHovered ? "rgba(152, 78, 50, 0.08)" : "rgba(70, 91, 64, 0.03)"
+        backgroundColor: isHovered ? "rgba(152, 78, 50, 0.08)" : "rgba(70, 91, 64, 0.03)",
       }}
       transition={{ type: "spring", stiffness: 350, damping: 25 }}
       className="fixed w-6 h-6 rounded-full border pointer-events-none z-[9999] backdrop-blur-[1px] hidden md:block"

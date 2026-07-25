@@ -35,7 +35,10 @@ export const PublicationsSection: React.FC = () => {
         </div>
 
         {/* Publications rows */}
-        <Reveal staggerChildren={0.12} className="border-t border-carbon-950/10 dark:border-bone-50/15">
+        <Reveal
+          staggerChildren={0.12}
+          className="border-t border-carbon-950/10 dark:border-bone-50/15"
+        >
           {latestPublicationsList.map((pub, idx) => {
             const isHovered = hoveredIdx === idx;
             return (
@@ -52,9 +55,13 @@ export const PublicationsSection: React.FC = () => {
                       {pub.category}
                     </span>
                     <div className="relative inline-block">
-                      <h3 className={`font-serif text-lg md:text-xl font-bold leading-snug transition-colors duration-300 ${
-                        isHovered ? "text-earth-600 dark:text-earth-400" : "text-carbon-950 dark:text-bone-100"
-                      }`}>
+                      <h3
+                        className={`font-serif text-lg md:text-xl font-bold leading-snug transition-colors duration-300 ${
+                          isHovered
+                            ? "text-earth-600 dark:text-earth-400"
+                            : "text-carbon-950 dark:text-bone-100"
+                        }`}
+                      >
                         {pub.title}
                       </h3>
                       <motion.span

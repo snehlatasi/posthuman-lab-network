@@ -17,20 +17,20 @@ const recordedLectures: LectureItem[] = [
     title: "Subjectivities in the Anthropocene",
     speaker: "Dr. Elena Rostova",
     tag: "Masterclass / Keynote",
-    duration: "48 mins"
+    duration: "48 mins",
   },
   {
     title: "Algorithmic Inquiries and LLM Biases",
     speaker: "Anya Chen",
     tag: "Audit Seminar",
-    duration: "35 mins"
+    duration: "35 mins",
   },
   {
     title: "Decentered Listening: Bio-Signals",
     speaker: "Marcus Vance",
     tag: "Workshop Presentation",
-    duration: "28 mins"
-  }
+    duration: "28 mins",
+  },
 ];
 
 export default function RecordedLecturesPage() {
@@ -53,14 +53,10 @@ export default function RecordedLecturesPage() {
                 <span className="font-mono text-[8px] text-bone-200/30 uppercase tracking-widest block">
                   By {lecture.speaker}
                 </span>
-                <h3 className="font-serif text-lg font-bold text-bone-100">
-                  {lecture.title}
-                </h3>
+                <h3 className="font-serif text-lg font-bold text-bone-100">{lecture.title}</h3>
               </div>
               <div className="pt-4">
-                <AnimatedLink href="/media/youtube-lectures">
-                  Stream Lecture
-                </AnimatedLink>
+                <AnimatedLink href="/media/youtube-lectures">Stream Lecture</AnimatedLink>
               </div>
             </div>
           </ContentCard>

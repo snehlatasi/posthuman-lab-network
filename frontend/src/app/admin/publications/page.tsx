@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { publicationsApi, PublicationApiDto } from "@/lib/api/publications";
+import type { PublicationApiDto } from "@/lib/api/publications";
+import { publicationsApi } from "@/lib/api/publications";
 import { Plus, Trash2, AlertTriangle } from "lucide-react";
 
 export default function AdminPublicationsPage() {
@@ -16,7 +17,13 @@ export default function AdminPublicationsPage() {
     content: string;
     authorDisplayName: string;
     publicationType: PublicationApiDto["publicationType"];
-  }>({ title: "", summary: "", content: "", authorDisplayName: "Admin Researcher", publicationType: "ARTICLE" });
+  }>({
+    title: "",
+    summary: "",
+    content: "",
+    authorDisplayName: "Admin Researcher",
+    publicationType: "ARTICLE",
+  });
 
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
@@ -60,7 +67,9 @@ export default function AdminPublicationsPage() {
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
             Publications Catalog
           </h2>
-          <p className="font-sans text-xs text-bone-200 font-medium">Manage academic articles, speculative essays, and research logs.</p>
+          <p className="font-sans text-xs text-bone-200 font-medium">
+            Manage academic articles, speculative essays, and research logs.
+          </p>
         </div>
         <button
           onClick={() => setShowNewModal(true)}
@@ -88,11 +97,17 @@ export default function AdminPublicationsPage() {
                 <tr key={p.id} className="hover:bg-carbon-950/40 transition-colors">
                   <td className="p-4 font-semibold text-bone-50">{p.title}</td>
                   <td className="p-4 text-bone-200/70">{p.authorDisplayName}</td>
-                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">{p.publicationType}</td>
+                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">
+                    {p.publicationType}
+                  </td>
                   <td className="p-4">
-                    <span className={`px-2.5 py-1 text-[9px] font-mono rounded-full uppercase tracking-wider font-bold ${
-                      p.status === "PUBLISHED" ? "bg-moss-500/20 text-moss-400 border border-moss-500/30" : "bg-earth-500/20 text-earth-400"
-                    }`}>
+                    <span
+                      className={`px-2.5 py-1 text-[9px] font-mono rounded-full uppercase tracking-wider font-bold ${
+                        p.status === "PUBLISHED"
+                          ? "bg-moss-500/20 text-moss-400 border border-moss-500/30"
+                          : "bg-earth-500/20 text-earth-400"
+                      }`}
+                    >
                       {p.status}
                     </span>
                   </td>
@@ -130,7 +145,7 @@ export default function AdminPublicationsPage() {
                             await publicationsApi.deletePublication(p.id);
                             triggerFeedback("Publication deleted.");
                             loadPublications();
-                          }
+                          },
                         });
                       }}
                       className="p-1.5 text-earth-400 hover:text-earth-300 cursor-pointer inline-block"
@@ -142,7 +157,10 @@ export default function AdminPublicationsPage() {
               ))}
               {publications.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase tracking-widest">
+                  <td
+                    colSpan={5}
+                    className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase tracking-widest"
+                  >
                     No publications cataloged.
                   </td>
                 </tr>
@@ -156,7 +174,9 @@ export default function AdminPublicationsPage() {
       {showNewModal && (
         <div className="fixed inset-0 bg-carbon-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-carbon-900 border border-bone-50/15 p-6 sm:p-8 rounded-3xl max-w-lg w-full space-y-4 shadow-2xl">
-            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase tracking-tight">Add Publication</h3>
+            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase tracking-tight">
+              Add Publication
+            </h3>
             <div className="space-y-3 text-xs">
               <input
                 type="text"
@@ -174,7 +194,12 @@ export default function AdminPublicationsPage() {
               />
               <select
                 value={newPub.publicationType}
-                onChange={(e) => setNewPub({ ...newPub, publicationType: e.target.value as PublicationApiDto["publicationType"] })}
+                onChange={(e) =>
+                  setNewPub({
+                    ...newPub,
+                    publicationType: e.target.value as PublicationApiDto["publicationType"],
+                  })
+                }
                 className="w-full p-3 bg-carbon-950 border border-bone-50/15 rounded-xl text-bone-50 focus:border-earth-400 focus:outline-none"
               >
                 <option value="ARTICLE">Academic Article</option>
@@ -207,10 +232,23 @@ export default function AdminPublicationsPage() {
               <button
                 onClick={async () => {
                   if (!newPub.title) return;
-                  const generatedSlug = newPub.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-                  await publicationsApi.createPublication({ ...newPub, slug: generatedSlug, status: "PUBLISHED" });
+                  const generatedSlug = newPub.title
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/^-+|-+$/g, "");
+                  await publicationsApi.createPublication({
+                    ...newPub,
+                    slug: generatedSlug,
+                    status: "PUBLISHED",
+                  });
                   setShowNewModal(false);
-                  setNewPub({ title: "", summary: "", content: "", authorDisplayName: "Admin Researcher", publicationType: "ARTICLE" });
+                  setNewPub({
+                    title: "",
+                    summary: "",
+                    content: "",
+                    authorDisplayName: "Admin Researcher",
+                    publicationType: "ARTICLE",
+                  });
                   triggerFeedback("Publication cataloged.");
                   loadPublications();
                 }}
@@ -229,9 +267,13 @@ export default function AdminPublicationsPage() {
           <div className="bg-carbon-900 border border-bone-50/15 p-6 rounded-2xl max-w-md w-full space-y-4 shadow-2xl">
             <div className="flex items-center space-x-3 text-earth-400">
               <AlertTriangle className="w-6 h-6 shrink-0" />
-              <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">{confirmModal.title}</h3>
+              <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">
+                {confirmModal.title}
+              </h3>
             </div>
-            <p className="font-sans text-xs text-bone-200 leading-relaxed font-medium">{confirmModal.description}</p>
+            <p className="font-sans text-xs text-bone-200 leading-relaxed font-medium">
+              {confirmModal.description}
+            </p>
             <div className="flex justify-end space-x-3 pt-2">
               <button
                 onClick={() => setConfirmModal({ ...confirmModal, isOpen: false })}

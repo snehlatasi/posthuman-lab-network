@@ -1,22 +1,25 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { cmsApi, HomepageCurationDto } from "@/lib/api/cms";
+import type { HomepageCurationDto } from "@/lib/api/cms";
+import { cmsApi } from "@/lib/api/cms";
 import { CheckCircle2 } from "lucide-react";
 
 export default function AdminCurationPage() {
   const [curation, setCuration] = useState<HomepageCurationDto>({
     id: 1,
     announcementTitle: "Call for Research Papers 2026",
-    announcementMessage: "Submissions are open for our upcoming ecological futures journal edition.",
+    announcementMessage:
+      "Submissions are open for our upcoming ecological futures journal edition.",
     announcementLink: "/publications/submit",
-    announcementActive: true
+    announcementActive: true,
   });
   const [saving, setSaving] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
 
   useEffect(() => {
-    cmsApi.getCurationSettings()
+    cmsApi
+      .getCurationSettings()
       .then((res) => {
         if (res) setCuration(res);
       })
@@ -43,7 +46,9 @@ export default function AdminCurationPage() {
         <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
           Homepage Curation & Announcements
         </h2>
-        <p className="font-sans text-xs text-bone-200 font-medium">Control featured content slots and site-wide announcement banners.</p>
+        <p className="font-sans text-xs text-bone-200 font-medium">
+          Control featured content slots and site-wide announcement banners.
+        </p>
       </div>
 
       {feedback && (
@@ -53,12 +58,19 @@ export default function AdminCurationPage() {
         </div>
       )}
 
-      <form onSubmit={handleSave} className="bg-carbon-900/90 border border-bone-50/15 p-6 sm:p-8 rounded-3xl space-y-6 shadow-md max-w-2xl">
+      <form
+        onSubmit={handleSave}
+        className="bg-carbon-900/90 border border-bone-50/15 p-6 sm:p-8 rounded-3xl space-y-6 shadow-md max-w-2xl"
+      >
         <div className="space-y-4">
-          <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">Network Announcement Banner</h3>
+          <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">
+            Network Announcement Banner
+          </h3>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-mono uppercase text-bone-200 font-bold">Announcement Title</label>
+            <label className="block text-xs font-mono uppercase text-bone-200 font-bold">
+              Announcement Title
+            </label>
             <input
               type="text"
               value={curation.announcementTitle || ""}
@@ -68,7 +80,9 @@ export default function AdminCurationPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-mono uppercase text-bone-200 font-bold">Message Content</label>
+            <label className="block text-xs font-mono uppercase text-bone-200 font-bold">
+              Message Content
+            </label>
             <textarea
               rows={3}
               value={curation.announcementMessage || ""}
@@ -78,7 +92,9 @@ export default function AdminCurationPage() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-xs font-mono uppercase text-bone-200 font-bold">Target Link URL</label>
+            <label className="block text-xs font-mono uppercase text-bone-200 font-bold">
+              Target Link URL
+            </label>
             <input
               type="text"
               value={curation.announcementLink || ""}
@@ -95,7 +111,10 @@ export default function AdminCurationPage() {
               onChange={(e) => setCuration({ ...curation, announcementActive: e.target.checked })}
               className="w-4 h-4 rounded text-earth-600 focus:ring-earth-400 cursor-pointer"
             />
-            <label htmlFor="active-announcement" className="text-xs text-bone-200 font-sans font-medium cursor-pointer">
+            <label
+              htmlFor="active-announcement"
+              className="text-xs text-bone-200 font-sans font-medium cursor-pointer"
+            >
               Enable active announcement banner across public site header
             </label>
           </div>

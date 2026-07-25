@@ -17,20 +17,23 @@ const membershipTiers: TierItem[] = [
     name: "Learner Member",
     role: "Open Access Participant",
     tag: "Tier 01 / Free",
-    description: "Access all learning hubs, digital lecture slides, reading lists, and join monthly community discussions."
+    description:
+      "Access all learning hubs, digital lecture slides, reading lists, and join monthly community discussions.",
   },
   {
     name: "Contributor Member",
     role: "Writer & Artist",
     tag: "Tier 02 / Active Partner",
-    description: "Submit writings, creative designs, and podcast logs directly to editors, and publish in our journal."
+    description:
+      "Submit writings, creative designs, and podcast logs directly to editors, and publish in our journal.",
   },
   {
     name: "Research Member",
     role: "Academic Scholar",
     tag: "Tier 03 / Specialized",
-    description: "Participate directly in our core lab operations (Ecological Futures, AI Ethics) and collaborative academic works."
-  }
+    description:
+      "Participate directly in our core lab operations (Ecological Futures, AI Ethics) and collaborative academic works.",
+  },
 ];
 
 export default function MembershipMainPage() {
@@ -59,9 +62,7 @@ export default function MembershipMainPage() {
                 </p>
               </div>
               <div className="pt-4">
-                <AnimatedLink href="/membership/become-a-member">
-                  Learn More
-                </AnimatedLink>
+                <AnimatedLink href="/membership/become-a-member">Learn More</AnimatedLink>
               </div>
             </div>
           </ContentCard>

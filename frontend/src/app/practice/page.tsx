@@ -17,20 +17,23 @@ const practicesList: GatheringItem[] = [
     title: "Woodland Retreats",
     category: "Physical Gatherings",
     tag: "Woodlands / Off-Grid",
-    description: "Multi-day off-grid reading sessions, software audits, and group meals in forested environments."
+    description:
+      "Multi-day off-grid reading sessions, software audits, and group meals in forested environments.",
   },
   {
     title: "Embodied Sensing Workshops",
     category: "Sensory Exercises",
     tag: "Retreats / Interactive",
-    description: "Practicing somatic awareness, environmental listening walks, and tracking botanical volt-fluctuations."
+    description:
+      "Practicing somatic awareness, environmental listening walks, and tracking botanical volt-fluctuations.",
   },
   {
     title: "Local Meetup Councils",
     category: "Regional Meetups",
     tag: "Chapters / Local",
-    description: "Decentralized local chapters meeting physically in cities to organize citizen science audits."
-  }
+    description:
+      "Decentralized local chapters meeting physically in cities to organize citizen science audits.",
+  },
 ];
 
 export default function PracticeMainPage() {
@@ -59,9 +62,7 @@ export default function PracticeMainPage() {
                 </p>
               </div>
               <div className="pt-4">
-                <AnimatedLink href="/practice/workshops">
-                  View Gathering Details
-                </AnimatedLink>
+                <AnimatedLink href="/practice/workshops">View Gathering Details</AnimatedLink>
               </div>
             </div>
           </ContentCard>

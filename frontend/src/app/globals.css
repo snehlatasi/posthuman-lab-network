@@ -31,7 +31,7 @@
 
   /* Global Semantic Design Tokens - Light Mode (Preserving Approved Visual Reference) */
   --background: #f7f0e4;
-  --background-body: 
+  --background-body:
     radial-gradient(circle at top left, rgba(179, 106, 79, 0.18), transparent 30%),
     radial-gradient(circle at 88% 18%, rgba(100, 116, 90, 0.16), transparent 28%),
     linear-gradient(180deg, #f9f3e9 0%, #f3eadb 45%, #efe4d4 100%);
@@ -73,7 +73,7 @@
 
   /* Global Semantic Design Tokens - Dark Mode (Deep Charcoal & Sage Ecosystem) */
   --background: #10120f;
-  --background-body: 
+  --background-body:
     radial-gradient(circle at top left, rgba(202, 117, 85, 0.15), transparent 35%),
     radial-gradient(circle at 88% 18%, rgba(138, 166, 135, 0.12), transparent 30%),
     linear-gradient(180deg, #10120f 0%, #131612 45%, #161914 100%);
@@ -121,7 +121,9 @@ html {
   scroll-behavior: smooth;
   background-color: var(--background);
   color: var(--foreground);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 body {
@@ -131,7 +133,9 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
   text-rendering: optimizeLegibility;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 body::before {
@@ -161,7 +165,7 @@ body::before {
 }
 
 .digital-grid {
-  background-image: 
+  background-image:
     linear-gradient(to right, var(--grid-line-right) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid-line-bottom) 1px, transparent 1px);
   background-size: 88px 88px;
@@ -169,19 +173,39 @@ body::before {
 }
 
 .organic-radial-glow {
-  background: radial-gradient(circle at 50% 50%, rgba(179, 106, 79, 0.14) 0%, rgba(100, 116, 90, 0.08) 40%, transparent 75%);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(179, 106, 79, 0.14) 0%,
+    rgba(100, 116, 90, 0.08) 40%,
+    transparent 75%
+  );
 }
 
 .dark .organic-radial-glow {
-  background: radial-gradient(circle at 50% 50%, rgba(202, 117, 85, 0.16) 0%, rgba(138, 166, 135, 0.12) 40%, transparent 75%);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(202, 117, 85, 0.16) 0%,
+    rgba(138, 166, 135, 0.12) 40%,
+    transparent 75%
+  );
 }
 
 .clay-radial-glow {
-  background: radial-gradient(circle at 50% 50%, rgba(255, 251, 242, 0.82) 0%, rgba(255, 246, 228, 0.14) 55%, transparent 78%);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 251, 242, 0.82) 0%,
+    rgba(255, 246, 228, 0.14) 55%,
+    transparent 78%
+  );
 }
 
 .dark .clay-radial-glow {
-  background: radial-gradient(circle at 50% 50%, rgba(30, 36, 28, 0.82) 0%, rgba(22, 26, 20, 0.14) 55%, transparent 78%);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(30, 36, 28, 0.82) 0%,
+    rgba(22, 26, 20, 0.14) 55%,
+    transparent 78%
+  );
 }
 
 ::-webkit-scrollbar {
@@ -217,7 +241,10 @@ body::before {
   backdrop-filter: blur(14px);
   border: 1px solid var(--surface-border);
   box-shadow: var(--shadow-card);
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .glass-panel-hover {
@@ -255,19 +282,36 @@ body::before {
 }
 
 @keyframes float-glow-1 {
-  0%, 100% { transform: translate(0px, 0px) scale(1); }
-  33% { transform: translate(40px, -60px) scale(1.1); }
-  66% { transform: translate(-30px, 30px) scale(0.95); }
+  0%,
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(40px, -60px) scale(1.1);
+  }
+  66% {
+    transform: translate(-30px, 30px) scale(0.95);
+  }
 }
 
 @keyframes float-glow-2 {
-  0%, 100% { transform: translate(0px, 0px) scale(1); }
-  50% { transform: translate(-50px, 50px) scale(1.15); }
+  0%,
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(-50px, 50px) scale(1.15);
+  }
 }
 
 @keyframes float-glow-3 {
-  0%, 100% { transform: translate(0px, 0px) scale(1); }
-  50% { transform: translate(50px, 40px) scale(0.9); }
+  0%,
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(50px, 40px) scale(0.9);
+  }
 }
 
 .animate-glow-1 {
@@ -283,7 +327,7 @@ body::before {
 }
 
 .organic-mesh {
-  background-image: 
+  background-image:
     radial-gradient(circle at 100% 150%, rgba(179, 106, 79, 0.05) 24%, transparent 24%),
     radial-gradient(circle at 0% 150%, rgba(100, 116, 90, 0.05) 24%, transparent 24%),
     linear-gradient(to bottom, var(--grid-line-right) 1px, transparent 1px);
@@ -294,7 +338,9 @@ body::before {
   background: var(--surface);
   border: 1px solid var(--surface-border);
   box-shadow: var(--shadow-soft);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 }
 
 .ink-rule {

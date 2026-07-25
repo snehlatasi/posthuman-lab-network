@@ -9,11 +9,17 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create-drop
-    show-sql: true
+    show-sql: false
+
+logging:
+  level:
+    org.hibernate.SQL: warn
+    org.springframework.boot.autoconfigure: warn
 
 app:
   jwt:
     secret: PosthumanLabNetworkSuperSecretSigningKey2026SecureKey!
     expiration-ms: 86400000
   cors:
-    allowed-origins: http://localhost:3000
+    allowed-origins:
+      - http://localhost:3000

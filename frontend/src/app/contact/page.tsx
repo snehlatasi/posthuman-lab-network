@@ -17,20 +17,23 @@ const contactTopicsList: ContactTopic[] = [
     title: "Research Collaboration",
     topic: "Institutional Partnerships",
     tag: "Pitch / Labs",
-    description: "Submit proposals for transdisciplinary research joint-ventures, biological sensors sharing, or computational audits."
+    description:
+      "Submit proposals for transdisciplinary research joint-ventures, biological sensors sharing, or computational audits.",
   },
   {
     title: "Invite a Speaker",
     topic: "Presentations & Lectures",
     tag: "Lectures / Seminars",
-    description: "Book our research leads, designers, or writers to speak at academic events, design weeks, or conferences."
+    description:
+      "Book our research leads, designers, or writers to speak at academic events, design weeks, or conferences.",
   },
   {
     title: "General Inquiries",
     topic: "Media / Support",
     tag: "Info / Help",
-    description: "Questions about membership guidelines, volunteering chapters, or general open-source data access."
-  }
+    description:
+      "Questions about membership guidelines, volunteering chapters, or general open-source data access.",
+  },
 ];
 
 export default function ContactMainPage() {
@@ -59,9 +62,7 @@ export default function ContactMainPage() {
                 </p>
               </div>
               <div className="pt-4">
-                <AnimatedLink href="/contact/collaboration">
-                  Send Inquiry
-                </AnimatedLink>
+                <AnimatedLink href="/contact/collaboration">Send Inquiry</AnimatedLink>
               </div>
             </div>
           </ContentCard>

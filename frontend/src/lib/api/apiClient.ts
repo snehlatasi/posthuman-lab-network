@@ -1,4 +1,7 @@
-const rawBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const rawBaseUrl =
+  process.env.NEXT_PUBLIC_API_BASE_URL ||
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:8080";
 const BASE_URL = rawBaseUrl.replace(/\/api\/v1\/?$/, "").replace(/\/+$/, "");
 
 export function getStoredToken(): string | null {
@@ -15,16 +18,13 @@ export function setStoredToken(token: string | null): void {
   }
 }
 
-export async function fetchJson<T>(
-  path: string,
-  options?: RequestInit
-): Promise<T> {
+export async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
   const url = `${BASE_URL}${path}`;
   const token = getStoredToken();
 
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...(options?.headers as Record<string, string> || {})
+    ...((options?.headers as Record<string, string>) || {}),
   };
 
   if (token && !headers["Authorization"]) {
@@ -33,7 +33,7 @@ export async function fetchJson<T>(
 
   const response = await fetch(url, {
     ...options,
-    headers
+    headers,
   });
 
   if (!response.ok) {
@@ -54,4 +54,3 @@ export async function fetchJson<T>(
 
   return response.json() as Promise<T>;
 }
-

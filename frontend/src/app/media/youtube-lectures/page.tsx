@@ -16,7 +16,8 @@ export default function YouTubeLecturesPage() {
       <div className="space-y-12">
         <Reveal className="max-w-2xl">
           <p className="text-sm md:text-base text-bone-200/70 leading-relaxed">
-            All our video assets are hosted openly to encourage broad academic participation. Below is our featured recording from the current volume.
+            All our video assets are hosted openly to encourage broad academic participation. Below
+            is our featured recording from the current volume.
           </p>
         </Reveal>
 
@@ -33,10 +34,15 @@ export default function YouTubeLecturesPage() {
           </div>
 
           <div className="lg:col-span-4 space-y-4">
-            <span className="font-mono text-xs text-moss-500 font-semibold uppercase tracking-widest">Featured</span>
-            <h3 className="font-serif text-2xl font-bold text-bone-50">Subjectivities in the Anthropocene</h3>
+            <span className="font-mono text-xs text-moss-500 font-semibold uppercase tracking-widest">
+              Featured
+            </span>
+            <h3 className="font-serif text-2xl font-bold text-bone-50">
+              Subjectivities in the Anthropocene
+            </h3>
             <p className="text-xs text-bone-200/60 leading-relaxed font-sans">
-              Recorded live at the London Hub during our summer panel. Elena Rostova explores posthuman ethics, agential realism, and ecological survival.
+              Recorded live at the London Hub during our summer panel. Elena Rostova explores
+              posthuman ethics, agential realism, and ecological survival.
             </p>
           </div>
         </Reveal>

@@ -26,7 +26,7 @@ const homeSections = [
   { id: "pillars", label: "Our Pillars" },
   { id: "conversations", label: "Themes" },
   { id: "labs", label: "Labs" },
-  { id: "events", label: "Events" }
+  { id: "events", label: "Events" },
 ];
 
 export default function HomePage() {
@@ -72,7 +72,7 @@ export default function HomePage() {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({
-        behavior: shouldReduceMotion ? "auto" : "smooth"
+        behavior: shouldReduceMotion ? "auto" : "smooth",
       });
     }
   };
@@ -83,7 +83,7 @@ export default function HomePage() {
       <Header />
 
       {/* Right-Side Circular Section Indicators */}
-      <div 
+      <div
         className="fixed right-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col space-y-4 z-40"
         role="navigation"
         aria-label="Section indicators"
@@ -92,7 +92,7 @@ export default function HomePage() {
           const isActive = activeSection === sec.id;
           const isHovered = hoveredIdx === idx;
           return (
-            <div 
+            <div
               key={sec.id}
               className="relative flex items-center justify-end group cursor-pointer"
               onMouseEnter={() => setHoveredIdx(idx)}
@@ -100,19 +100,19 @@ export default function HomePage() {
               onClick={() => handleSectionClick(sec.id)}
             >
               {/* Tooltip Label */}
-              <span 
+              <span
                 className={`mr-3 font-mono text-[9px] tracking-widest text-carbon-950 dark:text-bone-100 uppercase transition-all duration-300 pointer-events-none select-none bg-bone-50/90 dark:bg-carbon-900/90 px-2 py-0.5 border border-carbon-950/8 dark:border-bone-50/15 rounded shadow-sm ${
                   isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"
                 }`}
               >
                 {sec.label}
               </span>
-              
+
               {/* Dot */}
-              <div 
+              <div
                 className={`w-2.5 h-2.5 rounded-full border transition-all duration-300 ${
-                  isActive 
-                    ? "bg-earth-500 border-earth-500 scale-110 shadow-lg shadow-earth-500/30" 
+                  isActive
+                    ? "bg-earth-500 border-earth-500 scale-110 shadow-lg shadow-earth-500/30"
                     : "border-carbon-950/20 dark:border-bone-50/30 bg-bone-50/40 dark:bg-carbon-900/40 group-hover:border-carbon-950/60 dark:group-hover:border-bone-50/70"
                 }`}
                 aria-label={`Scroll to ${sec.label}`}

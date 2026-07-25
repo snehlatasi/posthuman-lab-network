@@ -1,12 +1,16 @@
 import React from "react";
 import { notFound } from "next/navigation";
 import { pagesContentMap } from "@/data/pagesContent";
-import { EditorialPageLayout, ListingPageLayout, ContentPageLayout } from "@/components/layout/Templates";
+import {
+  EditorialPageLayout,
+  ListingPageLayout,
+  ContentPageLayout,
+} from "@/components/layout/Templates";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { DynamicForm } from "@/components/layout/DynamicForm";
 import { ContentCard } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 interface RouteParams {
   section: string;
@@ -15,7 +19,7 @@ interface RouteParams {
 
 // 1. Generate static metadata dynamically for search crawlers
 export async function generateMetadata({
-  params
+  params,
 }: {
   params: Promise<RouteParams>;
 }): Promise<Metadata> {
@@ -25,13 +29,13 @@ export async function generateMetadata({
 
   if (!page) {
     return {
-      title: "Page Not Found | Posthuman Lab Network"
+      title: "Page Not Found | Posthuman Lab Network",
     };
   }
 
   return {
     title: `${page.title} | Posthuman Lab Network`,
-    description: page.description
+    description: page.description,
   };
 }
 
@@ -44,11 +48,7 @@ export async function generateStaticParams() {
 }
 
 // 3. Centralized Page Composer
-export default async function DynamicSubpage({
-  params
-}: {
-  params: Promise<RouteParams>;
-}) {
+export default async function DynamicSubpage({ params }: { params: Promise<RouteParams> }) {
   const { section, subpage } = await params;
   const slug = `${section}/${subpage}`;
   const page = pagesContentMap[slug];
@@ -60,7 +60,7 @@ export default async function DynamicSubpage({
   // Build breadcrumb items hierarchy
   const breadcrumbItems = [
     { label: page.parentLabel || "Section", href: page.parentHref },
-    { label: page.title }
+    { label: page.title },
   ];
 
   // Sidebar links context for Editorial Layouts (reusing related links)
@@ -68,7 +68,7 @@ export default async function DynamicSubpage({
     ? page.relatedLinks.map((link) => ({
         label: link.label,
         href: link.href,
-        active: false
+        active: false,
       }))
     : [];
 
@@ -123,7 +123,11 @@ export default async function DynamicSubpage({
               <div className="space-y-4">
                 <div className="flex justify-between items-center text-xs font-mono tracking-widest text-earth-600 dark:text-earth-400 uppercase font-bold">
                   <span>{item.tag || "Index"}</span>
-                  {item.date && <span className="text-carbon-900 dark:text-bone-200 font-bold">{item.date}</span>}
+                  {item.date && (
+                    <span className="text-carbon-900 dark:text-bone-200 font-bold">
+                      {item.date}
+                    </span>
+                  )}
                 </div>
                 <h4 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50 leading-tight">
                   {item.title}

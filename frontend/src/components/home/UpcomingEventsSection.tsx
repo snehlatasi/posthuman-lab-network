@@ -9,7 +9,10 @@ import { Reveal, StaggerItem } from "../ui/Reveal";
 
 export const UpcomingEventsSection: React.FC = () => {
   return (
-    <section id="events" className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300">
+    <section
+      id="events"
+      className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300"
+    >
       <Container className="space-y-16">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-5xl">
@@ -21,7 +24,8 @@ export const UpcomingEventsSection: React.FC = () => {
               Upcoming Gatherings
             </h2>
             <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed max-w-xl font-medium">
-              Physical retreats, decentralized chapter councils, and online seminars. Book tickets to reserve your spot.
+              Physical retreats, decentralized chapter councils, and online seminars. Book tickets
+              to reserve your spot.
             </p>
           </div>
           <Link
@@ -34,7 +38,10 @@ export const UpcomingEventsSection: React.FC = () => {
         </div>
 
         {/* Schedule List */}
-        <Reveal staggerChildren={0.12} className="border-t border-carbon-950/10 dark:border-bone-50/15">
+        <Reveal
+          staggerChildren={0.12}
+          className="border-t border-carbon-950/10 dark:border-bone-50/15"
+        >
           {upcomingMeetingsList.map((event) => (
             <StaggerItem key={event.title}>
               <Link

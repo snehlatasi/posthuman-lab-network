@@ -1,12 +1,17 @@
 package org.posthumanlab.network.event.service;
 
 import org.posthumanlab.network.common.exception.ResourceNotFoundException;
+import org.posthumanlab.network.common.util.EnumUtils;
+import org.posthumanlab.network.common.util.SlugUtils;
 import org.posthumanlab.network.event.dto.EventResponse;
+import org.posthumanlab.network.event.dto.EventRequest;
+import org.posthumanlab.network.event.entity.Event;
 import org.posthumanlab.network.event.entity.EventStatus;
 import org.posthumanlab.network.event.repository.EventRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,17 +50,13 @@ public class EventService {
     }
 
     @Transactional
-    public EventResponse createEvent(org.posthumanlab.network.event.dto.EventRequest req) {
-        org.posthumanlab.network.event.entity.Event event = new org.posthumanlab.network.event.entity.Event();
+    public EventResponse createEvent(EventRequest req) {
+        Event event = new Event();
         event.setTitle(req.getTitle());
-        String slug = req.getSlug();
-        if (slug == null || slug.trim().isEmpty()) {
-            slug = req.getTitle().toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
-        }
-        event.setSlug(slug);
+        event.setSlug(SlugUtils.resolve(req.getSlug(), req.getTitle()));
         event.setDescription(req.getDescription());
         event.setEventType(req.getEventType());
-        event.setStartDateTime(req.getStartDateTime() != null ? req.getStartDateTime() : java.time.LocalDateTime.now().plusDays(7));
+        event.setStartDateTime(req.getStartDateTime() != null ? req.getStartDateTime() : LocalDateTime.now().plusDays(7));
         event.setEndDateTime(req.getEndDateTime());
         event.setLocation(req.getLocation());
         event.setOnline(req.getOnline() != null ? req.getOnline() : false);
@@ -66,8 +67,8 @@ public class EventService {
     }
 
     @Transactional
-    public EventResponse updateEvent(Long id, org.posthumanlab.network.event.dto.EventRequest req) {
-        org.posthumanlab.network.event.entity.Event event = eventRepository.findById(id)
+    public EventResponse updateEvent(Long id, EventRequest req) {
+        Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + id));
 
         event.setTitle(req.getTitle());
@@ -81,7 +82,7 @@ public class EventService {
         event.setLocation(req.getLocation());
         if (req.getOnline() != null) event.setOnline(req.getOnline());
         event.setRegistrationUrl(req.getRegistrationUrl());
-        if (req.getStatus() != null) event.setStatus(EventStatus.valueOf(req.getStatus().toUpperCase()));
+        if (req.getStatus() != null) event.setStatus(EnumUtils.parse(EventStatus.class, req.getStatus()));
 
         return new EventResponse(eventRepository.save(event));
     }
@@ -96,7 +97,7 @@ public class EventService {
 
     @Transactional
     public EventResponse setPublishStatus(Long id, boolean publish) {
-        org.posthumanlab.network.event.entity.Event event = eventRepository.findById(id)
+        Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + id));
         event.setStatus(publish ? EventStatus.UPCOMING : EventStatus.DRAFT);
         return new EventResponse(eventRepository.save(event));

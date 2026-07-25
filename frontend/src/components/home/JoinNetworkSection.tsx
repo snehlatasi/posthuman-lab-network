@@ -30,7 +30,8 @@ export const JoinNetworkSection: React.FC = () => {
 
         <Reveal delay={0.35} yOffset={28}>
           <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed max-w-xl mx-auto font-medium">
-            Whether you are a student, researcher, creative practitioner, educator, or simply curious—there is space to contribute.
+            Whether you are a student, researcher, creative practitioner, educator, or simply
+            curious—there is space to contribute.
           </p>
         </Reveal>
 

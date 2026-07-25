@@ -27,13 +27,13 @@ export const HeroSection: React.FC = () => {
       transition: {
         duration: 0.9,
         delay: customDelay,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number]
-      }
-    })
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+      },
+    }),
   };
 
   return (
-    <section 
+    <section
       id="hero"
       className="min-h-screen flex flex-col justify-between relative overflow-hidden pt-28 pb-12 transition-colors duration-300"
     >
@@ -48,7 +48,7 @@ export const HeroSection: React.FC = () => {
 
       {/* Vertical Scroll Indicator */}
       <div className="absolute left-6 bottom-24 hidden xl:flex flex-col items-center space-y-4 z-20 select-none pointer-events-none">
-        <span 
+        <span
           className="font-mono text-[10px] tracking-[0.25em] text-[#3a2e28] dark:text-[#9e988b] font-bold uppercase"
           style={{ writingMode: "vertical-lr", transform: "rotate(180deg)" }}
         >
@@ -88,7 +88,8 @@ export const HeroSection: React.FC = () => {
               custom={0.4}
               className="font-sans text-base md:text-lg text-[#1b1613] dark:text-[#d5d0c4] leading-relaxed font-medium"
             >
-              Connecting thought, creativity, education and research across boundaries. Together we question, imagine and create more livable futures.
+              Connecting thought, creativity, education and research across boundaries. Together we
+              question, imagine and create more livable futures.
             </motion.p>
 
             <motion.div
@@ -106,7 +107,7 @@ export const HeroSection: React.FC = () => {
                   Explore the Network
                 </Link>
               </MagneticButton>
-              
+
               <MagneticButton strength={0.25}>
                 <button
                   type="button"

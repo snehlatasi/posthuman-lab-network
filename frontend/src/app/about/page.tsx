@@ -20,14 +20,20 @@ export default function AboutPage() {
               A Living Laboratory for Interdisciplinary Philosophy & Creativity
             </h2>
             <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-              The Posthuman Lab Network is an open-access global community exploring the shifting boundaries of human consciousness. By integrating scientific inquiries, computational machines, and botanical agents, we work to transition traditional academic boundaries into lived, creative experiments.
+              The Posthuman Lab Network is an open-access global community exploring the shifting
+              boundaries of human consciousness. By integrating scientific inquiries, computational
+              machines, and botanical agents, we work to transition traditional academic boundaries
+              into lived, creative experiments.
             </p>
           </div>
           <div className="lg:col-span-5">
             <ContentCard className="border border-earth-500/20 dark:border-bone-50/15 bg-white/80 dark:bg-carbon-900/90 shadow-md">
-              <span className="font-mono text-[10px] text-earth-600 dark:text-earth-400 uppercase tracking-widest block mb-2 font-bold">Our Stance</span>
+              <span className="font-mono text-[10px] text-earth-600 dark:text-earth-400 uppercase tracking-widest block mb-2 font-bold">
+                Our Stance
+              </span>
               <p className="font-serif text-lg text-carbon-950 dark:text-bone-50 italic">
-                &ldquo;We are not separate from the ecosystems we build or the technologies we generate. We co-evolve.&rdquo;
+                &ldquo;We are not separate from the ecosystems we build or the technologies we
+                generate. We co-evolve.&rdquo;
               </p>
             </ContentCard>
           </div>
@@ -36,29 +42,24 @@ export default function AboutPage() {
         {/* Pillars Grid */}
         <div className="space-y-8">
           <div className="border-b border-carbon-950/10 dark:border-bone-50/15 pb-4">
-            <h3 className="font-mono text-xs text-earth-600 dark:text-earth-400 uppercase tracking-widest font-bold">Our Key Pillars</h3>
+            <h3 className="font-mono text-xs text-earth-600 dark:text-earth-400 uppercase tracking-widest font-bold">
+              Our Key Pillars
+            </h3>
           </div>
-          
+
           <Reveal staggerChildren={0.15} className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <StaggerItem>
               <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 p-6">
                 <div className="space-y-4">
-                  <span className="font-mono text-xl font-bold text-earth-600 dark:text-earth-400">01</span>
-                  <h4 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">Transdisciplinary Thought</h4>
+                  <span className="font-mono text-xl font-bold text-earth-600 dark:text-earth-400">
+                    01
+                  </span>
+                  <h4 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
+                    Transdisciplinary Thought
+                  </h4>
                   <p className="text-xs md:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-                    Fusing philosophy, biology, software ethics, and critical art practices to establish new ways of viewing the nonhuman.
-                  </p>
-                </div>
-              </ContentCard>
-            </StaggerItem>
-            
-            <StaggerItem>
-              <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 p-6">
-                <div className="space-y-4">
-                  <span className="font-mono text-xl font-bold text-earth-600 dark:text-earth-400">02</span>
-                  <h4 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">Open Accessibility</h4>
-                  <p className="text-xs md:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-                    Democratizing advanced scholarship. Academic writing, toolsets, and digital lectures are, and will always be, free.
+                    Fusing philosophy, biology, software ethics, and critical art practices to
+                    establish new ways of viewing the nonhuman.
                   </p>
                 </div>
               </ContentCard>
@@ -67,10 +68,32 @@ export default function AboutPage() {
             <StaggerItem>
               <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 p-6">
                 <div className="space-y-4">
-                  <span className="font-mono text-xl font-bold text-earth-600 dark:text-earth-400">03</span>
-                  <h4 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">Embodied Practice</h4>
+                  <span className="font-mono text-xl font-bold text-earth-600 dark:text-earth-400">
+                    02
+                  </span>
+                  <h4 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
+                    Open Accessibility
+                  </h4>
                   <p className="text-xs md:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-                    Bridging digital connectivity with real-world, physical wilderness retreats, co-design groups, and sensory workshops.
+                    Democratizing advanced scholarship. Academic writing, toolsets, and digital
+                    lectures are, and will always be, free.
+                  </p>
+                </div>
+              </ContentCard>
+            </StaggerItem>
+
+            <StaggerItem>
+              <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 p-6">
+                <div className="space-y-4">
+                  <span className="font-mono text-xl font-bold text-earth-600 dark:text-earth-400">
+                    03
+                  </span>
+                  <h4 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
+                    Embodied Practice
+                  </h4>
+                  <p className="text-xs md:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
+                    Bridging digital connectivity with real-world, physical wilderness retreats,
+                    co-design groups, and sensory workshops.
                   </p>
                 </div>
               </ContentCard>
@@ -81,12 +104,14 @@ export default function AboutPage() {
         {/* Dynamic Navigation Box */}
         <Reveal className="border-t border-carbon-950/8 dark:border-bone-50/12 pt-12 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="space-y-1">
-            <span className="text-[10px] font-mono text-earth-600 dark:text-earth-400 uppercase tracking-widest block font-bold">Explore Our Story</span>
-            <p className="text-sm text-carbon-800 dark:text-bone-200 font-medium">Trace our chronological milestones from founders to future vision.</p>
+            <span className="text-[10px] font-mono text-earth-600 dark:text-earth-400 uppercase tracking-widest block font-bold">
+              Explore Our Story
+            </span>
+            <p className="text-sm text-carbon-800 dark:text-bone-200 font-medium">
+              Trace our chronological milestones from founders to future vision.
+            </p>
           </div>
-          <AnimatedLink href="/about/our-story">
-            Read Our Story
-          </AnimatedLink>
+          <AnimatedLink href="/about/our-story">Read Our Story</AnimatedLink>
         </Reveal>
       </div>
     </ContentPageLayout>

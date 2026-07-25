@@ -23,17 +23,13 @@ export const Reveal: React.FC<RevealProps> = ({
   yOffset = 24,
   xOffset = 0,
   scale = 1,
-  staggerChildren = 0
+  staggerChildren = 0,
 }) => {
   const shouldReduceMotion = useSafeReducedMotion();
 
   // If user prefers reduced motion, bypass standard transform displacements
   if (shouldReduceMotion) {
-    return (
-      <div className={className}>
-        {children}
-      </div>
-    );
+    return <div className={className}>{children}</div>;
   }
 
   if (staggerChildren > 0) {
@@ -42,9 +38,9 @@ export const Reveal: React.FC<RevealProps> = ({
       visible: {
         transition: {
           staggerChildren: staggerChildren,
-          delayChildren: delay
-        }
-      }
+          delayChildren: delay,
+        },
+      },
     };
 
     return (
@@ -65,7 +61,7 @@ export const Reveal: React.FC<RevealProps> = ({
       opacity: 0,
       y: yOffset,
       x: xOffset,
-      scale: scale
+      scale: scale,
     },
     visible: {
       opacity: 1,
@@ -75,9 +71,9 @@ export const Reveal: React.FC<RevealProps> = ({
       transition: {
         duration: duration,
         delay: delay,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number] // Out-expo bezier curve (premium, smooth feel)
-      }
-    }
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number], // Out-expo bezier curve (premium, smooth feel)
+      },
+    },
   };
 
   return (
@@ -93,11 +89,11 @@ export const Reveal: React.FC<RevealProps> = ({
   );
 };
 
-export const StaggerItem: React.FC<{ children: React.ReactNode; className?: string; yOffset?: number }> = ({ 
-  children, 
-  className = "",
-  yOffset = 16
-}) => {
+export const StaggerItem: React.FC<{
+  children: React.ReactNode;
+  className?: string;
+  yOffset?: number;
+}> = ({ children, className = "", yOffset = 16 }) => {
   const shouldReduceMotion = useSafeReducedMotion();
 
   if (shouldReduceMotion) {
@@ -108,11 +104,14 @@ export const StaggerItem: React.FC<{ children: React.ReactNode; className?: stri
     <motion.div
       variants={{
         hidden: { opacity: 0, y: yOffset },
-        visible: { 
-          opacity: 1, 
-          y: 0, 
-          transition: { ease: [0.16, 1, 0.3, 1] as [number, number, number, number], duration: 0.6 }
-        }
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+            duration: 0.6,
+          },
+        },
       }}
       className={className}
     >
@@ -136,7 +135,7 @@ export const SplitText: React.FC<SplitTextProps> = ({
   mode = "words",
   delay = 0.1,
   stagger = 0.04,
-  as: Component = "h2"
+  as: Component = "h2",
 }) => {
   const shouldReduceMotion = useSafeReducedMotion();
   const Tag = Component as React.ElementType<{ className?: string; children?: React.ReactNode }>;
@@ -152,16 +151,16 @@ export const SplitText: React.FC<SplitTextProps> = ({
     visible: {
       transition: {
         staggerChildren: stagger,
-        delayChildren: delay
-      }
-    }
+        delayChildren: delay,
+      },
+    },
   };
 
   const childVariants = {
     hidden: {
       opacity: 0,
       y: "115%",
-      rotateX: -12
+      rotateX: -12,
     },
     visible: {
       opacity: 1,
@@ -169,9 +168,9 @@ export const SplitText: React.FC<SplitTextProps> = ({
       rotateX: 0,
       transition: {
         duration: 0.85,
-        ease: [0.16, 1, 0.3, 1] as [number, number, number, number]
-      }
-    }
+        ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+      },
+    },
   };
 
   return (
@@ -188,10 +187,7 @@ export const SplitText: React.FC<SplitTextProps> = ({
             key={index}
             className="inline-block overflow-hidden pb-1 -mb-1 align-top mr-[0.25em] last:mr-0"
           >
-            <motion.span
-              variants={childVariants}
-              className="inline-block origin-bottom-left"
-            >
+            <motion.span variants={childVariants} className="inline-block origin-bottom-left">
               {item === "" ? "\u00A0" : item}
             </motion.span>
           </span>

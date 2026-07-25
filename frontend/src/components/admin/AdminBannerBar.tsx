@@ -24,9 +24,7 @@ export const AdminBannerBar: React.FC = () => {
           Admin Control Mode
         </span>
         <span className="text-moss-400/60 hidden sm:inline">•</span>
-        <span className="text-moss-300/80 text-[11px] hidden sm:inline">
-          {adminEmail}
-        </span>
+        <span className="text-moss-300/80 text-[11px] hidden sm:inline">{adminEmail}</span>
       </div>
 
       <div className="flex items-center space-x-4">

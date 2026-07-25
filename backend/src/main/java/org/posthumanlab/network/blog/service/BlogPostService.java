@@ -4,9 +4,12 @@ import org.posthumanlab.network.blog.dto.BlogPostDto;
 import org.posthumanlab.network.blog.entity.BlogPost;
 import org.posthumanlab.network.blog.entity.BlogPostStatus;
 import org.posthumanlab.network.blog.repository.BlogPostRepository;
+import org.posthumanlab.network.common.util.EnumUtils;
+import org.posthumanlab.network.common.util.SlugUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -66,12 +69,7 @@ public class BlogPostService {
     public BlogPostDto createPost(BlogPostDto dto) {
         BlogPost post = new BlogPost();
         post.setTitle(dto.getTitle());
-        
-        String slug = dto.getSlug();
-        if (slug == null || slug.trim().isEmpty()) {
-            slug = dto.getTitle().toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
-        }
-        post.setSlug(slug);
+        post.setSlug(SlugUtils.resolve(dto.getSlug(), dto.getTitle()));
         post.setExcerpt(dto.getExcerpt());
         post.setContent(dto.getContent());
         post.setAuthor(dto.getAuthor());
@@ -94,7 +92,7 @@ public class BlogPostService {
             post.setAuthor(dto.getAuthor());
             post.setFeaturedImage(dto.getFeaturedImage());
             if (dto.getStatus() != null) {
-                post.setStatus(BlogPostStatus.valueOf(dto.getStatus().toUpperCase()));
+                post.setStatus(EnumUtils.parse(BlogPostStatus.class, dto.getStatus()));
             }
             return mapToDto(blogPostRepository.save(post));
         });
@@ -114,7 +112,7 @@ public class BlogPostService {
         return blogPostRepository.findById(id).map(post -> {
             post.setStatus(publish ? BlogPostStatus.PUBLISHED : BlogPostStatus.DRAFT);
             if (publish && post.getPublishedAt() == null) {
-                post.setPublishedAt(java.time.LocalDateTime.now());
+                post.setPublishedAt(LocalDateTime.now());
             }
             return mapToDto(blogPostRepository.save(post));
         });

@@ -42,7 +42,7 @@ export const ScrollControls: React.FC = () => {
   const getPageSections = (): number[] => {
     const selector = "section, footer, header, main > div, main > article";
     const elements = Array.from(document.querySelectorAll(selector));
-    
+
     const offsets = elements
       .map((el) => {
         const rect = el.getBoundingClientRect();
@@ -65,7 +65,7 @@ export const ScrollControls: React.FC = () => {
   const scrollUp = () => {
     const sections = getPageSections();
     const currentScroll = window.scrollY;
-    
+
     let target = 0;
     for (let i = sections.length - 1; i >= 0; i--) {
       if (sections[i] < currentScroll - 20) {
@@ -85,7 +85,7 @@ export const ScrollControls: React.FC = () => {
     const currentScroll = window.scrollY;
     const docHeight = document.documentElement.scrollHeight;
     const winHeight = window.innerHeight;
-    
+
     let target = currentScroll + winHeight;
     for (let i = 0; i < sections.length; i++) {
       if (sections[i] > currentScroll + 20) {
@@ -105,7 +105,7 @@ export const ScrollControls: React.FC = () => {
   };
 
   return (
-    <div 
+    <div
       className="fixed right-6 bottom-8 z-50 flex flex-col space-y-4 pointer-events-none"
       role="navigation"
       aria-label="Vertical navigation shortcut"
@@ -116,7 +116,9 @@ export const ScrollControls: React.FC = () => {
         onClick={scrollUp}
         disabled={!showUp}
         className={`flex items-center space-x-2 text-left focus:outline-none pointer-events-auto group ${
-          showUp ? "opacity-60 hover:opacity-100 hover:text-moss-400" : "opacity-0 pointer-events-none"
+          showUp
+            ? "opacity-60 hover:opacity-100 hover:text-moss-400"
+            : "opacity-0 pointer-events-none"
         } transition-all duration-300`}
       >
         <div className="p-2 border border-bone-200/20 group-hover:border-moss-500 rounded-full bg-carbon-950/80 transition-all duration-300">
@@ -133,7 +135,9 @@ export const ScrollControls: React.FC = () => {
         onClick={scrollDown}
         disabled={!showDown}
         className={`flex items-center space-x-2 text-left focus:outline-none pointer-events-auto group ${
-          showDown ? "opacity-60 hover:opacity-100 hover:text-moss-400" : "opacity-0 pointer-events-none"
+          showDown
+            ? "opacity-60 hover:opacity-100 hover:text-moss-400"
+            : "opacity-0 pointer-events-none"
         } transition-all duration-300`}
       >
         <div className="p-2 border border-bone-200/20 group-hover:border-moss-500 rounded-full bg-carbon-950/80 transition-all duration-300">

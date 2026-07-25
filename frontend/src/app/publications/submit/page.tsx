@@ -32,7 +32,8 @@ export default function SubmitWorkPage() {
               Submission Guidelines
             </h2>
             <p className="text-xs md:text-sm text-carbon-800 leading-relaxed font-sans font-medium">
-              We seek transdisciplinary writings bridging plant bio-communications, critical algorithms audits, cybernetic architecture, and eco-art aesthetics.
+              We seek transdisciplinary writings bridging plant bio-communications, critical
+              algorithms audits, cybernetic architecture, and eco-art aesthetics.
             </p>
             <ul className="list-decimal pl-4 space-y-2 text-xs text-carbon-900 leading-relaxed font-mono font-bold">
               <li>Open Access: Approved works are published under CC BY-NC 4.0.</li>
@@ -48,17 +49,23 @@ export default function SubmitWorkPage() {
             {submitted ? (
               <div className="space-y-4 text-center py-6">
                 <span className="font-mono text-2xl text-earth-600 font-bold">✓</span>
-                <h3 className="font-serif text-xl font-bold text-carbon-950">Submission Received</h3>
+                <h3 className="font-serif text-xl font-bold text-carbon-950">
+                  Submission Received
+                </h3>
                 <p className="text-xs sm:text-sm text-carbon-800 leading-relaxed font-sans font-medium">
-                  Your draft has been submitted to the editorial queue. You can track updates in your profile dashboard.
+                  Your draft has been submitted to the editorial queue. You can track updates in
+                  your profile dashboard.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <h3 className="font-serif text-xl font-bold text-carbon-950">Upload Draft</h3>
-                
+
                 <div className="space-y-2">
-                  <label htmlFor="pub-title" className="font-mono text-xs text-carbon-900 uppercase font-bold tracking-widest block">
+                  <label
+                    htmlFor="pub-title"
+                    className="font-mono text-xs text-carbon-900 uppercase font-bold tracking-widest block"
+                  >
                     Document Title
                   </label>
                   <input
@@ -73,7 +80,10 @@ export default function SubmitWorkPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="pub-abstract" className="font-mono text-xs text-carbon-900 uppercase font-bold tracking-widest block">
+                  <label
+                    htmlFor="pub-abstract"
+                    className="font-mono text-xs text-carbon-900 uppercase font-bold tracking-widest block"
+                  >
                     Abstract / Summary
                   </label>
                   <textarea

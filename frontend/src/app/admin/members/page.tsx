@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { memberAuthApi, MemberDto } from "@/lib/api/memberAuth";
+import type { MemberDto } from "@/lib/api/memberAuth";
+import { memberAuthApi } from "@/lib/api/memberAuth";
 import { Search } from "lucide-react";
 
 export default function AdminMembersPage() {
@@ -40,7 +41,9 @@ export default function AdminMembersPage() {
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
             Approved Network Members
           </h2>
-          <p className="font-sans text-xs text-bone-200 font-medium">Catalog of active scholars, researchers, and creative practitioners in the network.</p>
+          <p className="font-sans text-xs text-bone-200 font-medium">
+            Catalog of active scholars, researchers, and creative practitioners in the network.
+          </p>
         </div>
 
         <div className="relative">
@@ -76,13 +79,19 @@ export default function AdminMembersPage() {
                     </div>
                     <div>
                       <span className="font-semibold text-bone-50 block">{m.fullName}</span>
-                      <span className="font-mono text-[10px] text-bone-200/50 block">{m.country || "International"}</span>
+                      <span className="font-mono text-[10px] text-bone-200/50 block">
+                        {m.country || "International"}
+                      </span>
                     </div>
                   </td>
                   <td className="p-4 font-mono text-[11px] text-bone-200/70">{m.email}</td>
                   <td className="p-4">
-                    <span className="text-earth-400 font-mono text-[10px] font-bold block uppercase">{m.role || "Scholar"}</span>
-                    <span className="text-bone-200/60 text-[11px] block">{m.affiliation || "Independent Lab"}</span>
+                    <span className="text-earth-400 font-mono text-[10px] font-bold block uppercase">
+                      {m.role || "Scholar"}
+                    </span>
+                    <span className="text-bone-200/60 text-[11px] block">
+                      {m.affiliation || "Independent Lab"}
+                    </span>
                   </td>
                   <td className="p-4">
                     <span className="px-2.5 py-1 text-[9px] font-mono rounded-full uppercase tracking-wider font-bold bg-moss-500/20 text-moss-400 border border-moss-500/30">
@@ -96,7 +105,10 @@ export default function AdminMembersPage() {
               ))}
               {filteredMembers.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase tracking-widest">
+                  <td
+                    colSpan={5}
+                    className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase tracking-widest"
+                  >
                     No approved members found in directory.
                   </td>
                 </tr>

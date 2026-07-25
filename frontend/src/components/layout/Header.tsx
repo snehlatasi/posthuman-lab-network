@@ -6,7 +6,8 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { Menu, X, ArrowRight, ChevronDown, ShieldCheck } from "lucide-react";
-import { navigationConfig, NavigationGroup } from "@/lib/navigation";
+import type { NavigationGroup } from "@/lib/navigation";
+import { navigationConfig } from "@/lib/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useMember } from "@/context/MemberContext";
 import { ThemeSelector } from "@/components/ui/ThemeSelector";
@@ -110,67 +111,68 @@ export const Header: React.FC = () => {
           role="navigation"
           aria-label="Main Desktop Navigation"
         >
-          {pathname === "/" ? (
-            [
-              { label: "HOME", href: "/" },
-              { label: "ABOUT", href: "/about" },
-              { label: "LABS", href: "/labs" },
-              { label: "LEARNING", href: "/learning" },
-              { label: "EVENTS", href: "/events" },
-              { label: "MEDIA", href: "/media" },
-              { label: "COMMUNITY", href: "/community" },
-              { label: "BLOG", href: "/blog" },
-              { label: "SUPPORT", href: "/support" }
-            ].map((link) => {
-              const isActive = link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
-              return (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className={`px-1.5 xl:px-2 2xl:px-2.5 py-1 text-[11px] xl:text-[11.5px] 2xl:text-xs font-sans tracking-wider uppercase transition-all duration-200 relative whitespace-nowrap ${
-                    isActive
-                      ? "text-earth-600 dark:text-earth-400 font-bold"
-                      : "text-[#1b1613] dark:text-[#d5d0c4] font-semibold hover:text-earth-600 dark:hover:text-earth-400"
-                  }`}
-                >
-                  <span>{link.label}</span>
-                  {isActive && (
-                    <span className="absolute bottom-[-2px] left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-earth-500" />
-                  )}
-                </Link>
-              );
-            })
-          ) : (
-            navigationConfig.map((group) => {
-              const isDropdownActive = activeGroup === group.label;
-              return (
-                <div
-                  key={group.label}
-                  className="relative"
-                  onMouseEnter={() => handleMouseEnter(group.label)}
-                  onMouseLeave={handleMouseLeave}
-                >
-                  <button
-                    onClick={() => toggleGroupClick(group.label)}
-                    aria-expanded={isDropdownActive}
-                    aria-haspopup="true"
-                    className={`flex items-center space-x-1 px-2 xl:px-2.5 2xl:px-3 py-1.5 text-xs font-sans tracking-wide uppercase transition-all duration-200 rounded-full focus:outline-none cursor-pointer whitespace-nowrap ${
-                      isDropdownActive
-                        ? "text-earth-600 dark:text-earth-400 bg-bone-200/50 dark:bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15"
-                        : "text-[#120e0c] dark:text-[#f3ebd9] hover:bg-bone-200/40 dark:hover:bg-carbon-900/50"
+          {pathname === "/"
+            ? [
+                { label: "HOME", href: "/" },
+                { label: "ABOUT", href: "/about" },
+                { label: "LABS", href: "/labs" },
+                { label: "LEARNING", href: "/learning" },
+                { label: "EVENTS", href: "/events" },
+                { label: "MEDIA", href: "/media" },
+                { label: "COMMUNITY", href: "/community" },
+                { label: "BLOG", href: "/blog" },
+                { label: "SUPPORT", href: "/support" },
+              ].map((link) => {
+                const isActive =
+                  link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
+                return (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className={`px-1.5 xl:px-2 2xl:px-2.5 py-1 text-[11px] xl:text-[11.5px] 2xl:text-xs font-sans tracking-wider uppercase transition-all duration-200 relative whitespace-nowrap ${
+                      isActive
+                        ? "text-earth-600 dark:text-earth-400 font-bold"
+                        : "text-[#1b1613] dark:text-[#d5d0c4] font-semibold hover:text-earth-600 dark:hover:text-earth-400"
                     }`}
                   >
-                    <span>{group.label}</span>
-                    <ChevronDown
-                      className={`w-3 h-3 transition-transform duration-200 ${
-                        isDropdownActive ? "rotate-180 text-earth-600 dark:text-earth-400" : "text-[#594e46] dark:text-bone-300"
+                    <span>{link.label}</span>
+                    {isActive && (
+                      <span className="absolute bottom-[-2px] left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-earth-500" />
+                    )}
+                  </Link>
+                );
+              })
+            : navigationConfig.map((group) => {
+                const isDropdownActive = activeGroup === group.label;
+                return (
+                  <div
+                    key={group.label}
+                    className="relative"
+                    onMouseEnter={() => handleMouseEnter(group.label)}
+                    onMouseLeave={handleMouseLeave}
+                  >
+                    <button
+                      onClick={() => toggleGroupClick(group.label)}
+                      aria-expanded={isDropdownActive}
+                      aria-haspopup="true"
+                      className={`flex items-center space-x-1 px-2 xl:px-2.5 2xl:px-3 py-1.5 text-xs font-sans tracking-wide uppercase transition-all duration-200 rounded-full focus:outline-none cursor-pointer whitespace-nowrap ${
+                        isDropdownActive
+                          ? "text-earth-600 dark:text-earth-400 bg-bone-200/50 dark:bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15"
+                          : "text-[#120e0c] dark:text-[#f3ebd9] hover:bg-bone-200/40 dark:hover:bg-carbon-900/50"
                       }`}
-                    />
-                  </button>
-                </div>
-              );
-            })
-          )}
+                    >
+                      <span>{group.label}</span>
+                      <ChevronDown
+                        className={`w-3 h-3 transition-transform duration-200 ${
+                          isDropdownActive
+                            ? "rotate-180 text-earth-600 dark:text-earth-400"
+                            : "text-[#594e46] dark:text-bone-300"
+                        }`}
+                      />
+                    </button>
+                  </div>
+                );
+              })}
         </nav>
 
         {/* Group 3: Header Actions (Theme Selector + Admin Login + Join CTA + Mobile Toggle) */}
@@ -239,7 +241,9 @@ export const Header: React.FC = () => {
                   return (
                     <div key={group.label} className="space-y-4">
                       <div className="flex items-center space-x-3">
-                        <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-widest">{group.number}</span>
+                        <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-widest">
+                          {group.number}
+                        </span>
                         <div className="h-[1px] w-8 bg-earth-500/40" />
                       </div>
                       <h2 className="font-serif text-4xl font-bold tracking-tight text-[#120e0c] dark:text-[#f3ebd9]">
@@ -295,7 +299,9 @@ export const Header: React.FC = () => {
             <div className="px-6 py-8 space-y-6">
               {/* Theme Preference in Mobile Drawer */}
               <div className="flex flex-col items-center space-y-2 pb-4 border-b border-carbon-950/10 dark:border-bone-50/10">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#594e46] dark:text-[#9e988b]">Theme Preference</span>
+                <span className="text-[10px] font-mono uppercase tracking-widest text-[#594e46] dark:text-[#9e988b]">
+                  Theme Preference
+                </span>
                 <ThemeSelector variant="pills" />
               </div>
 
@@ -346,8 +352,12 @@ const MobileAccordionGroup: React.FC<{
         className="w-full flex items-center justify-between py-2 text-left focus:outline-none cursor-pointer"
       >
         <div className="space-y-1">
-          <span className="font-mono text-xs text-earth-600 dark:text-earth-400 tracking-wider uppercase font-bold block">{group.number}</span>
-          <span className="font-serif text-2xl font-bold text-[#120e0c] dark:text-[#f3ebd9]">{group.label}</span>
+          <span className="font-mono text-xs text-earth-600 dark:text-earth-400 tracking-wider uppercase font-bold block">
+            {group.number}
+          </span>
+          <span className="font-serif text-2xl font-bold text-[#120e0c] dark:text-[#f3ebd9]">
+            {group.label}
+          </span>
         </div>
         <ChevronDown
           className={`w-5 h-5 text-[#120e0c] dark:text-[#f3ebd9] transition-transform duration-300 ${

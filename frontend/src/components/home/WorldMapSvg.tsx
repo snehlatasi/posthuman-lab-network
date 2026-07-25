@@ -12,85 +12,86 @@ import {
   MapPin,
   Compass,
   X,
-  Check
+  Check,
 } from "lucide-react";
-import { NetworkLocation, networkLocations, geoToSvg } from "@/lib/data/locations";
+import type { NetworkLocation } from "@/lib/data/locations";
+import { networkLocations, geoToSvg } from "@/lib/data/locations";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 
 // Detailed aesthetic SVG landmass paths mapped for Equirectangular projection (0 0 1000 500)
 const WORLD_LANDMASS_PATHS = [
   {
     name: "North America",
-    path: "M 130 50 L 160 45 L 210 55 L 250 65 L 310 75 L 360 85 L 350 110 L 320 120 L 310 145 L 290 170 L 295 190 L 275 220 L 250 240 L 235 270 L 250 280 L 270 265 L 295 285 L 280 300 L 270 285 L 250 270 L 230 245 L 210 230 L 180 220 L 160 190 L 180 170 L 195 140 L 175 130 L 140 145 L 110 125 L 90 95 L 110 75 Z"
+    path: "M 130 50 L 160 45 L 210 55 L 250 65 L 310 75 L 360 85 L 350 110 L 320 120 L 310 145 L 290 170 L 295 190 L 275 220 L 250 240 L 235 270 L 250 280 L 270 265 L 295 285 L 280 300 L 270 285 L 250 270 L 230 245 L 210 230 L 180 220 L 160 190 L 180 170 L 195 140 L 175 130 L 140 145 L 110 125 L 90 95 L 110 75 Z",
   },
   {
     name: "Greenland",
-    path: "M 360 30 L 410 25 L 440 35 L 430 75 L 390 90 L 365 75 Z"
+    path: "M 360 30 L 410 25 L 440 35 L 430 75 L 390 90 L 365 75 Z",
   },
   {
     name: "South America",
-    path: "M 300 305 L 330 300 L 360 310 L 390 325 L 415 350 L 420 380 L 395 420 L 375 460 L 360 480 L 350 460 L 355 420 L 340 380 L 325 350 L 305 325 Z"
+    path: "M 300 305 L 330 300 L 360 310 L 390 325 L 415 350 L 420 380 L 395 420 L 375 460 L 360 480 L 350 460 L 355 420 L 340 380 L 325 350 L 305 325 Z",
   },
   {
     name: "Europe",
-    path: "M 480 95 L 510 85 L 540 65 L 565 75 L 560 105 L 540 115 L 560 135 L 585 140 L 575 165 L 545 170 L 520 185 L 490 175 L 475 155 L 495 135 L 475 115 Z"
+    path: "M 480 95 L 510 85 L 540 65 L 565 75 L 560 105 L 540 115 L 560 135 L 585 140 L 575 165 L 545 170 L 520 185 L 490 175 L 475 155 L 495 135 L 475 115 Z",
   },
   {
     name: "British Isles",
-    path: "M 470 105 L 485 100 L 490 115 L 475 125 Z M 460 110 L 468 112 L 465 122 L 458 118 Z"
+    path: "M 470 105 L 485 100 L 490 115 L 475 125 Z M 460 110 L 468 112 L 465 122 L 458 118 Z",
   },
   {
     name: "Africa",
-    path: "M 465 190 L 515 185 L 565 195 L 610 230 L 615 265 L 585 295 L 575 345 L 590 390 L 575 435 L 545 440 L 530 400 L 510 350 L 495 310 L 460 280 L 450 235 Z"
+    path: "M 465 190 L 515 185 L 565 195 L 610 230 L 615 265 L 585 295 L 575 345 L 590 390 L 575 435 L 545 440 L 530 400 L 510 350 L 495 310 L 460 280 L 450 235 Z",
   },
   {
     name: "Madagascar",
-    path: "M 615 360 L 628 355 L 632 395 L 618 410 Z"
+    path: "M 615 360 L 628 355 L 632 395 L 618 410 Z",
   },
   {
     name: "Middle East",
-    path: "M 570 175 L 615 170 L 640 190 L 655 220 L 630 250 L 590 235 L 570 205 Z"
+    path: "M 570 175 L 615 170 L 640 190 L 655 220 L 630 250 L 590 235 L 570 205 Z",
   },
   {
     name: "Eurasia / Northern Asia",
-    path: "M 570 65 L 630 55 L 710 45 L 810 40 L 910 50 L 960 65 L 940 105 L 890 115 L 840 110 L 780 125 L 720 115 L 660 135 L 600 125 L 575 100 Z"
+    path: "M 570 65 L 630 55 L 710 45 L 810 40 L 910 50 L 960 65 L 940 105 L 890 115 L 840 110 L 780 125 L 720 115 L 660 135 L 600 125 L 575 100 Z",
   },
   {
     name: "Central & East Asia",
-    path: "M 650 140 L 730 130 L 800 135 L 870 150 L 895 180 L 875 220 L 820 240 L 760 220 L 710 200 L 660 180 Z"
+    path: "M 650 140 L 730 130 L 800 135 L 870 150 L 895 180 L 875 220 L 820 240 L 760 220 L 710 200 L 660 180 Z",
   },
   {
     name: "India Peninsula",
-    path: "M 690 200 L 735 195 L 760 220 L 745 260 L 725 295 L 710 290 L 685 245 L 675 220 Z"
+    path: "M 690 200 L 735 195 L 760 220 L 745 260 L 725 295 L 710 290 L 685 245 L 675 220 Z",
   },
   {
     name: "Sri Lanka",
-    path: "M 728 300 L 736 298 L 734 312 L 726 310 Z"
+    path: "M 728 300 L 736 298 L 734 312 L 726 310 Z",
   },
   {
     name: "Southeast Asia",
-    path: "M 770 225 L 825 235 L 860 265 L 830 300 L 795 280 L 775 250 Z"
+    path: "M 770 225 L 825 235 L 860 265 L 830 300 L 795 280 L 775 250 Z",
   },
   {
     name: "Japan",
-    path: "M 885 145 L 905 150 L 915 185 L 895 200 L 880 175 Z"
+    path: "M 885 145 L 905 150 L 915 185 L 895 200 L 880 175 Z",
   },
   {
     name: "Indonesia & Philippines",
-    path: "M 810 310 L 850 305 L 890 320 L 860 335 L 820 330 Z M 870 260 L 890 255 L 885 290 L 865 285 Z"
+    path: "M 810 310 L 850 305 L 890 320 L 860 335 L 820 330 Z M 870 260 L 890 255 L 885 290 L 865 285 Z",
   },
   {
     name: "Australia",
-    path: "M 830 365 L 880 350 L 925 365 L 935 410 L 910 445 L 860 450 L 825 415 L 820 385 Z"
+    path: "M 830 365 L 880 350 L 925 365 L 935 410 L 910 445 L 860 450 L 825 415 L 820 385 Z",
   },
   {
     name: "Tasmania",
-    path: "M 900 460 L 915 458 L 912 472 L 898 470 Z"
+    path: "M 900 460 L 915 458 L 912 472 L 898 470 Z",
   },
   {
     name: "New Zealand",
-    path: "M 950 420 L 965 415 L 955 450 Z M 935 440 L 948 435 L 940 470 Z"
-  }
+    path: "M 950 420 L 965 415 L 955 450 Z M 935 440 L 948 435 L 940 470 Z",
+  },
 ];
 
 // Connection Arcs between key network hubs
@@ -99,7 +100,7 @@ const NETWORK_CONNECTIONS = [
   { from: "india", to: "east-asia" },
   { from: "europe", to: "north-america" },
   { from: "north-america", to: "latin-america" },
-  { from: "europe", to: "africa" }
+  { from: "europe", to: "africa" },
 ];
 
 interface WorldMapSvgProps {
@@ -109,14 +110,14 @@ interface WorldMapSvgProps {
 
 export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
   onSelectLocation,
-  selectedLocationId
+  selectedLocationId,
 }) => {
   const shouldReduceMotion = useSafeReducedMotion();
   const [hoveredLoc, setHoveredLoc] = useState<NetworkLocation | null>(null);
   const [selectedLoc, setSelectedLoc] = useState<NetworkLocation | null>(
     networkLocations.find((l) => l.id === selectedLocationId) || null
   );
-  
+
   // Directions Modal state
   const [directionsLoc, setDirectionsLoc] = useState<NetworkLocation | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -208,7 +209,6 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
     <div className="space-y-6 w-full">
       {/* Map Container Box */}
       <div className="relative aspect-[16/9] sm:aspect-[2/1] w-full rounded-2xl bg-[#0b0e0c] dark:bg-[#0b0e0c] border border-bone-200/15 dark:border-bone-50/15 overflow-hidden shadow-2xl transition-all duration-500 group select-none">
-        
         {/* Fine Digital Grid Overlay */}
         <div className="absolute inset-0 digital-grid opacity-25 pointer-events-none z-0" />
 
@@ -254,7 +254,7 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
               <stop offset="0%" stopColor="#0e1511" stopOpacity="0.9" />
               <stop offset="100%" stopColor="#080c09" stopOpacity="1" />
             </radialGradient>
-            
+
             {/* Marker Glow Filter */}
             <filter id="orangeGlow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="2.5" result="blur" />
@@ -276,7 +276,13 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
           </g>
 
           {/* Continents & Landmasses SVG Paths */}
-          <g fill="#142017" stroke="#223527" strokeWidth="1" strokeLinejoin="round" strokeLinecap="round">
+          <g
+            fill="#142017"
+            stroke="#223527"
+            strokeWidth="1"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          >
             {WORLD_LANDMASS_PATHS.map((land) => (
               <path
                 key={land.name}

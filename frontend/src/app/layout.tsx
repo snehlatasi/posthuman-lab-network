@@ -23,19 +23,20 @@ const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
   display: "swap",
   weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"]
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
   title: "Posthuman Lab Network | A Living Laboratory for Collective Futures",
-  description: "An interactive digital ecosystem linking international philosophers, researchers, creative practitioners, and artists. Dedicated to posthumanism, ecological futures, technology ethics, and interdisciplinary collaboration.",
+  description:
+    "An interactive digital ecosystem linking international philosophers, researchers, creative practitioners, and artists. Dedicated to posthumanism, ecological futures, technology ethics, and interdisciplinary collaboration.",
   keywords: [
     "Posthumanism",
     "Technology Ethics",
     "Ecological Futures",
     "Digital Art",
     "Alternative Education",
-    "Academic Monolith"
+    "Academic Monolith",
   ],
 };
 

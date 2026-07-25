@@ -17,20 +17,20 @@ const bibliographies: BibliographyItem[] = [
     title: "The Posthuman",
     author: "Rosi Braidotti (2013)",
     tag: "Core Literature",
-    relevance: "Primary reference text exploring posthuman subjectivity and affirmative ethics."
+    relevance: "Primary reference text exploring posthuman subjectivity and affirmative ethics.",
   },
   {
     title: "Staying with the Trouble",
     author: "Donna Haraway (2016)",
     tag: "Ecological Co-existence",
-    relevance: "Investigates planetary damage, sympoiesis, and inter-species collaboration."
+    relevance: "Investigates planetary damage, sympoiesis, and inter-species collaboration.",
   },
   {
     title: "Meeting the Universe Halfway",
     author: "Karen Barad (2007)",
     tag: "Agential Realism",
-    relevance: "Establishes quantum intra-actions and decents the human observer."
-  }
+    relevance: "Establishes quantum intra-actions and decents the human observer.",
+  },
 ];
 
 export default function ReadingListsPage() {
@@ -53,9 +53,7 @@ export default function ReadingListsPage() {
                 <span className="font-mono text-[8px] text-bone-200/30 uppercase tracking-widest block">
                   {book.author}
                 </span>
-                <h3 className="font-serif text-lg font-bold text-bone-100">
-                  {book.title}
-                </h3>
+                <h3 className="font-serif text-lg font-bold text-bone-100">{book.title}</h3>
                 <p className="font-sans text-xs text-bone-200/60 leading-relaxed pt-2">
                   {book.relevance}
                 </p>

@@ -11,7 +11,7 @@ const labsSidebar = [
   { label: "Experimental Media", href: "/labs/experimental-media" },
   { label: "Collective Practice", href: "/labs/collective-practice" },
   { label: "Community Research", href: "/labs/community-research" },
-  { label: "Open Collaboration", href: "/labs/open-collaboration" }
+  { label: "Open Collaboration", href: "/labs/open-collaboration" },
 ];
 
 export default function AIEthicsLabPage() {
@@ -33,7 +33,11 @@ export default function AIEthicsLabPage() {
             The Philosophy of Machine Symbiosis
           </h3>
           <p className="text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-            We reject the narrative of a hostile AI takeover, as well as the standard corporate optimization models. We view artificial intelligence as a new category of nonhuman cognitive agency—a synthetic partner that reflects and reshapes human discourse. Our research frames machine learning models as collaborators in posthuman knowledge production.
+            We reject the narrative of a hostile AI takeover, as well as the standard corporate
+            optimization models. We view artificial intelligence as a new category of nonhuman
+            cognitive agency—a synthetic partner that reflects and reshapes human discourse. Our
+            research frames machine learning models as collaborators in posthuman knowledge
+            production.
           </p>
         </section>
 
@@ -42,7 +46,10 @@ export default function AIEthicsLabPage() {
             Key Focus Area: Algorithmic Audits & Open Weights
           </h3>
           <p className="text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-            We build open-source tools to inspect biases in generative neural nets and audit datasets for historical, cultural, and environmental bias. By promoting transparent weights and decentralized AI systems, we work to protect digital assets from corporate capture.
+            We build open-source tools to inspect biases in generative neural nets and audit
+            datasets for historical, cultural, and environmental bias. By promoting transparent
+            weights and decentralized AI systems, we work to protect digital assets from corporate
+            capture.
           </p>
         </section>
       </div>

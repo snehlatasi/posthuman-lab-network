@@ -4,7 +4,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { ListingPageLayout } from "@/components/layout/Templates";
 import { ContentCard, AnimatedLink } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";
-import { eventsApi, EventApiDto } from "@/lib/api/events";
+import type { EventApiDto } from "@/lib/api/events";
+import { eventsApi } from "@/lib/api/events";
 import { useAuth } from "@/context/AuthContext";
 import { Plus, Trash2, ShieldCheck, X } from "lucide-react";
 
@@ -24,7 +25,8 @@ const fallbackEvents: EventItem[] = [
     date: "August 12, 2026",
     type: "Online Seminar / Interactive",
     location: "Global Zoom / Discord Hub",
-    description: "An online demonstration of voltage tracking nodes and mapping plant bio-electricity into sound."
+    description:
+      "An online demonstration of voltage tracking nodes and mapping plant bio-electricity into sound.",
   },
   {
     id: 2,
@@ -32,7 +34,8 @@ const fallbackEvents: EventItem[] = [
     date: "September 18-21, 2026",
     type: "Physical Retreat",
     location: "Black Forest Wilderness, Germany",
-    description: "A three-day off-grid gathering featuring wilderness walking, collective reading, and software auditing."
+    description:
+      "A three-day off-grid gathering featuring wilderness walking, collective reading, and software auditing.",
   },
   {
     id: 3,
@@ -40,8 +43,9 @@ const fallbackEvents: EventItem[] = [
     date: "October 05, 2026",
     type: "Hybrid Panel Discussions",
     location: "London Hub / Live Webcast",
-    description: "Debating machine agency and transcolonial data storage with guest speakers from international AI hubs."
-  }
+    description:
+      "Debating machine agency and transcolonial data storage with guest speakers from international AI hubs.",
+  },
 ];
 
 export default function EventsMainPage() {
@@ -51,10 +55,16 @@ export default function EventsMainPage() {
 
   // Admin Create Event Modal State
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newEvent, setNewEvent] = useState({ title: "", description: "", eventType: "Workshop", location: "Online Webcast" });
+  const [newEvent, setNewEvent] = useState({
+    title: "",
+    description: "",
+    eventType: "Workshop",
+    location: "Online Webcast",
+  });
 
   const loadEvents = useCallback(() => {
-    eventsApi.getUpcomingEvents()
+    eventsApi
+      .getUpcomingEvents()
       .then((data: EventApiDto[]) => {
         if (data && data.length > 0) {
           const mapped: EventItem[] = data.map((e) => ({
@@ -63,7 +73,7 @@ export default function EventsMainPage() {
             date: e.startDateTime ? new Date(e.startDateTime).toLocaleDateString() : "Upcoming",
             type: e.eventType,
             location: e.location || "Online Webcast",
-            description: e.description || "Join us for this lab session."
+            description: e.description || "Join us for this lab session.",
           }));
           setEventsList(mapped);
         } else {
@@ -91,7 +101,10 @@ export default function EventsMainPage() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const slug = newEvent.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    const slug = newEvent.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
     const now = new Date();
     const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
     await eventsApi.createEvent({
@@ -100,7 +113,7 @@ export default function EventsMainPage() {
       startDateTime: nextWeek.toISOString(),
       endDateTime: new Date(nextWeek.getTime() + 2 * 60 * 60 * 1000).toISOString(),
       online: true,
-      status: "UPCOMING"
+      status: "UPCOMING",
     });
     setShowAddModal(false);
     setNewEvent({ title: "", description: "", eventType: "Workshop", location: "Online Webcast" });
@@ -140,43 +153,42 @@ export default function EventsMainPage() {
         </div>
       )}
 
-      {!loading && eventsList.map((event, idx) => (
-        <StaggerItem key={event.id || idx}>
-          <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300">
-            <div className="space-y-6 h-full flex flex-col justify-between p-2">
-              <div className="space-y-2">
-                <span className="font-mono text-xs text-earth-600 dark:text-earth-400 tracking-wider font-bold uppercase block">
-                  {event.type} — {event.date}
-                </span>
-                <span className="font-sans text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-wider block">
-                  📍 {event.location}
-                </span>
-                <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
-                  {event.title}
-                </h3>
-                <p className="font-sans text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-                  {event.description}
-                </p>
-              </div>
-              <div className="pt-4 flex items-center justify-between">
-                <AnimatedLink href="/events/upcoming">
-                  Register For Event
-                </AnimatedLink>
+      {!loading &&
+        eventsList.map((event, idx) => (
+          <StaggerItem key={event.id || idx}>
+            <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300">
+              <div className="space-y-6 h-full flex flex-col justify-between p-2">
+                <div className="space-y-2">
+                  <span className="font-mono text-xs text-earth-600 dark:text-earth-400 tracking-wider font-bold uppercase block">
+                    {event.type} — {event.date}
+                  </span>
+                  <span className="font-sans text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-wider block">
+                    📍 {event.location}
+                  </span>
+                  <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
+                    {event.title}
+                  </h3>
+                  <p className="font-sans text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
+                    {event.description}
+                  </p>
+                </div>
+                <div className="pt-4 flex items-center justify-between">
+                  <AnimatedLink href="/events/upcoming">Register For Event</AnimatedLink>
 
-                {isAdmin && event.id && (
-                  <button
-                    onClick={() => handleDelete(event.id)}
-                    className="p-1.5 rounded bg-earth-500/20 text-earth-600 dark:text-earth-400 hover:text-earth-500 hover:bg-earth-500/40 transition-colors cursor-pointer"
-                    title="Delete Event"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                )}
+                  {isAdmin && event.id && (
+                    <button
+                      onClick={() => handleDelete(event.id)}
+                      className="p-1.5 rounded bg-earth-500/20 text-earth-600 dark:text-earth-400 hover:text-earth-500 hover:bg-earth-500/40 transition-colors cursor-pointer"
+                      title="Delete Event"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          </ContentCard>
-        </StaggerItem>
-      ))}
+            </ContentCard>
+          </StaggerItem>
+        ))}
 
       {/* Admin Add Event Modal */}
       {showAddModal && (

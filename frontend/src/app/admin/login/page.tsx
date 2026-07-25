@@ -31,7 +31,9 @@ export default function AdminLoginPage() {
         setErrorMsg("Unable to sign in with those credentials.");
       }
     } catch {
-      setErrorMsg("Unable to sign in with those credentials. Please check your email and password.");
+      setErrorMsg(
+        "Unable to sign in with those credentials. Please check your email and password."
+      );
     } finally {
       setLoading(false);
     }
@@ -51,7 +53,7 @@ export default function AdminLoginPage() {
           <div className="inline-flex p-3.5 rounded-2xl bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15 text-earth-400 shadow-xl backdrop-blur-md">
             <ShieldCheck className="w-8 h-8" />
           </div>
-          
+
           <div className="space-y-1">
             <span className="font-serif text-xl sm:text-2xl font-bold tracking-[0.1em] text-bone-50 block uppercase">
               POSTHUMAN
@@ -66,7 +68,8 @@ export default function AdminLoginPage() {
               Administration
             </h1>
             <p className="font-sans text-xs text-bone-200 font-medium max-w-xs mx-auto leading-relaxed">
-              Private Network Console — Secure access for authorized administrators and editorial staff.
+              Private Network Console — Secure access for authorized administrators and editorial
+              staff.
             </p>
           </div>
         </div>
@@ -76,7 +79,10 @@ export default function AdminLoginPage() {
           <form onSubmit={handleLogin} className="space-y-5" noValidate>
             {/* Email / Username */}
             <div className="space-y-1.5">
-              <label htmlFor="admin-email" className="block text-xs font-mono tracking-widest uppercase text-bone-200 font-bold">
+              <label
+                htmlFor="admin-email"
+                className="block text-xs font-mono tracking-widest uppercase text-bone-200 font-bold"
+              >
                 Email Address
               </label>
               <div className="relative">
@@ -98,7 +104,10 @@ export default function AdminLoginPage() {
             {/* Password */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <label htmlFor="admin-pass" className="block text-xs font-mono tracking-widest uppercase text-bone-200 font-bold">
+                <label
+                  htmlFor="admin-pass"
+                  className="block text-xs font-mono tracking-widest uppercase text-bone-200 font-bold"
+                >
                   Password
                 </label>
                 <button
@@ -142,7 +151,10 @@ export default function AdminLoginPage() {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className="w-4 h-4 rounded bg-carbon-950 border-bone-50/20 text-earth-500 focus:ring-earth-400 cursor-pointer"
               />
-              <label htmlFor="remember-me" className="text-xs text-bone-200 font-sans cursor-pointer select-none">
+              <label
+                htmlFor="remember-me"
+                className="text-xs text-bone-200 font-sans cursor-pointer select-none"
+              >
                 Remember me on this browser
               </label>
             </div>
@@ -182,7 +194,9 @@ export default function AdminLoginPage() {
         <div className="fixed inset-0 bg-carbon-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
           <div className="bg-carbon-900 border border-bone-50/15 p-6 rounded-2xl max-w-md w-full space-y-4 shadow-2xl">
             <div className="flex items-center justify-between border-b border-bone-50/10 pb-3">
-              <h3 className="font-serif text-lg font-bold text-bone-50">Administrative Account Recovery</h3>
+              <h3 className="font-serif text-lg font-bold text-bone-50">
+                Administrative Account Recovery
+              </h3>
               <button
                 onClick={() => setShowForgotModal(false)}
                 className="p-1 text-bone-200 hover:text-bone-50 transition-colors focus:outline-none"
@@ -191,7 +205,10 @@ export default function AdminLoginPage() {
               </button>
             </div>
             <p className="font-sans text-xs text-bone-200 leading-relaxed font-medium">
-              Password recovery for administrative accounts requires super-administrator authorization. Please contact the network coordinator at <span className="text-earth-400 font-mono">admin@posthumanlab.org</span> to reset credentials.
+              Password recovery for administrative accounts requires super-administrator
+              authorization. Please contact the network coordinator at{" "}
+              <span className="text-earth-400 font-mono">admin@posthumanlab.org</span> to reset
+              credentials.
             </p>
             <div className="flex justify-end pt-2">
               <button

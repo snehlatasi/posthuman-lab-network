@@ -18,58 +18,82 @@ const educationalResources: CourseItem[] = [
     title: "Introduction to Posthumanism",
     category: "course",
     tag: "Core Course / 4 Modules",
-    description: "A comprehensive academic entry point reviewing humanity, environment, and computational frameworks.",
-    href: "/learning/introduction-to-posthumanism"
+    description:
+      "A comprehensive academic entry point reviewing humanity, environment, and computational frameworks.",
+    href: "/learning/introduction-to-posthumanism",
   },
   {
     title: "Beginner Pathways",
     category: "guide",
     tag: "Practical Guide",
-    description: "Step-by-step reading routes and basic terminology overviews for self-directed learning.",
-    href: "/learning/beginner-pathways"
+    description:
+      "Step-by-step reading routes and basic terminology overviews for self-directed learning.",
+    href: "/learning/beginner-pathways",
   },
   {
     title: "Recorded Masterclasses",
     category: "guide",
     tag: "Media Archive",
-    description: "Visual lectures and discussions from guest speakers on technological and biological networks.",
-    href: "/learning/recorded-lectures"
+    description:
+      "Visual lectures and discussions from guest speakers on technological and biological networks.",
+    href: "/learning/recorded-lectures",
   },
   {
     title: "Foundational Bibliography",
     category: "bibliography",
     tag: "Academic References",
-    description: "Curated list of primary literature, philosophical essays, and scientific research publications.",
-    href: "/learning/reading-lists"
+    description:
+      "Curated list of primary literature, philosophical essays, and scientific research publications.",
+    href: "/learning/reading-lists",
   },
   {
     title: "Study Material PDF Packs",
     category: "bibliography",
     tag: "Downloads / Open Access",
-    description: "Downloadable syllabi, lecture slides, and open-source worksheets for reading groups.",
-    href: "/learning/study-materials"
+    description:
+      "Downloadable syllabi, lecture slides, and open-source worksheets for reading groups.",
+    href: "/learning/study-materials",
   },
   {
     title: "H2 Database Integration Guide",
     category: "guide",
     tag: "Engineering Guide",
-    description: "Documentation detailing the file-based embedded H2 integration used in our monolith.",
-    href: "/learning/faq"
-  }
+    description:
+      "Documentation detailing the file-based embedded H2 integration used in our monolith.",
+    href: "/learning/faq",
+  },
 ];
 
 export default function LearningPage() {
-  const [activeFilter, setActiveFilter] = useState<"all" | "course" | "guide" | "bibliography">("all");
+  const [activeFilter, setActiveFilter] = useState<"all" | "course" | "guide" | "bibliography">(
+    "all"
+  );
 
   const filteredResources = educationalResources.filter(
     (item) => activeFilter === "all" || item.category === activeFilter
   );
 
   const filters = [
-    { label: "All Materials", active: activeFilter === "all", onClick: () => setActiveFilter("all") },
-    { label: "Full Courses", active: activeFilter === "course", onClick: () => setActiveFilter("course") },
-    { label: "Practical Guides", active: activeFilter === "guide", onClick: () => setActiveFilter("guide") },
-    { label: "Bibliographies & Papers", active: activeFilter === "bibliography", onClick: () => setActiveFilter("bibliography") }
+    {
+      label: "All Materials",
+      active: activeFilter === "all",
+      onClick: () => setActiveFilter("all"),
+    },
+    {
+      label: "Full Courses",
+      active: activeFilter === "course",
+      onClick: () => setActiveFilter("course"),
+    },
+    {
+      label: "Practical Guides",
+      active: activeFilter === "guide",
+      onClick: () => setActiveFilter("guide"),
+    },
+    {
+      label: "Bibliographies & Papers",
+      active: activeFilter === "bibliography",
+      onClick: () => setActiveFilter("bibliography"),
+    },
   ];
 
   return (
@@ -94,11 +118,9 @@ export default function LearningPage() {
                   {item.description}
                 </p>
               </div>
-              
+
               <div className="pt-4">
-                <AnimatedLink href={item.href}>
-                  Access Materials
-                </AnimatedLink>
+                <AnimatedLink href={item.href}>Access Materials</AnimatedLink>
               </div>
             </div>
           </ContentCard>

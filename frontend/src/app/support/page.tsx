@@ -17,20 +17,23 @@ const supportTiersList: SupportItem[] = [
     title: "Sustain Open Access",
     category: "Financial Support",
     tag: "Open Access / Academic",
-    description: "Help us keep all classes, study guides, data logs, and research archives completely free and unrestricted."
+    description:
+      "Help us keep all classes, study guides, data logs, and research archives completely free and unrestricted.",
   },
   {
     title: "Carbon-Conscious Tech",
     category: "Infrastructure Funding",
     tag: "Green Server Hosting",
-    description: "Support our efforts to host this website on servers powered by local renewable energy grids."
+    description:
+      "Support our efforts to host this website on servers powered by local renewable energy grids.",
   },
   {
     title: "Emerging Scholars Fund",
     category: "Mentorship Support",
     tag: "Sponsorship / Education",
-    description: "Provide travel grants and hardware node kits for emerging scholars and writers in developing regions."
-  }
+    description:
+      "Provide travel grants and hardware node kits for emerging scholars and writers in developing regions.",
+  },
 ];
 
 export default function SupportMainPage() {
@@ -59,9 +62,7 @@ export default function SupportMainPage() {
                 </p>
               </div>
               <div className="pt-4">
-                <AnimatedLink href="/support/why-support">
-                  View Ethics Roadmap
-                </AnimatedLink>
+                <AnimatedLink href="/support/why-support">View Ethics Roadmap</AnimatedLink>
               </div>
             </div>
           </ContentCard>

@@ -27,7 +27,7 @@ import {
   FlaskConical,
   UserPlus,
   SlidersHorizontal,
-  History
+  History,
 } from "lucide-react";
 
 interface AdminStats {
@@ -79,7 +79,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <div className="min-h-screen bg-[#10120f] flex items-center justify-center">
         <div className="flex items-center space-x-3 text-bone-50">
           <RefreshCw className="w-5 h-5 animate-spin text-earth-400" />
-          <span className="font-mono text-xs uppercase tracking-widest">Verifying Authorization...</span>
+          <span className="font-mono text-xs uppercase tracking-widest">
+            Verifying Authorization...
+          </span>
         </div>
       </div>
     );
@@ -93,52 +95,50 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const navGroups = [
     {
       group: "OVERVIEW",
-      items: [{ href: "/admin/overview", label: "Dashboard", icon: LayoutDashboard }]
+      items: [{ href: "/admin/overview", label: "Dashboard", icon: LayoutDashboard }],
     },
     {
       group: "CONTENT",
       items: [
         { href: "/admin/conversations", label: "Conversations", icon: MessageSquare },
         { href: "/admin/blog", label: "Blog Articles", icon: FileText },
-        { href: "/admin/curation", label: "Homepage Curation", icon: SlidersHorizontal }
-      ]
+        { href: "/admin/curation", label: "Homepage Curation", icon: SlidersHorizontal },
+      ],
     },
     {
       group: "PROGRAMS",
       items: [
         { href: "/admin/events", label: "Events & Gatherings", icon: Calendar },
         { href: "/admin/learning", label: "Masterclasses & Learning", icon: Award },
-        { href: "/admin/labs", label: "Research Labs", icon: FlaskConical }
-      ]
+        { href: "/admin/labs", label: "Research Labs", icon: FlaskConical },
+      ],
     },
     {
       group: "RESEARCH",
       items: [
         { href: "/admin/publications", label: "Publications Catalog", icon: BookOpen },
-        { href: "/admin/people", label: "People & Researchers", icon: UserPlus }
-      ]
+        { href: "/admin/people", label: "People & Researchers", icon: UserPlus },
+      ],
     },
     {
       group: "MEDIA",
-      items: [
-        { href: "/admin/media", label: "Media & YouTube", icon: Video }
-      ]
+      items: [{ href: "/admin/media", label: "Media & YouTube", icon: Video }],
     },
     {
       group: "COMMUNITY",
       items: [
         { href: "/admin/memberships", label: "Applications", icon: Users },
         { href: "/admin/members", label: "Approved Members", icon: UserCheck },
-        { href: "/admin/inquiries", label: "Inquiries", icon: Mail }
-      ]
+        { href: "/admin/inquiries", label: "Inquiries", icon: Mail },
+      ],
     },
     {
       group: "SYSTEM",
       items: [
         { href: "/admin/settings", label: "Settings", icon: Settings },
-        { href: "/admin/audit", label: "Audit Log", icon: History }
-      ]
-    }
+        { href: "/admin/audit", label: "Audit Log", icon: History },
+      ],
+    },
   ];
 
   return (
@@ -169,7 +169,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               </span>
             </div>
             {isMobileMenuOpen && (
-              <button onClick={() => setIsMobileMenuOpen(false)} className="xl:hidden p-1 text-bone-200">
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="xl:hidden p-1 text-bone-200"
+              >
                 <X className="w-5 h-5" />
               </button>
             )}
@@ -185,7 +188,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <div className="space-y-1">
                   {g.items.map((item) => {
                     const Icon = item.icon;
-                    const isActive = pathname === item.href || (item.href !== "/admin/overview" && pathname.startsWith(item.href));
+                    const isActive =
+                      pathname === item.href ||
+                      (item.href !== "/admin/overview" && pathname.startsWith(item.href));
                     return (
                       <Link
                         key={item.href}
@@ -198,7 +203,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                         }`}
                       >
                         <div className="flex items-center space-x-2.5">
-                          <Icon className={`w-3.5 h-3.5 ${isActive ? "text-earth-400" : "text-bone-200/50"}`} />
+                          <Icon
+                            className={`w-3.5 h-3.5 ${isActive ? "text-earth-400" : "text-bone-200/50"}`}
+                          />
                           <span>{item.label}</span>
                         </div>
                       </Link>
@@ -276,15 +283,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               className="p-2 rounded-xl bg-carbon-950 hover:bg-carbon-900 text-bone-200 hover:text-bone-50 border border-bone-50/10 transition-colors cursor-pointer"
               title="Refresh CMS Telemetry"
             >
-              <RefreshCw className={`w-4 h-4 ${loadingTelemetry ? "animate-spin text-earth-400" : ""}`} />
+              <RefreshCw
+                className={`w-4 h-4 ${loadingTelemetry ? "animate-spin text-earth-400" : ""}`}
+              />
             </button>
           </div>
         </header>
 
         {/* Dynamic Route Content Region */}
-        <main className="flex-1 p-6 md:p-8 space-y-8 max-w-7xl w-full mx-auto">
-          {children}
-        </main>
+        <main className="flex-1 p-6 md:p-8 space-y-8 max-w-7xl w-full mx-auto">{children}</main>
       </div>
     </div>
   );

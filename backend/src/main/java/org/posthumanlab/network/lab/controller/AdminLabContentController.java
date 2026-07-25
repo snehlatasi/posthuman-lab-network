@@ -1,6 +1,7 @@
 package org.posthumanlab.network.lab.controller;
 
 import jakarta.validation.Valid;
+import org.posthumanlab.network.common.util.SlugUtils;
 import org.posthumanlab.network.lab.entity.LabContent;
 import org.posthumanlab.network.lab.repository.LabContentRepository;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ public class AdminLabContentController {
     @PostMapping
     public ResponseEntity<LabContent> createLab(@Valid @RequestBody LabContent lab) {
         if (lab.getSlug() == null || lab.getSlug().isBlank()) {
-            lab.setSlug(lab.getName().toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-+|-+$", ""));
+            lab.setSlug(SlugUtils.fromTitle(lab.getName()));
         }
         LabContent saved = labContentRepository.save(lab);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);

@@ -4,7 +4,8 @@ import React, { useState, useEffect } from "react";
 import { ContentPageLayout } from "@/components/layout/Templates";
 import { ContentCard } from "@/components/layout/Primitives";
 import { Reveal } from "@/components/ui/Reveal";
-import { eventsApi, EventApiDto } from "@/lib/api/events";
+import type { EventApiDto } from "@/lib/api/events";
+import { eventsApi } from "@/lib/api/events";
 
 export default function UpcomingEventsPage() {
   const [events, setEvents] = useState<EventApiDto[]>([]);
@@ -15,7 +16,8 @@ export default function UpcomingEventsPage() {
   const [isBooked, setIsBooked] = useState(false);
 
   useEffect(() => {
-    eventsApi.getUpcomingEvents()
+    eventsApi
+      .getUpcomingEvents()
       .then((data) => {
         setEvents(data);
         setLoading(false);
@@ -36,7 +38,8 @@ export default function UpcomingEventsPage() {
     id: 0,
     title: "Symbiotic Signals: Plant & Code",
     slug: "symbiotic-signals",
-    description: "How do we write code that cooperates with biological rhythms? In this two-hour open seminar, the Ecological Futures Lab demonstrates our flora transducers, displaying live signal visualizations and mapping cellular voltage shifts into spatial digital audio. We will close with an open panel on anthropomorphic biases in hardware design.",
+    description:
+      "How do we write code that cooperates with biological rhythms? In this two-hour open seminar, the Ecological Futures Lab demonstrates our flora transducers, displaying live signal visualizations and mapping cellular voltage shifts into spatial digital audio. We will close with an open panel on anthropomorphic biases in hardware design.",
     eventType: "Seminar & Workshop",
     startDateTime: "2026-08-12T18:00:00",
     endDateTime: "2026-08-12T20:00:00",
@@ -44,7 +47,7 @@ export default function UpcomingEventsPage() {
     online: true,
     status: "UPCOMING",
     createdAt: "",
-    updatedAt: ""
+    updatedAt: "",
   };
 
   const activeEvents = events.length > 0 ? events : [fallbackEvent];
@@ -53,15 +56,20 @@ export default function UpcomingEventsPage() {
   const formatDate = (dateStr: string) => {
     try {
       const d = new Date(dateStr);
-      return d.toLocaleDateString("en-US", {
-        month: "long",
-        day: "numeric",
-        year: "numeric"
-      }) + " at " + d.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false
-      }) + " UTC";
+      return (
+        d.toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        }) +
+        " at " +
+        d.toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }) +
+        " UTC"
+      );
     } catch {
       return dateStr;
     }
@@ -90,12 +98,16 @@ export default function UpcomingEventsPage() {
           <div className="space-y-8">
             {isUsingFallback && (
               <div className="p-4 rounded-lg bg-bone-100 border border-carbon-950/10 text-xs font-mono text-carbon-900 leading-relaxed max-w-xl font-bold">
-                ⚠️ [DEMO MODE] REST API database is empty or offline. Showing static conceptual event below. Active registry will be restored upon local server connection.
+                ⚠️ [DEMO MODE] REST API database is empty or offline. Showing static conceptual
+                event below. Active registry will be restored upon local server connection.
               </div>
             )}
 
             {activeEvents.map((evt) => (
-              <div key={evt.id} className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start border-b border-carbon-950/10 dark:border-bone-50/12 pb-12 last:border-0 last:pb-0">
+              <div
+                key={evt.id}
+                className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start border-b border-carbon-950/10 dark:border-bone-50/12 pb-12 last:border-0 last:pb-0"
+              >
                 {/* Event Detail */}
                 <div className="lg:col-span-7 space-y-6">
                   <Reveal className="space-y-4">
@@ -108,7 +120,9 @@ export default function UpcomingEventsPage() {
                     <div className="flex flex-wrap gap-4 text-xs font-mono text-carbon-900 dark:text-bone-200 font-bold">
                       <span>📅 {formatDate(evt.startDateTime)}</span>
                       <span>•</span>
-                      <span>📍 {evt.location || (evt.online ? "Online Webcast" : "Physical Venue")}</span>
+                      <span>
+                        📍 {evt.location || (evt.online ? "Online Webcast" : "Physical Venue")}
+                      </span>
                     </div>
                     <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium pt-2">
                       {evt.description}
@@ -121,18 +135,28 @@ export default function UpcomingEventsPage() {
                   <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 shadow-md hover:shadow-xl p-6">
                     {isBooked ? (
                       <div className="space-y-4 text-center py-6">
-                        <span className="font-mono text-2xl text-earth-600 dark:text-earth-400 font-bold">✓</span>
-                        <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">Registration Confirmed</h3>
+                        <span className="font-mono text-2xl text-earth-600 dark:text-earth-400 font-bold">
+                          ✓
+                        </span>
+                        <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
+                          Registration Confirmed
+                        </h3>
                         <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-                          Thank you for booking. The access links and setup instructions have been sent to your email.
+                          Thank you for booking. The access links and setup instructions have been
+                          sent to your email.
                         </p>
                       </div>
                     ) : (
                       <form onSubmit={handleRegister} className="space-y-6">
-                        <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">Reserve Your Spot</h3>
-                        
+                        <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
+                          Reserve Your Spot
+                        </h3>
+
                         <div className="space-y-2">
-                          <label htmlFor={`name-field-${evt.id}`} className="font-mono text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-widest block">
+                          <label
+                            htmlFor={`name-field-${evt.id}`}
+                            className="font-mono text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-widest block"
+                          >
                             Full Name
                           </label>
                           <input
@@ -147,7 +171,10 @@ export default function UpcomingEventsPage() {
                         </div>
 
                         <div className="space-y-2">
-                          <label htmlFor={`email-field-${evt.id}`} className="font-mono text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-widest block">
+                          <label
+                            htmlFor={`email-field-${evt.id}`}
+                            className="font-mono text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-widest block"
+                          >
                             Email Address
                           </label>
                           <input

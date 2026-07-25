@@ -15,40 +15,55 @@ interface PillarItem {
 
 const pillars: PillarItem[] = [
   {
-    icon: <BookOpen className="w-5 h-5 text-moss-400 group-hover:scale-110 transition-transform duration-300" />,
+    icon: (
+      <BookOpen className="w-5 h-5 text-moss-400 group-hover:scale-110 transition-transform duration-300" />
+    ),
     title: "THOUGHT & RESEARCH",
-    description: "Bridging academic philosophy, software algorithms, and critical posthuman theory to construct new frames of ecological mapping.",
-    href: "/about/what-is-posthumanism"
+    description:
+      "Bridging academic philosophy, software algorithms, and critical posthuman theory to construct new frames of ecological mapping.",
+    href: "/about/what-is-posthumanism",
   },
   {
-    icon: <Sparkles className="w-5 h-5 text-teal-400 group-hover:scale-110 transition-transform duration-300" />,
+    icon: (
+      <Sparkles className="w-5 h-5 text-teal-400 group-hover:scale-110 transition-transform duration-300" />
+    ),
     title: "CREATIVITY & ART",
-    description: "Creating speculative art installations, interactive digital systems, and visual essays that translate organic signals into visual code.",
-    href: "/labs"
+    description:
+      "Creating speculative art installations, interactive digital systems, and visual essays that translate organic signals into visual code.",
+    href: "/labs",
   },
   {
-    icon: <GraduationCap className="w-5 h-5 text-moss-400 group-hover:scale-110 transition-transform duration-300" />,
+    icon: (
+      <GraduationCap className="w-5 h-5 text-moss-400 group-hover:scale-110 transition-transform duration-300" />
+    ),
     title: "EDUCATION & LEARNING",
-    description: "Providing free recorded guest lectures, conceptual study pathways, and foundational bibliographies to keep knowledge open.",
-    href: "/learning"
+    description:
+      "Providing free recorded guest lectures, conceptual study pathways, and foundational bibliographies to keep knowledge open.",
+    href: "/learning",
   },
   {
-    icon: <Network className="w-5 h-5 text-teal-400 group-hover:scale-110 transition-transform duration-300" />,
+    icon: (
+      <Network className="w-5 h-5 text-teal-400 group-hover:scale-110 transition-transform duration-300" />
+    ),
     title: "COLLABORATION",
-    description: "Coordinating transdisciplinary rooms, research circles, and community lab environments connecting global coordinates.",
-    href: "/community"
+    description:
+      "Coordinating transdisciplinary rooms, research circles, and community lab environments connecting global coordinates.",
+    href: "/community",
   },
   {
-    icon: <Leaf className="w-5 h-5 text-moss-400 group-hover:scale-110 transition-transform duration-300" />,
+    icon: (
+      <Leaf className="w-5 h-5 text-moss-400 group-hover:scale-110 transition-transform duration-300" />
+    ),
     title: "PRACTICE & ACTION",
-    description: "Translating online dialogue into physical workshops, off-grid wilderness retreats, and local embodied actions.",
-    href: "/practice"
-  }
+    description:
+      "Translating online dialogue into physical workshops, off-grid wilderness retreats, and local embodied actions.",
+    href: "/practice",
+  },
 ];
 
 export const VisionSection: React.FC = () => {
   return (
-    <section 
+    <section
       id="pillars"
       className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 relative bg-transparent transition-colors duration-300"
     >
@@ -68,13 +83,13 @@ export const VisionSection: React.FC = () => {
         </div>
 
         {/* Pillars Grid */}
-        <Reveal staggerChildren={0.1} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <Reveal
+          staggerChildren={0.1}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6"
+        >
           {pillars.map((pillar) => (
             <StaggerItem key={pillar.title} className="h-full">
-              <Link 
-                href={pillar.href}
-                className="group block h-full focus:outline-none"
-              >
+              <Link href={pillar.href} className="group block h-full focus:outline-none">
                 <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 flex flex-col justify-between h-full p-6 group-hover:-translate-y-1 shadow-md hover:shadow-xl">
                   <div className="space-y-6">
                     {/* Icon Box */}

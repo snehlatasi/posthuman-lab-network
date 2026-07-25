@@ -1,14 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { cmsApi, ConversationDto } from "@/lib/api/cms";
+import type { ConversationDto } from "@/lib/api/cms";
+import { cmsApi } from "@/lib/api/cms";
 import { Plus, Trash2 } from "lucide-react";
 
 export default function AdminConversationsPage() {
   const [conversations, setConversations] = useState<ConversationDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [newConv, setNewConv] = useState({ title: "", category: "Ethical AI", shortDescription: "", displayNumber: "01" });
+  const [newConv, setNewConv] = useState({
+    title: "",
+    category: "Ethical AI",
+    shortDescription: "",
+    displayNumber: "01",
+  });
 
   const loadConversations = async () => {
     setLoading(true);
@@ -34,7 +40,9 @@ export default function AdminConversationsPage() {
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
             Current Global Conversations
           </h2>
-          <p className="font-sans text-xs text-bone-200 font-medium">Manage featured research themes displayed across the network homepage.</p>
+          <p className="font-sans text-xs text-bone-200 font-medium">
+            Manage featured research themes displayed across the network homepage.
+          </p>
         </div>
         <button
           onClick={() => setShowNewModal(true)}
@@ -60,9 +68,13 @@ export default function AdminConversationsPage() {
             <tbody className="divide-y divide-bone-50/5 text-bone-200 font-medium">
               {conversations.map((c) => (
                 <tr key={c.id} className="hover:bg-carbon-950/40 transition-colors">
-                  <td className="p-4 font-mono text-earth-400 font-bold">{c.displayNumber || "01"}</td>
+                  <td className="p-4 font-mono text-earth-400 font-bold">
+                    {c.displayNumber || "01"}
+                  </td>
                   <td className="p-4 font-semibold text-bone-50">{c.title}</td>
-                  <td className="p-4 uppercase text-[10px] font-mono text-moss-400 font-bold">{c.category}</td>
+                  <td className="p-4 uppercase text-[10px] font-mono text-moss-400 font-bold">
+                    {c.category}
+                  </td>
                   <td className="p-4 max-w-xs truncate text-bone-200/70">{c.shortDescription}</td>
                   <td className="p-4 text-right">
                     <button
@@ -79,7 +91,10 @@ export default function AdminConversationsPage() {
               ))}
               {conversations.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase">
+                  <td
+                    colSpan={5}
+                    className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase"
+                  >
                     No global conversations cataloged.
                   </td>
                 </tr>
@@ -92,7 +107,9 @@ export default function AdminConversationsPage() {
       {showNewModal && (
         <div className="fixed inset-0 bg-carbon-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-carbon-900 border border-bone-50/15 p-6 rounded-3xl max-w-lg w-full space-y-4 shadow-2xl">
-            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase">New Global Conversation</h3>
+            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase">
+              New Global Conversation
+            </h3>
             <div className="space-y-3 text-xs">
               <input
                 type="text"

@@ -17,14 +17,14 @@ const recordedSessions: SessionItem[] = [
     title: "Woodland Retrospective and Botanical Bio-Sensors",
     host: "Ecological Futures Lab",
     tag: "Woodland Panel",
-    date: "June 2026"
+    date: "June 2026",
   },
   {
     title: "Language Weights and Decentered Cognitive Systems",
     host: "AI Ethics & Tech Unit",
     tag: "AI Seminar",
-    date: "May 2026"
-  }
+    date: "May 2026",
+  },
 ];
 
 export default function RecordedSessionsPage() {
@@ -47,14 +47,10 @@ export default function RecordedSessionsPage() {
                 <span className="font-mono text-[8px] text-bone-200/30 uppercase tracking-widest block">
                   Hosted by {session.host} — {session.date}
                 </span>
-                <h3 className="font-serif text-lg font-bold text-bone-100">
-                  {session.title}
-                </h3>
+                <h3 className="font-serif text-lg font-bold text-bone-100">{session.title}</h3>
               </div>
               <div className="pt-4">
-                <AnimatedLink href="/media/youtube-lectures">
-                  Stream Session
-                </AnimatedLink>
+                <AnimatedLink href="/media/youtube-lectures">Stream Session</AnimatedLink>
               </div>
             </div>
           </ContentCard>

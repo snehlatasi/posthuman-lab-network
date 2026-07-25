@@ -1,7 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { memberAuthApi, GoogleAuthResponseDto, GoogleAuthRequestDto } from "@/lib/api/memberAuth";
+import type { GoogleAuthResponseDto, GoogleAuthRequestDto } from "@/lib/api/memberAuth";
+import { memberAuthApi } from "@/lib/api/memberAuth";
 
 interface MemberUser {
   googleSubjectId: string;
@@ -24,7 +25,7 @@ const MemberContext = createContext<MemberContextType>({
   loading: true,
   loginWithGoogle: async () => ({ status: "NOT_APPLIED", email: "", fullName: "" }),
   logoutMember: () => {},
-  updateMemberStatus: () => {}
+  updateMemberStatus: () => {},
 });
 
 export const MemberProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -51,7 +52,8 @@ export const MemberProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   useEffect(() => {
     // Background re-validation of cached member status against backend
-    const stored = typeof window !== "undefined" ? localStorage.getItem("posthuman_member_user") : null;
+    const stored =
+      typeof window !== "undefined" ? localStorage.getItem("posthuman_member_user") : null;
     if (stored) {
       try {
         const cached: MemberUser = JSON.parse(stored);
@@ -61,7 +63,7 @@ export const MemberProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               googleSubjectId: cached.googleSubjectId,
               email: cached.email,
               fullName: cached.fullName,
-              profileImageUrl: cached.profileImageUrl
+              profileImageUrl: cached.profileImageUrl,
             })
             .then((res) => {
               if (res && res.status && res.status !== cached.status) {
@@ -82,14 +84,16 @@ export const MemberProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     }
   }, []);
 
-  const loginWithGoogle = async (googleData: GoogleAuthRequestDto): Promise<GoogleAuthResponseDto> => {
+  const loginWithGoogle = async (
+    googleData: GoogleAuthRequestDto
+  ): Promise<GoogleAuthResponseDto> => {
     const res = await memberAuthApi.verifyGoogleIdentity(googleData);
     const userState: MemberUser = {
       googleSubjectId: googleData.googleSubjectId,
       email: res.email || googleData.email,
       fullName: res.fullName || googleData.fullName,
       profileImageUrl: res.profileImageUrl || googleData.profileImageUrl,
-      status: res.status
+      status: res.status,
     };
     setMember(userState);
     if (typeof window !== "undefined") {
@@ -116,7 +120,9 @@ export const MemberProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   return (
-    <MemberContext.Provider value={{ member, loading, loginWithGoogle, logoutMember, updateMemberStatus }}>
+    <MemberContext.Provider
+      value={{ member, loading, loginWithGoogle, logoutMember, updateMemberStatus }}
+    >
       {children}
     </MemberContext.Provider>
   );

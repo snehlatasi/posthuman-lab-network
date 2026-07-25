@@ -10,14 +10,18 @@ export default function AdminSettingsPage() {
         <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
           System & Console Configuration
         </h2>
-        <p className="font-sans text-xs text-bone-200 font-medium">Operational system telemetry, database persistence settings, and security status.</p>
+        <p className="font-sans text-xs text-bone-200 font-medium">
+          Operational system telemetry, database persistence settings, and security status.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="p-6 rounded-2xl bg-carbon-900/90 border border-bone-50/15 space-y-4 shadow-md">
           <div className="flex items-center space-x-3 text-earth-400">
             <Server className="w-5 h-5" />
-            <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">Backend Server Telemetry</h3>
+            <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">
+              Backend Server Telemetry
+            </h3>
           </div>
           <div className="space-y-2 text-xs font-mono text-bone-200">
             <div className="flex justify-between py-1 border-b border-bone-50/10">
@@ -38,7 +42,9 @@ export default function AdminSettingsPage() {
         <div className="p-6 rounded-2xl bg-carbon-900/90 border border-bone-50/15 space-y-4 shadow-md">
           <div className="flex items-center space-x-3 text-earth-400">
             <Database className="w-5 h-5" />
-            <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">Database Persistence</h3>
+            <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">
+              Database Persistence
+            </h3>
           </div>
           <div className="space-y-2 text-xs font-mono text-bone-200">
             <div className="flex justify-between py-1 border-b border-bone-50/10">

@@ -9,7 +9,7 @@ const aboutSidebarLinks = [
   { label: "Why We Created This Network", href: "/about/why-we-created-this-network" },
   { label: "Digital to Real Practice", href: "/about/digital-to-real-practice" },
   { label: "Founders & Collaborators", href: "/about/founders-collaborators" },
-  { label: "Future Vision", href: "/about/future-vision" }
+  { label: "Future Vision", href: "/about/future-vision" },
 ];
 
 export default function WhatIsPosthumanismPage() {
@@ -31,7 +31,11 @@ export default function WhatIsPosthumanismPage() {
             1. Challenging Human Exceptionalism
           </h3>
           <p className="text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-            Posthumanism is a philosophical and cultural movement that critiques the traditional anthropocentric view of human beings as separate from, superior to, and dominant over the rest of the natural world. Instead of positioning the human at the center of the universe, posthumanism views humanity as a node in an interconnected web of matter, technology, and life.
+            Posthumanism is a philosophical and cultural movement that critiques the traditional
+            anthropocentric view of human beings as separate from, superior to, and dominant over
+            the rest of the natural world. Instead of positioning the human at the center of the
+            universe, posthumanism views humanity as a node in an interconnected web of matter,
+            technology, and life.
           </p>
         </section>
 
@@ -40,7 +44,10 @@ export default function WhatIsPosthumanismPage() {
             2. The Human-Machine Link
           </h3>
           <p className="text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-            As artificial intelligence, cybernetics, and digital tools evolve, the traditional boundaries of what constitutes &ldquo;the human&rdquo; blur. Posthuman thought examines how tools and technologies are not mere external instruments, but active extensions of our bodies and cognition.
+            As artificial intelligence, cybernetics, and digital tools evolve, the traditional
+            boundaries of what constitutes &ldquo;the human&rdquo; blur. Posthuman thought examines
+            how tools and technologies are not mere external instruments, but active extensions of
+            our bodies and cognition.
           </p>
         </section>
 
@@ -49,7 +56,10 @@ export default function WhatIsPosthumanismPage() {
             3. Ecological Interdependence
           </h3>
           <p className="text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-            From microbiomes in our stomachs to global atmospheric carbon cycles, humans are biologically co-dependent on microscopic bacteria, plant life, and animal networks. Posthumanism highlights this deep ecological interlinkage, arguing that human flourishing cannot be separated from the health of the nonhuman biosphere.
+            From microbiomes in our stomachs to global atmospheric carbon cycles, humans are
+            biologically co-dependent on microscopic bacteria, plant life, and animal networks.
+            Posthumanism highlights this deep ecological interlinkage, arguing that human
+            flourishing cannot be separated from the health of the nonhuman biosphere.
           </p>
         </section>
       </div>

@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { useTheme, ThemePreference } from "@/context/ThemeContext";
+import type { ThemePreference } from "@/context/ThemeContext";
+import { useTheme } from "@/context/ThemeContext";
 import { Sun, Moon, Monitor, ChevronDown } from "lucide-react";
 
 interface ThemeSelectorProps {
@@ -9,7 +10,10 @@ interface ThemeSelectorProps {
   className?: string;
 }
 
-export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ variant = "pills", className = "" }) => {
+export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
+  variant = "pills",
+  className = "",
+}) => {
   const { theme, setTheme, mounted } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -32,13 +36,15 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ variant = "pills",
 
   if (!mounted) {
     return (
-      <div className={`h-7 w-20 bg-carbon-950/5 dark:bg-bone-50/5 rounded-full animate-pulse ${className}`} />
+      <div
+        className={`h-7 w-20 bg-carbon-950/5 dark:bg-bone-50/5 rounded-full animate-pulse ${className}`}
+      />
     );
   }
 
   if (variant === "pills") {
     return (
-      <div 
+      <div
         className={`inline-flex items-center p-0.5 rounded-full bg-bone-100/90 dark:bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15 shadow-sm backdrop-blur-md shrink-0 ${className}`}
         role="radiogroup"
         aria-label="Theme preference selector"
@@ -124,7 +130,9 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({ variant = "pills",
       >
         {activeOpt.icon}
         <span className="text-[11px]">{activeOpt.label}</span>
-        <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isOpen ? "rotate-180 text-earth-600" : ""}`} />
+        <ChevronDown
+          className={`w-3 h-3 transition-transform duration-200 ${isOpen ? "rotate-180 text-earth-600" : ""}`}
+        />
       </button>
 
       {isOpen && (

@@ -6,7 +6,8 @@ import { EditorialPageLayout } from "@/components/layout/Templates";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { blogApi, BlogPost } from "@/lib/api/blog";
+import type { BlogPost } from "@/lib/api/blog";
+import { blogApi } from "@/lib/api/blog";
 
 interface ArticleDetail {
   title: string;
@@ -25,12 +26,13 @@ const mockArticleDatabase: Record<string, ArticleDetail> = {
     author: "Network Coordinator",
     date: "July 12, 2026",
     readTime: "6 min read",
-    excerpt: "Exploring the translation of underground mycelium voltage signals into interactive digital canvas networks.",
+    excerpt:
+      "Exploring the translation of underground mycelium voltage signals into interactive digital canvas networks.",
     paragraphs: [
       "Traditional scientific logging separates soil parameters from cognitive human expressions. In our latest experiment at the Ecological Futures Lab, we deployed a small network of ESP32-based voltage probes directly into forest soil nodes.",
       "By tracking tiny electrical fluctuations between root channels and earth grids, we generate a live stream of biological telemetry. Instead of plotting this on generic industrial bar charts, we feed the raw voltage data directly into digital canvas nodes.",
-      "The result is a living interface where plant voltages dictate node oscillations, sizing, and connector transparency. This decenters the human designer, allowing plant electrical signals to guide design topographies."
-    ]
+      "The result is a living interface where plant voltages dictate node oscillations, sizing, and connector transparency. This decenters the human designer, allowing plant electrical signals to guide design topographies.",
+    ],
   },
   "linguistic-gateways-in-machine-architectures": {
     title: "LINGUISTIC GATEWAYS IN MACHINE ARCHITECTURES",
@@ -38,12 +40,13 @@ const mockArticleDatabase: Record<string, ArticleDetail> = {
     author: "Technical Coordinator",
     date: "June 28, 2026",
     readTime: "8 min read",
-    excerpt: "Auditing transformer neural weights for anthropocentric language limits and exploring nonhuman semantic patterns.",
+    excerpt:
+      "Auditing transformer neural weights for anthropocentric language limits and exploring nonhuman semantic patterns.",
     paragraphs: [
       "Most modern conversational AI is built on the assumption that human language is the supreme structure of intelligence. In this essay, we audit standard transformer models to trace how they enforce anthropocentric biases.",
       "When we prompt models to describe nonhuman actors—like lichens, rivers, or algorithmic structures—they default to human analogies. This limits our ability to conceptualize agencies that operate outside human timelines and vocabularies.",
-      "We propose developing 'sympoietic mappers'—decentralized networks that utilize organic telemetry, acoustic ecology logs, and indigenous land datasets to train alternative language architectures."
-    ]
+      "We propose developing 'sympoietic mappers'—decentralized networks that utilize organic telemetry, acoustic ecology logs, and indigenous land datasets to train alternative language architectures.",
+    ],
   },
   "embodied-clay-digital-to-real-retreat": {
     title: "EMBODIED CLAY: THE DIGITAL-TO-REAL RETREAT",
@@ -51,18 +54,24 @@ const mockArticleDatabase: Record<string, ArticleDetail> = {
     author: "Practice Coordinator",
     date: "May 19, 2026",
     readTime: "5 min read",
-    excerpt: "Reflections from our off-grid coding, sculpting, and listening retreat in the Black Forest.",
+    excerpt:
+      "Reflections from our off-grid coding, sculpting, and listening retreat in the Black Forest.",
     paragraphs: [
       "Philosophy should not exist solely as screen text. Our digital-to-real practice vision was tested during our three-day off-grid gathering, where writers, developers, and philosophers gathered in the wilderness.",
       "During the day, we sculpted local forest clay, forming shapes that symbolized technical structures like databases and API gateways. During the night, we critiqued carbon server footprints and discussed decolonial computing guidelines.",
-      "This somatic grounding is essential. It ensures that our planetary digital networking remains deeply linked to local, tangible, real-world community actions."
-    ]
-  }
+      "This somatic grounding is essential. It ensures that our planetary digital networking remains deeply linked to local, tangible, real-world community actions.",
+    ],
+  },
 };
 
 export default function BlogArticleDetailPage() {
   const params = useParams();
-  const slugStr = typeof params?.slug === "string" ? params.slug : Array.isArray(params?.slug) ? params.slug[0] : "";
+  const slugStr =
+    typeof params?.slug === "string"
+      ? params.slug
+      : Array.isArray(params?.slug)
+        ? params.slug[0]
+        : "";
 
   const [post, setPost] = useState<ArticleDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -70,7 +79,8 @@ export default function BlogArticleDetailPage() {
   useEffect(() => {
     if (!slugStr) return;
 
-    blogApi.getBlogPostBySlug(slugStr)
+    blogApi
+      .getBlogPostBySlug(slugStr)
       .then((data: BlogPost) => {
         if (data) {
           setPost({
@@ -80,7 +90,7 @@ export default function BlogArticleDetailPage() {
             date: data.publishedAt ? new Date(data.publishedAt).toLocaleDateString() : "Recent",
             readTime: "5 min read",
             excerpt: data.excerpt || "Article details retrieved from Posthuman Lab Network.",
-            paragraphs: data.content ? data.content.split("\n\n") : ["Content loading..."]
+            paragraphs: data.content ? data.content.split("\n\n") : ["Content loading..."],
           });
         } else {
           setPost(mockArticleDatabase[slugStr] || null);
@@ -103,25 +113,25 @@ export default function BlogArticleDetailPage() {
     );
   }
 
-  const activeArticle = post || mockArticleDatabase[slugStr] || {
-    title: slugStr.replace(/-/g, " ").toUpperCase(),
-    category: "RESEARCH",
-    author: "Network Coordinator",
-    date: "July 2026",
-    readTime: "5 min read",
-    excerpt: "Article record synced from local H2 database repository.",
-    paragraphs: ["Detailed analysis content for this article is being synchronized with the network nodes."]
-  };
+  const activeArticle = post ||
+    mockArticleDatabase[slugStr] || {
+      title: slugStr.replace(/-/g, " ").toUpperCase(),
+      category: "RESEARCH",
+      author: "Network Coordinator",
+      date: "July 2026",
+      readTime: "5 min read",
+      excerpt: "Article record synced from local H2 database repository.",
+      paragraphs: [
+        "Detailed analysis content for this article is being synchronized with the network nodes.",
+      ],
+    };
 
-  const breadcrumbItems = [
-    { label: "Blog", href: "/blog" },
-    { label: activeArticle.title }
-  ];
+  const breadcrumbItems = [{ label: "Blog", href: "/blog" }, { label: activeArticle.title }];
 
   const sidebarLinks = Object.keys(mockArticleDatabase).map((key) => ({
     label: mockArticleDatabase[key].title.toLowerCase(),
     href: `/blog/${key}`,
-    active: key === slugStr
+    active: key === slugStr,
   }));
 
   return (
@@ -146,7 +156,10 @@ export default function BlogArticleDetailPage() {
         </div>
 
         {activeArticle.paragraphs.map((p, idx) => (
-          <p key={idx} className="text-sm md:text-base text-carbon-900 dark:text-bone-200 leading-relaxed font-medium">
+          <p
+            key={idx}
+            className="text-sm md:text-base text-carbon-900 dark:text-bone-200 leading-relaxed font-medium"
+          >
             {p}
           </p>
         ))}

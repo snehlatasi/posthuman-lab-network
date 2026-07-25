@@ -5,7 +5,8 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
-import { useTheme, ResolvedTheme } from "@/context/ThemeContext";
+import type { ResolvedTheme } from "@/context/ThemeContext";
+import { useTheme } from "@/context/ThemeContext";
 
 // Pure Seeded PRNG for 100% deterministic, render-safe pseudo-random numbers
 function createPRNG(seed: number) {
@@ -31,13 +32,83 @@ interface ConceptNodeDef {
 }
 
 const CONCEPT_NODES: ConceptNodeDef[] = [
-  { id: "human", label: "HUMAN", color: "#e5e2d9", darkColor: "#f3ebd9", radius: 3.5, speed: 0.04, tiltX: 0.2, tiltY: 0.1, related: ["ai", "nature", "creativity"] },
-  { id: "ai", label: "AI", color: "#e0b86c", darkColor: "#f5cc7f", radius: 3.9, speed: 0.055, tiltX: -0.25, tiltY: 0.3, related: ["human", "technology", "knowledge"] },
-  { id: "nature", label: "NATURE", color: "#7a947b", darkColor: "#8aa687", radius: 4.3, speed: 0.035, tiltX: 0.4, tiltY: -0.2, related: ["human", "ecology"] },
-  { id: "technology", label: "TECHNOLOGY", color: "#688d8e", darkColor: "#7ca5a7", radius: 3.3, speed: 0.065, tiltX: -0.15, tiltY: 0.25, related: ["ai"] },
-  { id: "ecology", label: "ECOLOGY", color: "#7a947b", darkColor: "#8aa687", radius: 4.1, speed: 0.038, tiltX: 0.3, tiltY: 0.4, related: ["nature"] },
-  { id: "creativity", label: "CREATIVITY", color: "#e0b86c", darkColor: "#f5cc7f", radius: 3.7, speed: 0.048, tiltX: 0.1, tiltY: -0.35, related: ["human"] },
-  { id: "knowledge", label: "KNOWLEDGE", color: "#e5e2d9", darkColor: "#f3ebd9", radius: 4.0, speed: 0.042, tiltX: -0.2, tiltY: -0.25, related: ["ai"] }
+  {
+    id: "human",
+    label: "HUMAN",
+    color: "#e5e2d9",
+    darkColor: "#f3ebd9",
+    radius: 3.5,
+    speed: 0.04,
+    tiltX: 0.2,
+    tiltY: 0.1,
+    related: ["ai", "nature", "creativity"],
+  },
+  {
+    id: "ai",
+    label: "AI",
+    color: "#e0b86c",
+    darkColor: "#f5cc7f",
+    radius: 3.9,
+    speed: 0.055,
+    tiltX: -0.25,
+    tiltY: 0.3,
+    related: ["human", "technology", "knowledge"],
+  },
+  {
+    id: "nature",
+    label: "NATURE",
+    color: "#7a947b",
+    darkColor: "#8aa687",
+    radius: 4.3,
+    speed: 0.035,
+    tiltX: 0.4,
+    tiltY: -0.2,
+    related: ["human", "ecology"],
+  },
+  {
+    id: "technology",
+    label: "TECHNOLOGY",
+    color: "#688d8e",
+    darkColor: "#7ca5a7",
+    radius: 3.3,
+    speed: 0.065,
+    tiltX: -0.15,
+    tiltY: 0.25,
+    related: ["ai"],
+  },
+  {
+    id: "ecology",
+    label: "ECOLOGY",
+    color: "#7a947b",
+    darkColor: "#8aa687",
+    radius: 4.1,
+    speed: 0.038,
+    tiltX: 0.3,
+    tiltY: 0.4,
+    related: ["nature"],
+  },
+  {
+    id: "creativity",
+    label: "CREATIVITY",
+    color: "#e0b86c",
+    darkColor: "#f5cc7f",
+    radius: 3.7,
+    speed: 0.048,
+    tiltX: 0.1,
+    tiltY: -0.35,
+    related: ["human"],
+  },
+  {
+    id: "knowledge",
+    label: "KNOWLEDGE",
+    color: "#e5e2d9",
+    darkColor: "#f3ebd9",
+    radius: 4.0,
+    speed: 0.042,
+    tiltX: -0.2,
+    tiltY: -0.25,
+    related: ["ai"],
+  },
 ];
 
 // Pre-computed connection pairs for storytelling lines
@@ -46,7 +117,8 @@ const CONNECTION_PAIRS = (() => {
   CONCEPT_NODES.forEach((node) => {
     node.related.forEach((targetId) => {
       const exists = pairs.some(
-        (p) => (p.from === node.id && p.to === targetId) || (p.from === targetId && p.to === node.id)
+        (p) =>
+          (p.from === node.id && p.to === targetId) || (p.from === targetId && p.to === node.id)
       );
       if (!exists) {
         pairs.push({ from: node.id, to: targetId });
@@ -71,7 +143,10 @@ interface ParticlePoint {
 }
 
 // 1. Background Particle Cloud (Depth Layer 1)
-const BackgroundParticles: React.FC<{ shouldReduceMotion: boolean; resolvedTheme: ResolvedTheme }> = ({ shouldReduceMotion, resolvedTheme }) => {
+const BackgroundParticles: React.FC<{
+  shouldReduceMotion: boolean;
+  resolvedTheme: ResolvedTheme;
+}> = ({ shouldReduceMotion, resolvedTheme }) => {
   const pointsRef = useRef<THREE.Points>(null);
   const matRef = useRef<THREE.PointsMaterial>(null);
 
@@ -85,7 +160,7 @@ const BackgroundParticles: React.FC<{ shouldReduceMotion: boolean; resolvedTheme
       new THREE.Color("#7a947b"),
       new THREE.Color("#e5e2d9"),
       new THREE.Color("#1e2d20"),
-      new THREE.Color("#d4af37")
+      new THREE.Color("#d4af37"),
     ];
 
     for (let i = 0; i < count; i++) {
@@ -134,7 +209,10 @@ const BackgroundParticles: React.FC<{ shouldReduceMotion: boolean; resolvedTheme
 };
 
 // 2. Foreground Floating Particles (Depth Layer 3)
-const ForegroundParticles: React.FC<{ shouldReduceMotion: boolean; resolvedTheme: ResolvedTheme }> = ({ shouldReduceMotion, resolvedTheme }) => {
+const ForegroundParticles: React.FC<{
+  shouldReduceMotion: boolean;
+  resolvedTheme: ResolvedTheme;
+}> = ({ shouldReduceMotion, resolvedTheme }) => {
   const groupRef = useRef<THREE.Group>(null);
 
   const fgData = useMemo(() => {
@@ -147,11 +225,16 @@ const ForegroundParticles: React.FC<{ shouldReduceMotion: boolean; resolvedTheme
       const y = (rng() - 0.5) * 10;
       const z = 3 + rng() * 3;
       items.push({
-        x, y, z, ox: x, oy: y, oz: z,
+        x,
+        y,
+        z,
+        ox: x,
+        oy: y,
+        oz: z,
         size: 0.06 + rng() * 0.06,
         speed: 0.1 + rng() * 0.2,
         color: rng() > 0.5 ? "#7a947b" : "#e5e2d9",
-        darkColor: rng() > 0.5 ? "#8aa687" : "#f3ebd9"
+        darkColor: rng() > 0.5 ? "#8aa687" : "#f3ebd9",
       });
     }
     return items;
@@ -173,10 +256,10 @@ const ForegroundParticles: React.FC<{ shouldReduceMotion: boolean; resolvedTheme
       {fgData.map((item, idx) => (
         <mesh key={idx} position={[item.x, item.y, item.z]}>
           <sphereGeometry args={[item.size, 8, 8]} />
-          <meshBasicMaterial 
-            color={resolvedTheme === "dark" ? item.darkColor : item.color} 
-            transparent 
-            opacity={resolvedTheme === "dark" ? 0.35 : 0.2} 
+          <meshBasicMaterial
+            color={resolvedTheme === "dark" ? item.darkColor : item.color}
+            transparent
+            opacity={resolvedTheme === "dark" ? 0.35 : 0.2}
           />
         </mesh>
       ))}
@@ -185,7 +268,10 @@ const ForegroundParticles: React.FC<{ shouldReduceMotion: boolean; resolvedTheme
 };
 
 // 3. Central 3D Neural-Organic Organism
-const CentralOrganism: React.FC<{ shouldReduceMotion: boolean; resolvedTheme: ResolvedTheme }> = ({ shouldReduceMotion, resolvedTheme }) => {
+const CentralOrganism: React.FC<{ shouldReduceMotion: boolean; resolvedTheme: ResolvedTheme }> = ({
+  shouldReduceMotion,
+  resolvedTheme,
+}) => {
   const groupRef = useRef<THREE.Group>(null);
   const lineMatRef = useRef<THREE.LineBasicMaterial>(null);
   const pointsMatRef = useRef<THREE.PointsMaterial>(null);
@@ -235,8 +321,12 @@ const CentralOrganism: React.FC<{ shouldReduceMotion: boolean; resolvedTheme: Re
         const dist = pointsVec[i].distanceTo(pointsVec[j]);
         if (dist < lineThreshold) {
           linePositions.push(
-            pointsVec[i].x, pointsVec[i].y, pointsVec[i].z,
-            pointsVec[j].x, pointsVec[j].y, pointsVec[j].z
+            pointsVec[i].x,
+            pointsVec[i].y,
+            pointsVec[i].z,
+            pointsVec[j].x,
+            pointsVec[j].y,
+            pointsVec[j].z
           );
         }
       }
@@ -245,7 +335,7 @@ const CentralOrganism: React.FC<{ shouldReduceMotion: boolean; resolvedTheme: Re
     return {
       positions,
       colors,
-      linePositions: new Float32Array(linePositions)
+      linePositions: new Float32Array(linePositions),
     };
   }, []);
 
@@ -255,7 +345,7 @@ const CentralOrganism: React.FC<{ shouldReduceMotion: boolean; resolvedTheme: Re
       groupRef.current.rotation.y = t * 0.045;
       groupRef.current.rotation.x = Math.sin(t * 0.03) * 0.08;
 
-      const breath = 1.00 + Math.sin(t * 0.9) * 0.012;
+      const breath = 1.0 + Math.sin(t * 0.9) * 0.012;
       groupRef.current.scale.set(breath, breath, breath);
     }
 
@@ -297,12 +387,22 @@ const CentralOrganism: React.FC<{ shouldReduceMotion: boolean; resolvedTheme: Re
       </lineSegments>
 
       {/* Soft inner warm core light */}
-      <pointLight position={[0, 0, 0]} intensity={resolvedTheme === "dark" ? 4.5 : 3.8} color="#e0b86c" distance={5} decay={1.5} />
-      
+      <pointLight
+        position={[0, 0, 0]}
+        intensity={resolvedTheme === "dark" ? 4.5 : 3.8}
+        color="#e0b86c"
+        distance={5}
+        decay={1.5}
+      />
+
       {/* Inner glowing aura sphere for high contrast */}
       <mesh>
         <sphereGeometry args={[1.2, 16, 16]} />
-        <meshBasicMaterial color={resolvedTheme === "dark" ? "#8aa687" : "#7a947b"} transparent opacity={resolvedTheme === "dark" ? 0.22 : 0.12} />
+        <meshBasicMaterial
+          color={resolvedTheme === "dark" ? "#8aa687" : "#7a947b"}
+          transparent
+          opacity={resolvedTheme === "dark" ? 0.22 : 0.12}
+        />
       </mesh>
     </group>
   );
@@ -380,18 +480,16 @@ const ConceptNodeItem: React.FC<{
       {/* Subtle outer sage glow */}
       <mesh ref={glowMeshRef}>
         <sphereGeometry args={[0.16, 12, 12]} />
-        <meshBasicMaterial
-          color={nodeColor}
-          transparent
-          opacity={0.25}
-        />
+        <meshBasicMaterial color={nodeColor} transparent opacity={0.25} />
       </mesh>
 
       {/* HTML Monospace Label */}
       <Html distanceFactor={10} position={[0, 0.3, 0]} center>
         <span
           className={`font-mono text-[9px] tracking-widest px-2.5 py-0.5 bg-carbon-950/95 dark:bg-bone-50/95 border border-bone-200/10 dark:border-carbon-950/20 text-bone-100 dark:text-carbon-950 rounded transition-all duration-500 pointer-events-none uppercase whitespace-nowrap select-none ${
-            isActive ? "opacity-100 translate-y-0 text-moss-400 font-semibold" : "opacity-0 translate-y-1.5"
+            isActive
+              ? "opacity-100 translate-y-0 text-moss-400 font-semibold"
+              : "opacity-0 translate-y-1.5"
           }`}
         >
           ● {def.label}
@@ -421,8 +519,10 @@ const ConnectionLineItem: React.FC<{
   useFrame((state, delta) => {
     const isConnectedToActive =
       activeId !== null &&
-      ((activeId === fromId && CONCEPT_NODES.find((n) => n.id === activeId)?.related.includes(toId)) ||
-       (activeId === toId && CONCEPT_NODES.find((n) => n.id === activeId)?.related.includes(fromId)));
+      ((activeId === fromId &&
+        CONCEPT_NODES.find((n) => n.id === activeId)?.related.includes(toId)) ||
+        (activeId === toId &&
+          CONCEPT_NODES.find((n) => n.id === activeId)?.related.includes(fromId)));
 
     const targetOpacity = isConnectedToActive ? (resolvedTheme === "dark" ? 0.75 : 0.55) : 0.0;
     opacityLerp.current += (targetOpacity - opacityLerp.current) * Math.min(delta * 6.0, 1.0);
@@ -453,7 +553,9 @@ const ConnectionLineItem: React.FC<{
     // eslint-disable-next-line react-hooks/immutability
     pos.needsUpdate = true;
 
-    (lineObject.material as THREE.LineBasicMaterial).color.set(resolvedTheme === "dark" ? "#f5cc7f" : "#e0b86c");
+    (lineObject.material as THREE.LineBasicMaterial).color.set(
+      resolvedTheme === "dark" ? "#f5cc7f" : "#e0b86c"
+    );
     (lineObject.material as THREE.LineBasicMaterial).opacity = opacityLerp.current;
   });
 
@@ -461,10 +563,13 @@ const ConnectionLineItem: React.FC<{
 };
 
 // 6. Main WebGL Scene Coordinator
-const SceneCoordinator: React.FC<{ shouldReduceMotion: boolean; resolvedTheme: ResolvedTheme }> = ({ shouldReduceMotion, resolvedTheme }) => {
+const SceneCoordinator: React.FC<{ shouldReduceMotion: boolean; resolvedTheme: ResolvedTheme }> = ({
+  shouldReduceMotion,
+  resolvedTheme,
+}) => {
   const { viewport } = useThree();
   const groupRef = useRef<THREE.Group>(null);
-  
+
   const [hoveredConcept, setHoveredConcept] = useState<string | null>(null);
   const [autoConceptIdx, setAutoConceptIdx] = useState<number>(0);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -524,8 +629,16 @@ const SceneCoordinator: React.FC<{ shouldReduceMotion: boolean; resolvedTheme: R
     <group ref={groupRef} position={[positionX, positionY, 0]}>
       {/* 3D Scene Lighting */}
       <ambientLight intensity={resolvedTheme === "dark" ? 0.4 : 0.25} color={lightColor} />
-      <directionalLight position={[6, 10, 8]} intensity={resolvedTheme === "dark" ? 1.8 : 1.5} color={lightColor} />
-      <pointLight position={[-8, -5, -8]} intensity={resolvedTheme === "dark" ? 1.6 : 1.2} color={resolvedTheme === "dark" ? "#8aa687" : "#7a947b"} />
+      <directionalLight
+        position={[6, 10, 8]}
+        intensity={resolvedTheme === "dark" ? 1.8 : 1.5}
+        color={lightColor}
+      />
+      <pointLight
+        position={[-8, -5, -8]}
+        intensity={resolvedTheme === "dark" ? 1.6 : 1.2}
+        color={resolvedTheme === "dark" ? "#8aa687" : "#7a947b"}
+      />
 
       {/* Layer 1: Background microscopic dust */}
       <BackgroundParticles shouldReduceMotion={shouldReduceMotion} resolvedTheme={resolvedTheme} />
@@ -623,9 +736,10 @@ export const ImmersiveHero3D: React.FC = () => {
     );
   }
 
-  const radialBg = resolvedTheme === "dark"
-    ? "radial-gradient(circle at 72% 48%, rgba(138, 166, 135, 0.22) 0%, rgba(20, 26, 19, 0.15) 45%, transparent 75%)"
-    : "radial-gradient(circle at 72% 48%, rgba(122, 148, 123, 0.15) 0%, rgba(30, 45, 32, 0.06) 35%, transparent 70%)";
+  const radialBg =
+    resolvedTheme === "dark"
+      ? "radial-gradient(circle at 72% 48%, rgba(138, 166, 135, 0.22) 0%, rgba(20, 26, 19, 0.15) 45%, transparent 75%)"
+      : "radial-gradient(circle at 72% 48%, rgba(122, 148, 123, 0.15) 0%, rgba(30, 45, 32, 0.06) 35%, transparent 70%)";
 
   return (
     <div
@@ -635,7 +749,7 @@ export const ImmersiveHero3D: React.FC = () => {
         display: "block",
         width: "100%",
         height: "100%",
-        background: radialBg
+        background: radialBg,
       }}
     >
       <Canvas

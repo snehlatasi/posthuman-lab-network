@@ -13,7 +13,7 @@ interface MagneticProps {
 export const MagneticButton: React.FC<MagneticProps> = ({
   children,
   strength = 0.3,
-  className = ""
+  className = "",
 }) => {
   const shouldReduceMotion = useSafeReducedMotion();
   const ref = useRef<HTMLDivElement>(null);

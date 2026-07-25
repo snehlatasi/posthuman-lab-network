@@ -36,7 +36,7 @@ export const EditorialPageLayout: React.FC<EditorialPageLayoutProps> = ({
   sidebarLinks,
   children,
   nextPageLabel,
-  nextPageHref
+  nextPageHref,
 }) => {
   return (
     <>
@@ -90,7 +90,9 @@ export const EditorialPageLayout: React.FC<EditorialPageLayoutProps> = ({
                     className="group inline-flex items-center space-x-3 text-right focus:outline-none"
                   >
                     <div className="space-y-1">
-                      <span className="font-mono text-[9px] text-carbon-700 dark:text-bone-300 uppercase tracking-widest block">Read Next</span>
+                      <span className="font-mono text-[9px] text-carbon-700 dark:text-bone-300 uppercase tracking-widest block">
+                        Read Next
+                      </span>
                       <span className="font-serif text-lg font-semibold text-carbon-950 dark:text-bone-50 group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
                         {nextPageLabel}
                       </span>
@@ -134,7 +136,7 @@ export const ListingPageLayout: React.FC<ListingPageLayoutProps> = ({
   parentLabel,
   parentHref,
   filters = [],
-  children
+  children,
 }) => {
   return (
     <>
@@ -197,7 +199,7 @@ export const ContentPageLayout: React.FC<ContentPageLayoutProps> = ({
   subtitle,
   parentLabel,
   parentHref,
-  children
+  children,
 }) => {
   return (
     <>

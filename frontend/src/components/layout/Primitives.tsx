@@ -6,7 +6,7 @@ import { SplitText } from "../ui/Reveal";
 // Container component
 export const Container: React.FC<{ children: React.ReactNode; className?: string }> = ({
   children,
-  className = ""
+  className = "",
 }) => {
   return <div className={`editorial-container ${className}`}>{children}</div>;
 };
@@ -64,11 +64,21 @@ export const PageHeader: React.FC<{
       <div className="absolute inset-x-[8%] bottom-0 h-px ink-rule z-0 pointer-events-none" />
       <Container className="relative z-10 space-y-4">
         <div className="flex items-center space-x-2 text-xs font-mono tracking-[0.22em] uppercase text-carbon-900 dark:text-bone-200 font-bold">
-          <Link href="/" className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors">Home</Link>
+          <Link
+            href="/"
+            className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors"
+          >
+            Home
+          </Link>
           {parentLabel && parentHref && (
             <>
               <span>/</span>
-              <Link href={parentHref} className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors">{parentLabel}</Link>
+              <Link
+                href={parentHref}
+                className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors"
+              >
+                {parentLabel}
+              </Link>
             </>
           )}
           <span>/</span>
@@ -82,7 +92,7 @@ export const PageHeader: React.FC<{
           stagger={0.04}
           className="font-serif-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 max-w-4xl leading-[0.96] text-balance uppercase"
         />
-        
+
         {subtitle && (
           <p className="font-sans text-base md:text-xl text-carbon-800 dark:text-bone-200 leading-relaxed max-w-2xl pt-2 font-medium">
             {subtitle}
@@ -100,7 +110,9 @@ export const ContentCard: React.FC<{
   href?: string;
 }> = ({ children, className = "", href }) => {
   const cardContent = (
-    <div className={`glass-panel glass-panel-hover p-6 md:p-8 rounded-[28px] h-full flex flex-col justify-between ${className}`}>
+    <div
+      className={`glass-panel glass-panel-hover p-6 md:p-8 rounded-[28px] h-full flex flex-col justify-between ${className}`}
+    >
       {children}
     </div>
   );

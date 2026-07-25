@@ -16,7 +16,7 @@ export const authApi = {
   login: async (credentials: LoginRequestDto): Promise<LoginResponseDto> => {
     const res = await fetchJson<LoginResponseDto>("/api/auth/login", {
       method: "POST",
-      body: JSON.stringify(credentials)
+      body: JSON.stringify(credentials),
     });
     if (res?.token) {
       setStoredToken(res.token);
@@ -30,5 +30,5 @@ export const authApi = {
 
   isAuthenticated: (): boolean => {
     return !!getStoredToken();
-  }
+  },
 };

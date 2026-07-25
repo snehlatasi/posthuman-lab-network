@@ -1,14 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { cmsApi, PersonDto } from "@/lib/api/cms";
+import type { PersonDto } from "@/lib/api/cms";
+import { cmsApi } from "@/lib/api/cms";
 import { Plus, Trash2 } from "lucide-react";
 
 export default function AdminPeoplePage() {
   const [people, setPeople] = useState<PersonDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [newPerson, setNewPerson] = useState({ name: "", role: "Researcher", affiliation: "Center for Critical Posthumanism", shortBio: "" });
+  const [newPerson, setNewPerson] = useState({
+    name: "",
+    role: "Researcher",
+    affiliation: "Center for Critical Posthumanism",
+    shortBio: "",
+  });
 
   const loadPeople = async () => {
     setLoading(true);
@@ -34,7 +40,9 @@ export default function AdminPeoplePage() {
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
             People & Researchers Directory
           </h2>
-          <p className="font-sans text-xs text-bone-200 font-medium">Manage network authors, speakers, instructors, and lab leads.</p>
+          <p className="font-sans text-xs text-bone-200 font-medium">
+            Manage network authors, speakers, instructors, and lab leads.
+          </p>
         </div>
         <button
           onClick={() => setShowNewModal(true)}
@@ -60,7 +68,9 @@ export default function AdminPeoplePage() {
               {people.map((p) => (
                 <tr key={p.id} className="hover:bg-carbon-950/40 transition-colors">
                   <td className="p-4 font-semibold text-bone-50">{p.name}</td>
-                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">{p.role}</td>
+                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">
+                    {p.role}
+                  </td>
                   <td className="p-4 text-bone-200/70">{p.affiliation}</td>
                   <td className="p-4 text-right">
                     <button
@@ -77,7 +87,10 @@ export default function AdminPeoplePage() {
               ))}
               {people.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase">
+                  <td
+                    colSpan={4}
+                    className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase"
+                  >
                     No people records found in directory.
                   </td>
                 </tr>
@@ -90,7 +103,9 @@ export default function AdminPeoplePage() {
       {showNewModal && (
         <div className="fixed inset-0 bg-carbon-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-carbon-900 border border-bone-50/15 p-6 rounded-3xl max-w-lg w-full space-y-4 shadow-2xl">
-            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase">Add Person / Researcher</h3>
+            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase">
+              Add Person / Researcher
+            </h3>
             <div className="space-y-3 text-xs">
               <input
                 type="text"

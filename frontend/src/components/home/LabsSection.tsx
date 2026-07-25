@@ -9,7 +9,10 @@ import { Reveal, StaggerItem } from "../ui/Reveal";
 
 export const LabsSection: React.FC = () => {
   return (
-    <section id="labs" className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300">
+    <section
+      id="labs"
+      className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300"
+    >
       <Container className="space-y-16">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 max-w-5xl">
@@ -21,7 +24,8 @@ export const LabsSection: React.FC = () => {
               Explore Our Labs
             </h2>
             <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed max-w-xl font-medium">
-              Collaborative spaces linking critical philosophy and creative practice. Select a cell to explore active research projects.
+              Collaborative spaces linking critical philosophy and creative practice. Select a cell
+              to explore active research projects.
             </p>
           </div>
           <Link
@@ -37,7 +41,10 @@ export const LabsSection: React.FC = () => {
         <Reveal staggerChildren={0.15} className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {featuredLabsList.map((lab) => (
             <StaggerItem key={lab.name}>
-              <ContentCard href={lab.href} className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 hover:border-earth-600 dark:hover:border-earth-400 h-full flex flex-col justify-between p-8 min-h-[300px] shadow-md hover:shadow-xl transition-all duration-300">
+              <ContentCard
+                href={lab.href}
+                className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 hover:border-earth-600 dark:hover:border-earth-400 h-full flex flex-col justify-between p-8 min-h-[300px] shadow-md hover:shadow-xl transition-all duration-300"
+              >
                 <div className="space-y-6">
                   {/* Number & Category */}
                   <div className="flex items-center justify-between">

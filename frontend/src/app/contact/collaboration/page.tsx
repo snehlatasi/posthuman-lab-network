@@ -32,7 +32,9 @@ export default function ContactCollaborationPage() {
               Let&apos;s Build Together
             </h2>
             <p className="text-xs md:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-sans font-medium">
-              We coordinate with botanical labs, algorithmic research units, cultural institutions, and alternative schools globally. Submit your contact details and outline your collaborative proposal.
+              We coordinate with botanical labs, algorithmic research units, cultural institutions,
+              and alternative schools globally. Submit your contact details and outline your
+              collaborative proposal.
             </p>
           </Reveal>
         </div>
@@ -42,18 +44,28 @@ export default function ContactCollaborationPage() {
           <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 shadow-md hover:shadow-xl p-6">
             {sent ? (
               <div className="space-y-4 text-center py-6">
-                <span className="font-mono text-2xl text-earth-600 dark:text-earth-400 font-bold">✓</span>
-                <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">Message Sent</h3>
+                <span className="font-mono text-2xl text-earth-600 dark:text-earth-400 font-bold">
+                  ✓
+                </span>
+                <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
+                  Message Sent
+                </h3>
                 <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-sans font-medium">
-                  Thank you for reaching out. An operational coordinator will inspect your proposal and respond within three business days.
+                  Thank you for reaching out. An operational coordinator will inspect your proposal
+                  and respond within three business days.
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSend} className="space-y-6">
-                <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">Pitch Your Project</h3>
-                
+                <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
+                  Pitch Your Project
+                </h3>
+
                 <div className="space-y-2">
-                  <label htmlFor="collab-email" className="font-mono text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-widest block">
+                  <label
+                    htmlFor="collab-email"
+                    className="font-mono text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-widest block"
+                  >
                     Your Email
                   </label>
                   <input
@@ -68,7 +80,10 @@ export default function ContactCollaborationPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="collab-msg" className="font-mono text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-widest block">
+                  <label
+                    htmlFor="collab-msg"
+                    className="font-mono text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-widest block"
+                  >
                     Proposal Outline
                   </label>
                   <textarea

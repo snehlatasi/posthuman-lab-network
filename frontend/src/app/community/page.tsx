@@ -17,20 +17,23 @@ const communityFeed: PostItem[] = [
     title: "Diaries from a Concrete Forest",
     author: "Elena Rostova",
     tag: "Reflections / Germany",
-    description: "Speculative diary entries on moss colonization across city concrete structures and architectural decay."
+    description:
+      "Speculative diary entries on moss colonization across city concrete structures and architectural decay.",
   },
   {
     title: "Entangled Voices: Sub-soil Listening",
     author: "Kojo Boateng",
     tag: "Speculative / Ghana",
-    description: "Listening exercises detailing sub-soil insect activity and localized rain-drainage systems."
+    description:
+      "Listening exercises detailing sub-soil insect activity and localized rain-drainage systems.",
   },
   {
     title: "Algorithmic Subjectivities: AI Symbiosis",
     author: "Anya Chen",
     tag: "Research Notes / Global",
-    description: "A short review of conversational interactions with language models behaving as digital companions."
-  }
+    description:
+      "A short review of conversational interactions with language models behaving as digital companions.",
+  },
 ];
 
 export default function CommunityMainPage() {
@@ -59,9 +62,7 @@ export default function CommunityMainPage() {
                 </p>
               </div>
               <div className="pt-4">
-                <AnimatedLink href="/community/global-voices">
-                  Read Reflections
-                </AnimatedLink>
+                <AnimatedLink href="/community/global-voices">Read Reflections</AnimatedLink>
               </div>
             </div>
           </ContentCard>

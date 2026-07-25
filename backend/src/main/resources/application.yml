@@ -22,7 +22,7 @@ spring:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: ${JPA_SHOW_SQL:true}
     properties:
       hibernate:
         format_sql: true
@@ -40,3 +40,32 @@ app:
   google:
     client-id: ${GOOGLE_CLIENT_ID:}
     verify-tokens: ${GOOGLE_VERIFY_TOKENS:false}
+  cors:
+    allowed-origins:
+      - ${FRONTEND_ORIGIN:http://localhost:3000}
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+      - OPTIONS
+      - PATCH
+    allowed-headers:
+      - "*"
+    allow-credentials: true
+    max-age: 3600
+  media:
+    storage:
+      upload-dir: ${MEDIA_UPLOAD_DIR:uploads}
+      max-file-size-bytes: ${MEDIA_MAX_FILE_SIZE_BYTES:52428800}
+      allowed-extensions:
+        - .jpg
+        - .jpeg
+        - .png
+        - .webp
+        - .gif
+        - .mp4
+        - .webm
+        - .mp3
+        - .wav
+        - .pdf

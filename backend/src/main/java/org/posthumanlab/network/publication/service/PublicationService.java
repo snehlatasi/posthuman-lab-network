@@ -1,6 +1,9 @@
 package org.posthumanlab.network.publication.service;
 
 import org.posthumanlab.network.common.exception.ResourceNotFoundException;
+import org.posthumanlab.network.common.util.EnumUtils;
+import org.posthumanlab.network.common.util.SlugUtils;
+import org.posthumanlab.network.publication.dto.PublicationRequest;
 import org.posthumanlab.network.publication.dto.PublicationResponse;
 import org.posthumanlab.network.publication.entity.Publication;
 import org.posthumanlab.network.publication.entity.PublicationStatus;
@@ -9,6 +12,7 @@ import org.posthumanlab.network.publication.repository.PublicationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,30 +59,26 @@ public class PublicationService {
     }
 
     @Transactional
-    public PublicationResponse createPublication(org.posthumanlab.network.publication.dto.PublicationRequest req) {
+    public PublicationResponse createPublication(PublicationRequest req) {
         Publication pub = new Publication();
         pub.setTitle(req.getTitle());
-        String slug = req.getSlug();
-        if (slug == null || slug.trim().isEmpty()) {
-            slug = req.getTitle().toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
-        }
-        pub.setSlug(slug);
+        pub.setSlug(SlugUtils.resolve(req.getSlug(), req.getTitle()));
         pub.setSummary(req.getSummary());
         pub.setContent(req.getContent());
         pub.setAuthorDisplayName(req.getAuthorDisplayName());
         if (req.getPublicationType() != null) {
-            pub.setPublicationType(PublicationType.valueOf(req.getPublicationType().toUpperCase()));
+            pub.setPublicationType(EnumUtils.parse(PublicationType.class, req.getPublicationType()));
         } else {
             pub.setPublicationType(PublicationType.ARTICLE);
         }
         pub.setStatus(req.getStatus() != null && req.getStatus().equalsIgnoreCase("DRAFT") ? PublicationStatus.DRAFT : PublicationStatus.PUBLISHED);
-        pub.setPublishedAt(req.getPublishedAt() != null ? req.getPublishedAt() : java.time.LocalDateTime.now());
+        pub.setPublishedAt(req.getPublishedAt() != null ? req.getPublishedAt() : LocalDateTime.now());
 
         return new PublicationResponse(publicationRepository.save(pub));
     }
 
     @Transactional
-    public PublicationResponse updatePublication(Long id, org.posthumanlab.network.publication.dto.PublicationRequest req) {
+    public PublicationResponse updatePublication(Long id, PublicationRequest req) {
         Publication pub = publicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Publication not found with ID: " + id));
 
@@ -90,10 +90,10 @@ public class PublicationService {
         pub.setContent(req.getContent());
         pub.setAuthorDisplayName(req.getAuthorDisplayName());
         if (req.getPublicationType() != null) {
-            pub.setPublicationType(PublicationType.valueOf(req.getPublicationType().toUpperCase()));
+            pub.setPublicationType(EnumUtils.parse(PublicationType.class, req.getPublicationType()));
         }
         if (req.getStatus() != null) {
-            pub.setStatus(PublicationStatus.valueOf(req.getStatus().toUpperCase()));
+            pub.setStatus(EnumUtils.parse(PublicationStatus.class, req.getStatus()));
         }
 
         return new PublicationResponse(publicationRepository.save(pub));
@@ -113,7 +113,7 @@ public class PublicationService {
                 .orElseThrow(() -> new ResourceNotFoundException("Publication not found with ID: " + id));
         pub.setStatus(publish ? PublicationStatus.PUBLISHED : PublicationStatus.DRAFT);
         if (publish && pub.getPublishedAt() == null) {
-            pub.setPublishedAt(java.time.LocalDateTime.now());
+            pub.setPublishedAt(LocalDateTime.now());
         }
         return new PublicationResponse(publicationRepository.save(pub));
     }

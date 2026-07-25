@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { eventsApi, EventApiDto } from "@/lib/api/events";
+import type { EventApiDto } from "@/lib/api/events";
+import { eventsApi } from "@/lib/api/events";
 import { Plus, Trash2, AlertTriangle } from "lucide-react";
 
 export default function AdminEventsPage() {
@@ -10,7 +11,15 @@ export default function AdminEventsPage() {
   const [actionFeedback, setActionFeedback] = useState<string | null>(null);
 
   const [showNewModal, setShowNewModal] = useState(false);
-  const [newEvent, setNewEvent] = useState({ title: "", description: "", eventType: "Workshop", startDateTime: "", endDateTime: "", location: "Online Webcast", online: true });
+  const [newEvent, setNewEvent] = useState({
+    title: "",
+    description: "",
+    eventType: "Workshop",
+    startDateTime: "",
+    endDateTime: "",
+    location: "Online Webcast",
+    online: true,
+  });
 
   const [confirmModal, setConfirmModal] = useState<{
     isOpen: boolean;
@@ -54,7 +63,9 @@ export default function AdminEventsPage() {
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
             Events & Gatherings Catalog
           </h2>
-          <p className="font-sans text-xs text-bone-200 font-medium">Manage upcoming physical retreats, seminars, and virtual masterclasses.</p>
+          <p className="font-sans text-xs text-bone-200 font-medium">
+            Manage upcoming physical retreats, seminars, and virtual masterclasses.
+          </p>
         </div>
         <button
           onClick={() => setShowNewModal(true)}
@@ -81,12 +92,18 @@ export default function AdminEventsPage() {
               {events.map((e) => (
                 <tr key={e.id} className="hover:bg-carbon-950/40 transition-colors">
                   <td className="p-4 font-semibold text-bone-50">{e.title}</td>
-                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">{e.eventType}</td>
+                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">
+                    {e.eventType}
+                  </td>
                   <td className="p-4 text-bone-200/70">{e.location || "Online Webcast"}</td>
                   <td className="p-4">
-                    <span className={`px-2.5 py-1 text-[9px] font-mono rounded-full uppercase tracking-wider font-bold ${
-                      e.status === "UPCOMING" ? "bg-moss-500/20 text-moss-400 border border-moss-500/30" : "bg-carbon-950 text-bone-200/50"
-                    }`}>
+                    <span
+                      className={`px-2.5 py-1 text-[9px] font-mono rounded-full uppercase tracking-wider font-bold ${
+                        e.status === "UPCOMING"
+                          ? "bg-moss-500/20 text-moss-400 border border-moss-500/30"
+                          : "bg-carbon-950 text-bone-200/50"
+                      }`}
+                    >
                       {e.status}
                     </span>
                   </td>
@@ -101,7 +118,7 @@ export default function AdminEventsPage() {
                             await eventsApi.deleteEvent(e.id);
                             triggerFeedback("Event deleted.");
                             loadEvents();
-                          }
+                          },
                         });
                       }}
                       className="p-1.5 text-earth-400 hover:text-earth-300 cursor-pointer inline-block"
@@ -113,7 +130,10 @@ export default function AdminEventsPage() {
               ))}
               {events.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase tracking-widest">
+                  <td
+                    colSpan={5}
+                    className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase tracking-widest"
+                  >
                     No events cataloged.
                   </td>
                 </tr>
@@ -127,7 +147,9 @@ export default function AdminEventsPage() {
       {showNewModal && (
         <div className="fixed inset-0 bg-carbon-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-carbon-900 border border-bone-50/15 p-6 sm:p-8 rounded-3xl max-w-lg w-full space-y-4 shadow-2xl">
-            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase tracking-tight">Create Event</h3>
+            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase tracking-tight">
+              Create Event
+            </h3>
             <div className="space-y-3 text-xs">
               <input
                 type="text"
@@ -168,7 +190,10 @@ export default function AdminEventsPage() {
               <button
                 onClick={async () => {
                   if (!newEvent.title) return;
-                  const generatedSlug = newEvent.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+                  const generatedSlug = newEvent.title
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, "-")
+                    .replace(/^-+|-+$/g, "");
                   const now = new Date();
                   const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
                   await eventsApi.createEvent({
@@ -176,10 +201,18 @@ export default function AdminEventsPage() {
                     slug: generatedSlug,
                     startDateTime: nextWeek.toISOString(),
                     endDateTime: new Date(nextWeek.getTime() + 2 * 60 * 60 * 1000).toISOString(),
-                    status: "UPCOMING"
+                    status: "UPCOMING",
                   });
                   setShowNewModal(false);
-                  setNewEvent({ title: "", description: "", eventType: "Workshop", startDateTime: "", endDateTime: "", location: "Online Webcast", online: true });
+                  setNewEvent({
+                    title: "",
+                    description: "",
+                    eventType: "Workshop",
+                    startDateTime: "",
+                    endDateTime: "",
+                    location: "Online Webcast",
+                    online: true,
+                  });
                   triggerFeedback("Event created.");
                   loadEvents();
                 }}
@@ -198,9 +231,13 @@ export default function AdminEventsPage() {
           <div className="bg-carbon-900 border border-bone-50/15 p-6 rounded-2xl max-w-md w-full space-y-4 shadow-2xl">
             <div className="flex items-center space-x-3 text-earth-400">
               <AlertTriangle className="w-6 h-6 shrink-0" />
-              <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">{confirmModal.title}</h3>
+              <h3 className="font-serif text-lg font-bold text-bone-50 uppercase">
+                {confirmModal.title}
+              </h3>
             </div>
-            <p className="font-sans text-xs text-bone-200 leading-relaxed font-medium">{confirmModal.description}</p>
+            <p className="font-sans text-xs text-bone-200 leading-relaxed font-medium">
+              {confirmModal.description}
+            </p>
             <div className="flex justify-end space-x-3 pt-2">
               <button
                 onClick={() => setConfirmModal({ ...confirmModal, isOpen: false })}

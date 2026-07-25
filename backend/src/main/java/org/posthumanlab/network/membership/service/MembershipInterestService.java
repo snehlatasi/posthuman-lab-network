@@ -1,5 +1,7 @@
 package org.posthumanlab.network.membership.service;
 
+import org.posthumanlab.network.common.exception.ResourceNotFoundException;
+import org.posthumanlab.network.common.util.EnumUtils;
 import org.posthumanlab.network.membership.dto.MembershipInterestRequest;
 import org.posthumanlab.network.membership.dto.MembershipInterestResponse;
 import org.posthumanlab.network.membership.entity.MembershipInterest;
@@ -39,8 +41,8 @@ public class MembershipInterestService {
 
     public MembershipInterestResponse updateInterestStatus(Long id, String statusStr) {
         MembershipInterest mi = interestRepository.findById(id)
-                .orElseThrow(() -> new org.posthumanlab.network.common.exception.ResourceNotFoundException("Membership interest not found with ID: " + id));
-        mi.setStatus(MembershipInterestStatus.valueOf(statusStr.toUpperCase()));
+                .orElseThrow(() -> new ResourceNotFoundException("Membership interest not found with ID: " + id));
+        mi.setStatus(EnumUtils.parse(MembershipInterestStatus.class, statusStr));
         return new MembershipInterestResponse(interestRepository.save(mi));
     }
 }

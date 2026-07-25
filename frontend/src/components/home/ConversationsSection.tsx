@@ -13,15 +13,18 @@ const fallbackList = conversationsList.map((c, i) => ({
   title: c.title,
   tag: c.tag,
   description: c.description,
-  href: c.href
+  href: c.href,
 }));
 
 export const ConversationsSection: React.FC = () => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  const [items, setItems] = useState<Array<{ number: string; title: string; tag: string; description: string; href: string }>>([]);
+  const [items, setItems] = useState<
+    Array<{ number: string; title: string; tag: string; description: string; href: string }>
+  >([]);
 
   useEffect(() => {
-    cmsApi.getConversations()
+    cmsApi
+      .getConversations()
       .then((res) => {
         if (res && res.length > 0) {
           const mapped = res.map((c, i) => ({
@@ -29,7 +32,7 @@ export const ConversationsSection: React.FC = () => {
             title: c.title,
             tag: c.category || "Research Focus",
             description: c.shortDescription,
-            href: `/learning`
+            href: `/learning`,
           }));
           setItems(mapped);
         } else {
@@ -42,7 +45,10 @@ export const ConversationsSection: React.FC = () => {
   const displayItems = items.length > 0 ? items : fallbackList;
 
   return (
-    <section id="conversations" className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300">
+    <section
+      id="conversations"
+      className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300"
+    >
       <Container className="space-y-16">
         {/* Section Header - Standardized Layout & Typography */}
         <div className="max-w-xl space-y-4">
@@ -64,7 +70,10 @@ export const ConversationsSection: React.FC = () => {
         </div>
 
         {/* Structured Row List - 12 Column Aligned Grid */}
-        <Reveal staggerChildren={0.12} className="border-t border-carbon-950/10 dark:border-bone-50/12 pt-2">
+        <Reveal
+          staggerChildren={0.12}
+          className="border-t border-carbon-950/10 dark:border-bone-50/12 pt-2"
+        >
           {displayItems.map((item, idx) => {
             const isHovered = hoveredIdx === idx;
             return (
@@ -87,9 +96,13 @@ export const ConversationsSection: React.FC = () => {
                     <span className="font-mono text-[10px] text-earth-600 dark:text-earth-400 tracking-wider font-bold uppercase block">
                       {item.tag}
                     </span>
-                    <h3 className={`font-serif text-lg sm:text-xl md:text-2xl font-bold leading-snug transition-colors duration-300 ${
-                      isHovered ? "text-earth-600 dark:text-earth-400" : "text-carbon-950 dark:text-bone-50"
-                    }`}>
+                    <h3
+                      className={`font-serif text-lg sm:text-xl md:text-2xl font-bold leading-snug transition-colors duration-300 ${
+                        isHovered
+                          ? "text-earth-600 dark:text-earth-400"
+                          : "text-carbon-950 dark:text-bone-50"
+                      }`}
+                    >
                       {item.title}
                     </h3>
                   </div>
@@ -116,4 +129,3 @@ export const ConversationsSection: React.FC = () => {
     </section>
   );
 };
-

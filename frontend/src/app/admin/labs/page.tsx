@@ -1,14 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { cmsApi, LabContentDto } from "@/lib/api/cms";
+import type { LabContentDto } from "@/lib/api/cms";
+import { cmsApi } from "@/lib/api/cms";
 import { Plus, Trash2 } from "lucide-react";
 
 export default function AdminLabsPage() {
   const [labs, setLabs] = useState<LabContentDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [newLab, setNewLab] = useState({ name: "", researchFocus: "AI & Bio-Ethics", shortDescription: "", leadName: "Dr. Alex Rivera" });
+  const [newLab, setNewLab] = useState({
+    name: "",
+    researchFocus: "AI & Bio-Ethics",
+    shortDescription: "",
+    leadName: "Dr. Alex Rivera",
+  });
 
   const loadLabs = async () => {
     setLoading(true);
@@ -34,7 +40,9 @@ export default function AdminLabsPage() {
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
             Research Labs Catalog
           </h2>
-          <p className="font-sans text-xs text-bone-200 font-medium">Manage research focus areas, lab leads, and experimental clusters.</p>
+          <p className="font-sans text-xs text-bone-200 font-medium">
+            Manage research focus areas, lab leads, and experimental clusters.
+          </p>
         </div>
         <button
           onClick={() => setShowNewModal(true)}
@@ -60,7 +68,9 @@ export default function AdminLabsPage() {
               {labs.map((l) => (
                 <tr key={l.id} className="hover:bg-carbon-950/40 transition-colors">
                   <td className="p-4 font-semibold text-bone-50">{l.name}</td>
-                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">{l.researchFocus}</td>
+                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">
+                    {l.researchFocus}
+                  </td>
                   <td className="p-4 text-bone-200/70">{l.leadName || "Lab Coordinator"}</td>
                   <td className="p-4 text-right">
                     <button
@@ -77,7 +87,10 @@ export default function AdminLabsPage() {
               ))}
               {labs.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase">
+                  <td
+                    colSpan={4}
+                    className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase"
+                  >
                     No research labs cataloged.
                   </td>
                 </tr>
@@ -90,7 +103,9 @@ export default function AdminLabsPage() {
       {showNewModal && (
         <div className="fixed inset-0 bg-carbon-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-carbon-900 border border-bone-50/15 p-6 rounded-3xl max-w-lg w-full space-y-4 shadow-2xl">
-            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase">New Research Lab</h3>
+            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase">
+              New Research Lab
+            </h3>
             <div className="space-y-3 text-xs">
               <input
                 type="text"

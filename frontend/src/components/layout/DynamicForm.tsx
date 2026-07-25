@@ -63,8 +63,11 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
     try {
       if (formType === "submission") {
         const rawTitle = formData.title || "Untitled Paper";
-        const generatedSlug = rawTitle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-        
+        const generatedSlug = rawTitle
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+
         let typeVal: "ARTICLE" | "ESSAY" | "RESEARCH" | "CREATIVE_WORK" = "ARTICLE";
         if (formData.category === "essays") typeVal = "ESSAY";
         if (formData.category === "research") typeVal = "RESEARCH";
@@ -77,7 +80,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
           content: formData.message || "Submitted for peer review.",
           authorDisplayName: formData.name,
           publicationType: typeVal,
-          status: "DRAFT"
+          status: "DRAFT",
         });
         setStatusMsg("Your publication draft has been submitted to the editorial review pipeline.");
       } else if (formType === "membership") {
@@ -85,25 +88,33 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
           name: formData.name,
           email: formData.email,
           areaOfInterest: formData.membershipType || "learner",
-          message: formData.message || ""
+          message: formData.message || "",
         });
-        setStatusMsg("Your expression of interest has been recorded. The cell coordinators will contact you shortly.");
+        setStatusMsg(
+          "Your expression of interest has been recorded. The cell coordinators will contact you shortly."
+        );
       } else {
         // "contact" or "collaboration"
         await contactApi.submitContactMessage({
           name: formData.name,
           email: formData.email,
-          subject: formType === "collaboration" 
-            ? `Collaboration - ${formData.organization || "Independent"}` 
-            : formData.subject || "General Inquiry",
-          message: formData.message || ""
+          subject:
+            formType === "collaboration"
+              ? `Collaboration - ${formData.organization || "Independent"}`
+              : formData.subject || "General Inquiry",
+          message: formData.message || "",
         });
-        setStatusMsg("Your message has been sent successfully. Thank you for engaging with the network.");
+        setStatusMsg(
+          "Your message has been sent successfully. Thank you for engaging with the network."
+        );
       }
       setIsSuccess(true);
       setFormData({});
     } catch (err: unknown) {
-      const errMsg = err instanceof Error ? err.message : "An unexpected network error occurred. Please verify your connection.";
+      const errMsg =
+        err instanceof Error
+          ? err.message
+          : "An unexpected network error occurred. Please verify your connection.";
       setStatusMsg(errMsg);
       setIsSuccess(false);
     } finally {
@@ -131,7 +142,10 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
       <form onSubmit={handleSubmit} className="relative z-10 space-y-5" noValidate>
         {/* Full Name */}
         <div className="space-y-1.5">
-          <label htmlFor="name" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
+          <label
+            htmlFor="name"
+            className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200"
+          >
             Full Name <span className="text-earth-400">*</span>
           </label>
           <input
@@ -157,7 +171,10 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
 
         {/* Email Address */}
         <div className="space-y-1.5">
-          <label htmlFor="email" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
+          <label
+            htmlFor="email"
+            className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200"
+          >
             Email Address <span className="text-earth-400">*</span>
           </label>
           <input
@@ -184,7 +201,10 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
         {/* Dynamic Fields by Form Type */}
         {formType === "collaboration" && (
           <div className="space-y-1.5">
-            <label htmlFor="organization" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
+            <label
+              htmlFor="organization"
+              className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200"
+            >
               Organization / Collective <span className="text-earth-400">*</span>
             </label>
             <input
@@ -197,7 +217,9 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
               aria-invalid={!!errors.organization}
               aria-describedby={errors.organization ? "org-error" : undefined}
               className={`w-full px-4 py-3 bg-carbon-950 border text-sm text-bone-50 placeholder-bone-200/60 rounded-lg focus:outline-none focus:ring-1 focus:ring-earth-400 transition-colors ${
-                errors.organization ? "border-earth-400" : "border-bone-200/20 focus:border-earth-400"
+                errors.organization
+                  ? "border-earth-400"
+                  : "border-bone-200/20 focus:border-earth-400"
               }`}
               placeholder="Symbiotic Labs Collective"
             />
@@ -212,7 +234,10 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
         {formType === "submission" && (
           <>
             <div className="space-y-1.5">
-              <label htmlFor="title" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
+              <label
+                htmlFor="title"
+                className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200"
+              >
                 Paper / Artwork Title <span className="text-earth-400">*</span>
               </label>
               <input
@@ -237,7 +262,10 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="category" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
+              <label
+                htmlFor="category"
+                className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200"
+              >
                 Submission Category
               </label>
               <select
@@ -258,7 +286,10 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
 
         {formType === "membership" && (
           <div className="space-y-1.5">
-            <label htmlFor="membershipType" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
+            <label
+              htmlFor="membershipType"
+              className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200"
+            >
               Affiliation Type
             </label>
             <select
@@ -277,7 +308,10 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
 
         {/* Message / Scope Text Area */}
         <div className="space-y-1.5">
-          <label htmlFor="message" className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200">
+          <label
+            htmlFor="message"
+            className="block text-xs font-mono tracking-widest uppercase font-bold text-bone-200"
+          >
             Description / Context
           </label>
           <textarea
@@ -295,7 +329,8 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
         <div className="p-4 rounded-lg bg-carbon-950 border border-bone-200/15 flex items-start space-x-3">
           <HelpCircle className="w-4 h-4 text-moss-300 shrink-0 mt-0.5" />
           <p className="text-xs font-sans text-bone-200 leading-relaxed font-normal">
-            All submitted communications are processed horizontally by regional cell coordinators. No data is shared with external advertising entities.
+            All submitted communications are processed horizontally by regional cell coordinators.
+            No data is shared with external advertising entities.
           </p>
         </div>
 
@@ -311,11 +346,13 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
 
         {/* Submission notification status */}
         {statusMsg && (
-          <div className={`p-4 rounded-lg border text-xs font-sans leading-relaxed transition-all ${
-            isSuccess 
-              ? "bg-moss-500/10 border-moss-500/20 text-moss-400" 
-              : "bg-earth-500/10 border-earth-500/20 text-earth-400"
-          }`}>
+          <div
+            className={`p-4 rounded-lg border text-xs font-sans leading-relaxed transition-all ${
+              isSuccess
+                ? "bg-moss-500/10 border-moss-500/20 text-moss-400"
+                : "bg-earth-500/10 border-earth-500/20 text-earth-400"
+            }`}
+          >
             {statusMsg}
           </div>
         )}

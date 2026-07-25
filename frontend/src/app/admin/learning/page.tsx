@@ -1,14 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { cmsApi, LearningResourceDto } from "@/lib/api/cms";
+import type { LearningResourceDto } from "@/lib/api/cms";
+import { cmsApi } from "@/lib/api/cms";
 import { Plus, Trash2 } from "lucide-react";
 
 export default function AdminLearningPage() {
   const [resources, setResources] = useState<LearningResourceDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [showNewModal, setShowNewModal] = useState(false);
-  const [newRes, setNewRes] = useState({ title: "", instructor: "Dr. Sarah Chen", description: "", videoUrl: "" });
+  const [newRes, setNewRes] = useState({
+    title: "",
+    instructor: "Dr. Sarah Chen",
+    description: "",
+    videoUrl: "",
+  });
 
   const loadLearning = async () => {
     setLoading(true);
@@ -34,7 +40,9 @@ export default function AdminLearningPage() {
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
             Masterclasses & Learning Hub
           </h2>
-          <p className="font-sans text-xs text-bone-200 font-medium">Manage masterclasses, courses, study guides, and video resources.</p>
+          <p className="font-sans text-xs text-bone-200 font-medium">
+            Manage masterclasses, courses, study guides, and video resources.
+          </p>
         </div>
         <button
           onClick={() => setShowNewModal(true)}
@@ -60,7 +68,9 @@ export default function AdminLearningPage() {
               {resources.map((r) => (
                 <tr key={r.id} className="hover:bg-carbon-950/40 transition-colors">
                   <td className="p-4 font-semibold text-bone-50">{r.title}</td>
-                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">{r.resourceType}</td>
+                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">
+                    {r.resourceType}
+                  </td>
                   <td className="p-4 text-bone-200/70">{r.instructor || "Network Lead"}</td>
                   <td className="p-4 text-right">
                     <button
@@ -77,7 +87,10 @@ export default function AdminLearningPage() {
               ))}
               {resources.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={4} className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase">
+                  <td
+                    colSpan={4}
+                    className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase"
+                  >
                     No learning resources cataloged.
                   </td>
                 </tr>

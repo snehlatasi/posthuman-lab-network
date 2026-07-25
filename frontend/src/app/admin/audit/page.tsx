@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { cmsApi, AuditLogDto } from "@/lib/api/cms";
+import type { AuditLogDto } from "@/lib/api/cms";
+import { cmsApi } from "@/lib/api/cms";
 
 export default function AdminAuditPage() {
   const [logs, setLogs] = useState<AuditLogDto[]>([]);
@@ -9,7 +10,8 @@ export default function AdminAuditPage() {
 
   useEffect(() => {
     let isMounted = true;
-    cmsApi.getAuditLogs()
+    cmsApi
+      .getAuditLogs()
       .then((res) => {
         if (isMounted) setLogs(res);
       })
@@ -17,7 +19,9 @@ export default function AdminAuditPage() {
       .finally(() => {
         if (isMounted) setLoading(false);
       });
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
@@ -26,7 +30,9 @@ export default function AdminAuditPage() {
         <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
           Administrative Audit Trail
         </h2>
-        <p className="font-sans text-xs text-bone-200 font-medium">Recorded administrative actions, entity mutations, and editorial operations.</p>
+        <p className="font-sans text-xs text-bone-200 font-medium">
+          Recorded administrative actions, entity mutations, and editorial operations.
+        </p>
       </div>
 
       <div className="bg-carbon-900/90 rounded-2xl overflow-hidden border border-bone-50/15 shadow-md">
@@ -48,14 +54,21 @@ export default function AdminAuditPage() {
                     {new Date(log.timestamp).toLocaleString()}
                   </td>
                   <td className="p-4 font-semibold text-bone-50">{log.adminEmail}</td>
-                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">{log.action}</td>
-                  <td className="p-4 uppercase text-[10px] font-mono text-moss-400">{log.entityType} #{log.entityId}</td>
+                  <td className="p-4 uppercase text-[10px] font-mono text-earth-400 font-bold">
+                    {log.action}
+                  </td>
+                  <td className="p-4 uppercase text-[10px] font-mono text-moss-400">
+                    {log.entityType} #{log.entityId}
+                  </td>
                   <td className="p-4 max-w-xs truncate text-bone-200/70">{log.details || "—"}</td>
                 </tr>
               ))}
               {logs.length === 0 && !loading && (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase tracking-widest">
+                  <td
+                    colSpan={5}
+                    className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase tracking-widest"
+                  >
                     No administrative audit records logged.
                   </td>
                 </tr>

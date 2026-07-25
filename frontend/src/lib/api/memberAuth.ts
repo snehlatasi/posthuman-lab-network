@@ -78,17 +78,16 @@ export const memberAuthApi = {
   verifyGoogleIdentity: (data: GoogleAuthRequestDto) =>
     fetchJson<GoogleAuthResponseDto>("/api/members/auth/google", {
       method: "POST",
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }),
 
   submitApplication: (data: MembershipApplicationRequestDto) =>
     fetchJson<MembershipApplicationResponseDto>("/api/members/apply", {
       method: "POST",
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }),
 
-  getPublicDirectory: () =>
-    fetchJson<PublicMemberDto[]>("/api/members/directory"),
+  getPublicDirectory: () => fetchJson<PublicMemberDto[]>("/api/members/directory"),
 
   // Admin Member Endpoints
   getAdminApplications: () =>
@@ -96,14 +95,13 @@ export const memberAuthApi = {
 
   approveApplication: (id: number) =>
     fetchJson<MembershipApplicationResponseDto>(`/api/admin/members/applications/${id}/approve`, {
-      method: "PUT"
+      method: "PUT",
     }),
 
   rejectApplication: (id: number) =>
     fetchJson<MembershipApplicationResponseDto>(`/api/admin/members/applications/${id}/reject`, {
-      method: "PUT"
+      method: "PUT",
     }),
 
-  getAdminMembersList: () =>
-    fetchJson<MemberDto[]>("/api/admin/members/list")
+  getAdminMembersList: () => fetchJson<MemberDto[]>("/api/admin/members/list"),
 };

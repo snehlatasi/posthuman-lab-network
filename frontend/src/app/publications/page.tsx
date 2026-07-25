@@ -4,7 +4,8 @@ import React, { useState, useEffect, useCallback } from "react";
 import { ListingPageLayout } from "@/components/layout/Templates";
 import { ContentCard, AnimatedLink } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";
-import { publicationsApi, PublicationApiDto } from "@/lib/api/publications";
+import type { PublicationApiDto } from "@/lib/api/publications";
+import { publicationsApi } from "@/lib/api/publications";
 import { useAuth } from "@/context/AuthContext";
 import { Plus, Trash2, ShieldCheck, X } from "lucide-react";
 
@@ -26,11 +27,12 @@ export default function PublicationsMainPage() {
     summary: "",
     content: "",
     authorDisplayName: "Lab Fellow",
-    publicationType: "ARTICLE"
+    publicationType: "ARTICLE",
   });
 
   const loadPubs = useCallback(() => {
-    publicationsApi.getPublishedPublications()
+    publicationsApi
+      .getPublishedPublications()
       .then((data) => {
         setPublications(data);
       })
@@ -51,38 +53,41 @@ export default function PublicationsMainPage() {
       id: 1,
       title: "Agential Realism and Nonhuman Subjectivities",
       slug: "agential-realism-and-nonhuman-subjectivities",
-      summary: "Re-evaluating Karen Barad's quantum intra-actions inside forest electrical voltage grids.",
+      summary:
+        "Re-evaluating Karen Barad's quantum intra-actions inside forest electrical voltage grids.",
       content: "",
       authorDisplayName: "Dr. Elena Rostova",
       publicationType: "ARTICLE",
       status: "PUBLISHED",
       createdAt: "",
-      updatedAt: ""
+      updatedAt: "",
     },
     {
       id: 2,
       title: "Lichen-Synth: Generative Visual Topologies",
       slug: "lichen-synth",
-      summary: "A review of generative growth algorithms behaving as simulated posthuman bio-environments.",
+      summary:
+        "A review of generative growth algorithms behaving as simulated posthuman bio-environments.",
       content: "",
       authorDisplayName: "Marcus Vance",
       publicationType: "CREATIVE_WORK",
       status: "PUBLISHED",
       createdAt: "",
-      updatedAt: ""
+      updatedAt: "",
     },
     {
       id: 3,
       title: "Algorithmic Inquiries on Large Language Models",
       slug: "algorithmic-inquiries",
-      summary: "Auditing transformer neural networks for linguistic biases and nonhuman semantic agency.",
+      summary:
+        "Auditing transformer neural networks for linguistic biases and nonhuman semantic agency.",
       content: "",
       authorDisplayName: "Anya Chen",
       publicationType: "RESEARCH",
       status: "PUBLISHED",
       createdAt: "",
-      updatedAt: ""
-    }
+      updatedAt: "",
+    },
   ];
 
   const activePublications = publications.length > 0 ? publications : fallbackPublications;
@@ -96,11 +101,14 @@ export default function PublicationsMainPage() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const slug = newPub.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    const slug = newPub.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
     await publicationsApi.createPublication({
       ...newPub,
       slug,
-      status: "PUBLISHED"
+      status: "PUBLISHED",
     });
     setShowAddModal(false);
     setNewPub({
@@ -108,7 +116,7 @@ export default function PublicationsMainPage() {
       summary: "",
       content: "",
       authorDisplayName: "Lab Fellow",
-      publicationType: "ARTICLE"
+      publicationType: "ARTICLE",
     });
     loadPubs();
   };
@@ -125,7 +133,9 @@ export default function PublicationsMainPage() {
           <div className="p-4 rounded-xl bg-moss-950/40 border border-moss-500/30 flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center space-x-2 text-moss-300 font-mono text-xs">
               <ShieldCheck className="w-4 h-4 text-moss-400" />
-              <span>Admin Mode Active: Add peer-reviewed papers or manage public publications.</span>
+              <span>
+                Admin Mode Active: Add peer-reviewed papers or manage public publications.
+              </span>
             </div>
             <button
               onClick={() => setShowAddModal(true)}
@@ -146,44 +156,43 @@ export default function PublicationsMainPage() {
         </div>
       )}
 
-      {!loading && activePublications.map((pub) => (
-        <StaggerItem key={pub.id}>
-          <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 h-full">
-            <div className="space-y-6 h-full flex flex-col justify-between p-2">
-              <div className="space-y-2">
-                <span className="font-mono text-xs text-earth-600 dark:text-earth-400 tracking-wider font-bold uppercase block">
-                  Volume 04 — {pub.publicationType}
-                </span>
-                <span className="font-sans text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-wider block">
-                  By {pub.authorDisplayName}
-                </span>
-                <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
-                  {pub.title}
-                </h3>
-                <p className="font-sans text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-                  {pub.summary}
-                </p>
-              </div>
-              
-              <div className="pt-4 flex items-center justify-between">
-                <AnimatedLink href={`/publications/${pub.slug}`}>
-                  Read Document
-                </AnimatedLink>
+      {!loading &&
+        activePublications.map((pub) => (
+          <StaggerItem key={pub.id}>
+            <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300 h-full">
+              <div className="space-y-6 h-full flex flex-col justify-between p-2">
+                <div className="space-y-2">
+                  <span className="font-mono text-xs text-earth-600 dark:text-earth-400 tracking-wider font-bold uppercase block">
+                    Volume 04 — {pub.publicationType}
+                  </span>
+                  <span className="font-sans text-xs text-carbon-900 dark:text-bone-200 uppercase font-bold tracking-wider block">
+                    By {pub.authorDisplayName}
+                  </span>
+                  <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
+                    {pub.title}
+                  </h3>
+                  <p className="font-sans text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
+                    {pub.summary}
+                  </p>
+                </div>
 
-                {isAdmin && (
-                  <button
-                    onClick={() => handleDelete(pub.id)}
-                    className="p-1.5 rounded bg-earth-500/20 text-earth-600 dark:text-earth-400 hover:text-earth-500 hover:bg-earth-500/40 transition-colors cursor-pointer"
-                    title="Delete Publication"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
-                )}
+                <div className="pt-4 flex items-center justify-between">
+                  <AnimatedLink href={`/publications/${pub.slug}`}>Read Document</AnimatedLink>
+
+                  {isAdmin && (
+                    <button
+                      onClick={() => handleDelete(pub.id)}
+                      className="p-1.5 rounded bg-earth-500/20 text-earth-600 dark:text-earth-400 hover:text-earth-500 hover:bg-earth-500/40 transition-colors cursor-pointer"
+                      title="Delete Publication"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          </ContentCard>
-        </StaggerItem>
-      ))}
+            </ContentCard>
+          </StaggerItem>
+        ))}
 
       {/* Admin Add Publication Modal */}
       {showAddModal && (
@@ -195,7 +204,9 @@ export default function PublicationsMainPage() {
             >
               <X className="w-5 h-5" />
             </button>
-            <h3 className="font-serif text-xl font-bold text-bone-50">Add Publication Catalog Entry</h3>
+            <h3 className="font-serif text-xl font-bold text-bone-50">
+              Add Publication Catalog Entry
+            </h3>
             <form onSubmit={handleCreate} className="space-y-3 text-xs">
               <input
                 type="text"
@@ -214,7 +225,12 @@ export default function PublicationsMainPage() {
               />
               <select
                 value={newPub.publicationType}
-                onChange={(e) => setNewPub({ ...newPub, publicationType: e.target.value as PublicationApiDto["publicationType"] })}
+                onChange={(e) =>
+                  setNewPub({
+                    ...newPub,
+                    publicationType: e.target.value as PublicationApiDto["publicationType"],
+                  })
+                }
                 className="w-full p-3 bg-carbon-900 border border-bone-200/10 rounded-lg text-bone-100 focus:outline-none"
               >
                 <option value="ARTICLE">Academic Article</option>

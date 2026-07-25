@@ -25,7 +25,8 @@ export const Footer: React.FC = () => {
             </div>
 
             <p className="text-sm font-sans text-carbon-800 dark:text-bone-200 leading-relaxed max-w-xs font-normal">
-              A digital ecosystem mapping connections between human thought, technological expansion, and nonhuman environments.
+              A digital ecosystem mapping connections between human thought, technological
+              expansion, and nonhuman environments.
             </p>
 
             <div className="space-y-2.5 max-w-sm">
@@ -81,11 +82,18 @@ export const Footer: React.FC = () => {
           <div className="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-2">
             <span>© {currentYear} Posthuman Lab Network. All rights reserved.</span>
             <span>•</span>
-            <span className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors cursor-pointer">Ethical Guidelines</span>
+            <span className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors cursor-pointer">
+              Ethical Guidelines
+            </span>
             <span>•</span>
-            <span className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors cursor-pointer">Open-Access Policy</span>
+            <span className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors cursor-pointer">
+              Open-Access Policy
+            </span>
             <span>•</span>
-            <Link href="/admin" className="text-earth-600 dark:text-earth-400 font-mono uppercase tracking-wider hover:underline">
+            <Link
+              href="/admin"
+              className="text-earth-600 dark:text-earth-400 font-mono uppercase tracking-wider hover:underline"
+            >
               Coordinator Admin Portal
             </Link>
           </div>

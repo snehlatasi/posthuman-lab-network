@@ -1,13 +1,15 @@
 package org.posthumanlab.network.media.service;
 
+import org.posthumanlab.network.media.config.MediaStorageProperties;
 import org.posthumanlab.network.media.entity.MediaAsset;
 import org.posthumanlab.network.media.entity.MediaProvider;
 import org.posthumanlab.network.media.entity.MediaType;
 import org.posthumanlab.network.media.repository.MediaAssetRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,15 +23,17 @@ import java.util.regex.Pattern;
 @Service
 public class MediaStorageService {
 
-    private static final String UPLOAD_DIR = "uploads";
+    private static final Logger log = LoggerFactory.getLogger(MediaStorageService.class);
     private static final Pattern YOUTUBE_PATTERN = Pattern.compile(
             "(?:https?:\\/\\/)?(?:www\\.)?(?:youtube\\.com\\/(?:watch\\?v=|embed\\/|shorts\\/)|youtu\\.be\\/)([a-zA-Z0-9_-]{11})"
     );
 
     private final MediaAssetRepository mediaAssetRepository;
+    private final MediaStorageProperties storageProperties;
 
-    public MediaStorageService(MediaAssetRepository mediaAssetRepository) {
+    public MediaStorageService(MediaAssetRepository mediaAssetRepository, MediaStorageProperties storageProperties) {
         this.mediaAssetRepository = mediaAssetRepository;
+        this.storageProperties = storageProperties;
     }
 
     public static String extractYouTubeId(String url) {
@@ -62,14 +66,11 @@ public class MediaStorageService {
         return mediaAssetRepository.save(asset);
     }
 
-    private static final long MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024; // 50MB max
-    private static final List<String> ALLOWED_EXTENSIONS = List.of(".jpg", ".jpeg", ".png", ".webp", ".gif", ".mp4", ".webm", ".mp3", ".wav", ".pdf");
-
     public MediaAsset uploadFile(MultipartFile file, String title, String altText) throws IOException {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("Uploaded file cannot be empty.");
         }
-        if (file.getSize() > MAX_FILE_SIZE_BYTES) {
+        if (file.getSize() > storageProperties.getMaxFileSizeBytes()) {
             throw new IllegalArgumentException("File size exceeds maximum allowed limit of 50MB.");
         }
 
@@ -79,17 +80,15 @@ public class MediaStorageService {
             extension = originalName.substring(originalName.lastIndexOf(".")).toLowerCase();
         }
 
-        if (!ALLOWED_EXTENSIONS.contains(extension)) {
-            throw new IllegalArgumentException("Invalid file extension: " + extension + ". Allowed file types: " + String.join(", ", ALLOWED_EXTENSIONS));
+        if (!storageProperties.getAllowedExtensions().contains(extension)) {
+            throw new IllegalArgumentException("Invalid file extension: " + extension + ". Allowed file types: " + String.join(", ", storageProperties.getAllowedExtensions()));
         }
 
-        File uploadDirFolder = new File(UPLOAD_DIR);
-        if (!uploadDirFolder.exists()) {
-            uploadDirFolder.mkdirs();
-        }
+        Path uploadDir = Paths.get(storageProperties.getUploadDir());
+        Files.createDirectories(uploadDir);
 
         String uniqueFilename = UUID.randomUUID().toString() + extension;
-        Path targetPath = Paths.get(UPLOAD_DIR).resolve(uniqueFilename);
+        Path targetPath = uploadDir.resolve(uniqueFilename);
         Files.copy(file.getInputStream(), targetPath);
 
         String mimeType = file.getContentType();
@@ -130,10 +129,10 @@ public class MediaStorageService {
             MediaAsset asset = assetOpt.get();
             if (asset.getProvider() == MediaProvider.LOCAL && asset.getFilename() != null) {
                 try {
-                    Path filePath = Paths.get(UPLOAD_DIR).resolve(asset.getFilename());
+                    Path filePath = Paths.get(storageProperties.getUploadDir()).resolve(asset.getFilename());
                     Files.deleteIfExists(filePath);
-                } catch (IOException ignored) {
-                    // Log warning if physical file delete fails
+                } catch (IOException ex) {
+                    log.warn("Failed to delete media file for asset id {} and filename {}", id, asset.getFilename(), ex);
                 }
             }
             mediaAssetRepository.deleteById(id);

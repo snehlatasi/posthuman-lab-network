@@ -11,7 +11,6 @@ export const LearningHubSection: React.FC = () => {
   return (
     <section className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300">
       <Container className="space-y-16">
-        
         {/* Section Header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div className="lg:col-span-8 space-y-4">
@@ -22,7 +21,7 @@ export const LearningHubSection: React.FC = () => {
               &ldquo;Knowledge should be accessible, not exclusive.&rdquo;
             </h2>
           </div>
-          
+
           <div className="lg:col-span-4 lg:text-right">
             <Link
               href="/learning"
@@ -37,7 +36,10 @@ export const LearningHubSection: React.FC = () => {
         <Reveal staggerChildren={0.15} className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {learningPathwaysList.map((path) => (
             <StaggerItem key={path.title}>
-              <ContentCard href={path.href} className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 hover:border-earth-600 dark:hover:border-earth-400 h-full flex flex-col justify-between p-8 min-h-[280px] shadow-md hover:shadow-xl transition-all duration-300">
+              <ContentCard
+                href={path.href}
+                className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 hover:border-earth-600 dark:hover:border-earth-400 h-full flex flex-col justify-between p-8 min-h-[280px] shadow-md hover:shadow-xl transition-all duration-300"
+              >
                 <div className="space-y-6">
                   <div className="w-12 h-12 rounded-xl bg-bone-100 dark:bg-carbon-950 border border-carbon-950/10 dark:border-bone-50/15 flex items-center justify-center text-earth-600 dark:text-earth-400 transition-colors">
                     <BookOpen className="w-6 h-6" />

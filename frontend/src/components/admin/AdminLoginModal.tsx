@@ -42,9 +42,7 @@ export const AdminLoginModal: React.FC = () => {
           <div className="inline-flex p-3 rounded-xl bg-carbon-900 border border-moss-500/20 text-moss-400">
             <ShieldCheck className="w-6 h-6" />
           </div>
-          <h2 className="font-serif text-2xl font-bold text-bone-50">
-            Coordinator Login
-          </h2>
+          <h2 className="font-serif text-2xl font-bold text-bone-50">Coordinator Login</h2>
           <p className="font-sans text-xs text-bone-200/50">
             Enter admin credentials to unlock content editing across the network.
           </p>
@@ -52,7 +50,10 @@ export const AdminLoginModal: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1">
-            <label htmlFor="modal-admin-email" className="block text-[10px] font-mono tracking-widest uppercase text-bone-200/60">
+            <label
+              htmlFor="modal-admin-email"
+              className="block text-[10px] font-mono tracking-widest uppercase text-bone-200/60"
+            >
               Email Address
             </label>
             <div className="relative">
@@ -69,7 +70,10 @@ export const AdminLoginModal: React.FC = () => {
           </div>
 
           <div className="space-y-1">
-            <label htmlFor="modal-admin-pass" className="block text-[10px] font-mono tracking-widest uppercase text-bone-200/60">
+            <label
+              htmlFor="modal-admin-pass"
+              className="block text-[10px] font-mono tracking-widest uppercase text-bone-200/60"
+            >
               Password
             </label>
             <div className="relative">

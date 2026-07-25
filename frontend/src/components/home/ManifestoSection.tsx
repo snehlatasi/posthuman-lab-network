@@ -9,7 +9,7 @@ import { Reveal } from "../ui/Reveal";
 
 export const ManifestoSection: React.FC = () => {
   return (
-    <section 
+    <section
       id="about-us"
       className="py-24 md:py-36 border-t border-carbon-950/8 dark:border-bone-50/12 relative bg-transparent transition-colors duration-300 overflow-hidden"
     >
@@ -28,10 +28,16 @@ export const ManifestoSection: React.FC = () => {
 
           <Reveal delay={0.25} yOffset={30} className="space-y-4">
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-carbon-950 dark:text-bone-50 leading-[1.05] uppercase tracking-tight">
-              Beyond Human.<br />Beyond Boundaries.
+              Beyond Human.
+              <br />
+              Beyond Boundaries.
             </h2>
             <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-              Posthumanism should not remain limited to institutions, journals, or inaccessible academic spaces. The Posthuman Lab Network is an open-access global community exploring the shifting boundaries of human consciousness, technology, and ecology. By connecting researchers, students, and creative practitioners, we work to transition critical thought into active, lived experiments.
+              Posthumanism should not remain limited to institutions, journals, or inaccessible
+              academic spaces. The Posthuman Lab Network is an open-access global community
+              exploring the shifting boundaries of human consciousness, technology, and ecology. By
+              connecting researchers, students, and creative practitioners, we work to transition
+              critical thought into active, lived experiments.
             </p>
           </Reveal>
 
@@ -52,11 +58,11 @@ export const ManifestoSection: React.FC = () => {
         <div className="col-span-12 lg:col-span-6 flex justify-center lg:justify-end">
           <Reveal delay={0.3} className="w-full max-w-md lg:max-w-lg">
             <div className="relative aspect-square w-full rounded-full overflow-hidden border border-bone-200/10 group cursor-pointer shadow-2xl">
-              <Image 
-                src="/circular_nature_portal.jpg" 
+              <Image
+                src="/circular_nature_portal.jpg"
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-[0.8] contrast-[1.05]" 
-                alt="Nature Portal entering another way of thinking" 
+                className="object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-[0.8] contrast-[1.05]"
+                alt="Nature Portal entering another way of thinking"
               />
               {/* Inner ambient shadows */}
               <div className="absolute inset-0 bg-gradient-to-t from-carbon-950/40 via-transparent to-carbon-950/40 z-10" />

@@ -18,7 +18,8 @@ export default function FoundersCollaboratorsPage() {
       <div className="space-y-12">
         <Reveal className="max-w-2xl">
           <p className="text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-            Our network functions horizontally. We are steered by a core operational team and an international advisory board of writers, researchers, and creative thinkers.
+            Our network functions horizontally. We are steered by a core operational team and an
+            international advisory board of writers, researchers, and creative thinkers.
           </p>
         </Reveal>
 
@@ -32,10 +33,20 @@ export default function FoundersCollaboratorsPage() {
                 Founders & Collaborators Index
               </h3>
               <p className="text-xs md:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-                Specific founder biographies, collaborator portraits, and advisory roles will be updated by the Posthuman Lab Network team. The operational structure is designed to function horizontally, linking regional coordinators across educational cells.
+                Specific founder biographies, collaborator portraits, and advisory roles will be
+                updated by the Posthuman Lab Network team. The operational structure is designed to
+                function horizontally, linking regional coordinators across educational cells.
               </p>
               <p className="text-xs font-mono text-carbon-700 dark:text-bone-300 leading-relaxed pt-2 border-t border-carbon-950/8 dark:border-bone-50/12 font-medium">
-                If you would like to volunteer or suggest an advisory affiliation, please query our coordinators using the <Link href="/contact/collaboration" className="text-earth-600 dark:text-earth-400 hover:text-earth-500 font-bold underline">Collaboration Contact Portal</Link>.
+                If you would like to volunteer or suggest an advisory affiliation, please query our
+                coordinators using the{" "}
+                <Link
+                  href="/contact/collaboration"
+                  className="text-earth-600 dark:text-earth-400 hover:text-earth-500 font-bold underline"
+                >
+                  Collaboration Contact Portal
+                </Link>
+                .
               </p>
             </div>
           </ContentCard>

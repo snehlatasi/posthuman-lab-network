@@ -38,7 +38,7 @@ export const FeaturedLectureSection: React.FC = () => {
                 className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-70"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-carbon-950 via-carbon-950/40 to-transparent" />
-              
+
               {/* Glowing Play circle */}
               <div className="relative z-10 w-20 h-20 rounded-full bg-[#120e0c] dark:bg-earth-600 text-bone-50 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-all duration-300 border-2 border-bone-50/70">
                 <Play className="w-7 h-7 fill-current ml-1" />
@@ -67,7 +67,9 @@ export const FeaturedLectureSection: React.FC = () => {
 
             <Reveal delay={0.3}>
               <p className="font-sans text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
-                Exploring posthuman subjectivity, agential realism, and biological citizenship. Elena Rostova analyzes Karen Barad&apos;s physical theories and Donna Haraway&apos;s planetary co-dependence models.
+                Exploring posthuman subjectivity, agential realism, and biological citizenship.
+                Elena Rostova analyzes Karen Barad&apos;s physical theories and Donna Haraway&apos;s
+                planetary co-dependence models.
               </p>
             </Reveal>
 

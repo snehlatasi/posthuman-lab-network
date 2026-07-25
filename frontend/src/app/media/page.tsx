@@ -18,23 +18,26 @@ const mediaFiles: MediaItem[] = [
     title: "Posthuman Subjectivities in the Anthropocene",
     type: "video",
     tag: "Recorded Lecture / Video",
-    description: "Opening keynote exploring biological citizenship, cybernetic links, and non-anthropocentric futures.",
-    href: "/media/youtube-lectures"
+    description:
+      "Opening keynote exploring biological citizenship, cybernetic links, and non-anthropocentric futures.",
+    href: "/media/youtube-lectures",
   },
   {
     title: "Eco-Acoustics & Trans-Species Listening",
     type: "podcast",
     tag: "Podcast / Audio",
-    description: "Podcast Episode 12: An exploration of sub-soil soundscapes, microphone ethics, and forest recordings.",
-    href: "/media/recorded-sessions"
+    description:
+      "Podcast Episode 12: An exploration of sub-soil soundscapes, microphone ethics, and forest recordings.",
+    href: "/media/recorded-sessions",
   },
   {
     title: "Digital Moss: Generative Art Synthesis",
     type: "art",
     tag: "Visual Essay / Multimedia",
-    description: "A generative browser simulation mapping simulated lichen growth patterns based on environmental grids.",
-    href: "/media/youtube-lectures"
-  }
+    description:
+      "A generative browser simulation mapping simulated lichen growth patterns based on environmental grids.",
+    href: "/media/youtube-lectures",
+  },
 ];
 
 export default function MediaArchiveMainPage() {
@@ -60,9 +63,7 @@ export default function MediaArchiveMainPage() {
                 </p>
               </div>
               <div className="pt-4">
-                <AnimatedLink href={media.href}>
-                  View Media
-                </AnimatedLink>
+                <AnimatedLink href={media.href}>View Media</AnimatedLink>
               </div>
             </div>
           </ContentCard>

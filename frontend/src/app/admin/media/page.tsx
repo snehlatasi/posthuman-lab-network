@@ -1,14 +1,20 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { cmsApi, MediaAssetDto } from "@/lib/api/cms";
+import type { MediaAssetDto } from "@/lib/api/cms";
+import { cmsApi } from "@/lib/api/cms";
 import { Image as ImageIcon, Plus, Trash2, ExternalLink } from "lucide-react";
 
 export default function AdminMediaPage() {
   const [media, setMedia] = useState<MediaAssetDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [showYoutubeModal, setShowYoutubeModal] = useState(false);
-  const [youtubeData, setYoutubeData] = useState({ url: "", title: "", category: "LECTURE", description: "" });
+  const [youtubeData, setYoutubeData] = useState({
+    url: "",
+    title: "",
+    category: "LECTURE",
+    description: "",
+  });
 
   const loadMedia = async () => {
     setLoading(true);
@@ -47,7 +53,9 @@ export default function AdminMediaPage() {
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
             Media Library & YouTube Videos
           </h2>
-          <p className="font-sans text-xs text-bone-200 font-medium">Manage video embeds, uploaded assets, and gallery images.</p>
+          <p className="font-sans text-xs text-bone-200 font-medium">
+            Manage video embeds, uploaded assets, and gallery images.
+          </p>
         </div>
         <button
           onClick={() => setShowYoutubeModal(true)}
@@ -60,7 +68,10 @@ export default function AdminMediaPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {media.map((item) => (
-          <div key={item.id} className="p-4 rounded-2xl bg-carbon-900 border border-bone-50/15 space-y-3 flex flex-col justify-between shadow-md">
+          <div
+            key={item.id}
+            className="p-4 rounded-2xl bg-carbon-900 border border-bone-50/15 space-y-3 flex flex-col justify-between shadow-md"
+          >
             <div className="space-y-3">
               <div className="h-36 rounded-xl bg-carbon-950 flex items-center justify-center relative overflow-hidden">
                 {item.provider === "YOUTUBE" ? (
@@ -77,7 +88,9 @@ export default function AdminMediaPage() {
                 <span className="font-mono text-[9px] uppercase tracking-wider text-earth-400 font-bold block">
                   {item.provider} • {item.mediaType}
                 </span>
-                <h3 className="font-serif text-sm font-bold text-bone-50 truncate">{item.title || item.filename}</h3>
+                <h3 className="font-serif text-sm font-bold text-bone-50 truncate">
+                  {item.title || item.filename}
+                </h3>
               </div>
             </div>
 
@@ -113,8 +126,13 @@ export default function AdminMediaPage() {
 
       {showYoutubeModal && (
         <div className="fixed inset-0 bg-carbon-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <form onSubmit={handleAddYouTube} className="bg-carbon-900 border border-bone-50/15 p-6 rounded-3xl max-w-lg w-full space-y-4 shadow-2xl">
-            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase">Add YouTube Video</h3>
+          <form
+            onSubmit={handleAddYouTube}
+            className="bg-carbon-900 border border-bone-50/15 p-6 rounded-3xl max-w-lg w-full space-y-4 shadow-2xl"
+          >
+            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase">
+              Add YouTube Video
+            </h3>
             <div className="space-y-3 text-xs">
               <input
                 type="url"
