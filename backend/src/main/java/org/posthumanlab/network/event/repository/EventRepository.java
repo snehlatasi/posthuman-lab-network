@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Long> {
     Optional<Event> findBySlug(String slug);
     List<Event> findByStatusOrderByStartDateTimeAsc(EventStatus status);
+    long countByStatus(EventStatus status);
 }

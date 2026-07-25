@@ -567,6 +567,9 @@ export const ImmersiveHero3D: React.FC = () => {
   const shouldReduceMotion = useSafeReducedMotion();
   const { resolvedTheme } = useTheme();
   const [webGLSupport, setWebGLSupport] = useState<boolean | null>(null);
+  const [isCanvasVisible, setIsCanvasVisible] = useState(true);
+  const [isTabVisible, setIsTabVisible] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkWebGL = () => {
@@ -582,6 +585,27 @@ export const ImmersiveHero3D: React.FC = () => {
       }
     };
     checkWebGL();
+
+    const handleVisibilityChange = () => {
+      setIsTabVisible(!document.hidden);
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsCanvasVisible(entry.isIntersecting);
+      },
+      { threshold: 0.05 }
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      observer.disconnect();
+    };
   }, []);
 
   if (webGLSupport === false) {
@@ -605,6 +629,7 @@ export const ImmersiveHero3D: React.FC = () => {
 
   return (
     <div
+      ref={containerRef}
       className="absolute inset-0 w-full h-full pointer-events-none z-0 transition-all duration-500"
       style={{
         display: "block",
@@ -615,8 +640,9 @@ export const ImmersiveHero3D: React.FC = () => {
     >
       <Canvas
         camera={{ position: [0, 0, 10], fov: 45 }}
+        frameloop={isCanvasVisible && isTabVisible ? "always" : "never"}
         style={{ pointerEvents: "auto", width: "100%", height: "100%" }}
-        gl={{ alpha: true, antialias: true }}
+        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
       >
         <SceneCoordinator shouldReduceMotion={shouldReduceMotion} resolvedTheme={resolvedTheme} />
       </Canvas>

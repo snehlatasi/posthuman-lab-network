@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface MembershipInterestRepository extends JpaRepository<MembershipInterest, Long> {
     List<MembershipInterest> findByStatusOrderByCreatedAtDesc(MembershipInterestStatus status);
+    long countByStatus(MembershipInterestStatus status);
 }

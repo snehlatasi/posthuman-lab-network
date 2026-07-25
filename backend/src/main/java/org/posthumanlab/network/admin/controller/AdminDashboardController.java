@@ -45,11 +45,11 @@ public class AdminDashboardController {
     public ResponseEntity<AdminDashboardStatsDto> getDashboardStats() {
         AdminDashboardStatsDto dto = new AdminDashboardStatsDto();
         dto.setTotalBlogPosts(blogPostRepository.count());
-        dto.setPublishedBlogPosts(blogPostRepository.findByStatusOrderByPublishedAtDesc(BlogPostStatus.PUBLISHED).size());
+        dto.setPublishedBlogPosts(blogPostRepository.countByStatus(BlogPostStatus.PUBLISHED));
         dto.setTotalEvents(eventRepository.count());
-        dto.setUpcomingEvents(eventRepository.findByStatusOrderByStartDateTimeAsc(EventStatus.UPCOMING).size());
+        dto.setUpcomingEvents(eventRepository.countByStatus(EventStatus.UPCOMING));
         dto.setTotalPublications(publicationRepository.count());
-        dto.setPendingMemberships(membershipInterestRepository.findByStatusOrderByCreatedAtDesc(MembershipInterestStatus.NEW).size());
+        dto.setPendingMemberships(membershipInterestRepository.countByStatus(MembershipInterestStatus.NEW));
         dto.setTotalContactMessages(contactRepository.count());
         dto.setTotalCollaborationRequests(collaborationRequestRepository.count());
         return ResponseEntity.ok(dto);

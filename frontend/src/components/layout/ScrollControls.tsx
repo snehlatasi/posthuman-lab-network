@@ -19,8 +19,11 @@ export const ScrollControls: React.FC = () => {
           const docHeight = document.documentElement.scrollHeight;
           const winHeight = window.innerHeight;
 
-          setShowUp(scrollY > 120);
-          setShowDown(scrollY + winHeight < docHeight - 80);
+          const nextUp = scrollY > 120;
+          const nextDown = scrollY + winHeight < docHeight - 80;
+
+          setShowUp((prev) => (prev !== nextUp ? nextUp : prev));
+          setShowDown((prev) => (prev !== nextDown ? nextDown : prev));
 
           ticking = false;
         });

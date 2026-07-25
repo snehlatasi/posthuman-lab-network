@@ -53,7 +53,7 @@ export default function HomePage() {
               }
             }
           }
-          setActiveSection(currentActive);
+          setActiveSection((prev) => (prev !== currentActive ? currentActive : prev));
           ticking = false;
         });
         ticking = true;

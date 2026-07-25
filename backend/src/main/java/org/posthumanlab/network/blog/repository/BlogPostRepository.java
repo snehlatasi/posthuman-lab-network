@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface BlogPostRepository extends JpaRepository<BlogPost, Long> {
     List<BlogPost> findByStatusOrderByPublishedAtDesc(BlogPostStatus status);
+    long countByStatus(BlogPostStatus status);
     Optional<BlogPost> findBySlugAndStatus(String slug, BlogPostStatus status);
     Optional<BlogPost> findBySlug(String slug);
 }

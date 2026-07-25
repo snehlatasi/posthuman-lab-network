@@ -48,12 +48,23 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/blog/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/publications/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/media/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/people/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/conversations/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/learning/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/labs/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/curation/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/public/**").permitAll()
+                .requestMatchers("/uploads/**").permitAll()
 
                 // Public POST endpoints for user form submissions
                 .requestMatchers(HttpMethod.POST, "/api/membership/interests").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/contact").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/collaboration").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/publications/submit").permitAll()
+
+                // Public member authentication and application submission endpoints
+                .requestMatchers("/api/members/**").permitAll()
 
                 // H2 console & Swagger docs
                 .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()

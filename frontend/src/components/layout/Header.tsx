@@ -9,10 +9,12 @@ import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { Menu, X, ArrowRight, ChevronDown, ShieldCheck } from "lucide-react";
 import { navigationConfig, NavigationGroup } from "@/lib/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useMember } from "@/context/MemberContext";
 import { ThemeSelector } from "@/components/ui/ThemeSelector";
 
 export const Header: React.FC = () => {
   const { isAdmin, openLoginModal } = useAuth();
+  const { member } = useMember();
   const [isOpen, setIsOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,6 +22,12 @@ export const Header: React.FC = () => {
   const shouldReduceMotion = useSafeReducedMotion();
   const headerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setIsOpen(false);
@@ -169,7 +177,7 @@ export const Header: React.FC = () => {
           {/* Segmented Theme Preference Control */}
           <ThemeSelector variant="pills" />
 
-          {!isAdmin && (
+          {mounted && !isAdmin && (
             <button
               onClick={openLoginModal}
               className="hidden xl:inline-flex items-center space-x-1 px-2.5 py-1.5 2xl:px-3 2xl:py-2 text-[10.5px] xl:text-[11px] 2xl:text-xs font-mono tracking-wider uppercase text-[#3a2e28] dark:text-[#d5d0c4] hover:text-earth-600 dark:hover:text-earth-400 border border-[#120e0c]/15 dark:border-bone-50/20 hover:border-earth-500/40 rounded-full transition-colors cursor-pointer bg-bone-100/80 dark:bg-carbon-900/80 whitespace-nowrap shrink-0"
@@ -179,12 +187,23 @@ export const Header: React.FC = () => {
             </button>
           )}
 
+          {/* Google Member State Indicator */}
+          {mounted && member && (
+            <Link
+              href="/membership/become-a-member"
+              className="hidden xl:inline-flex items-center space-x-1.5 px-2.5 py-1.5 text-[10.5px] font-mono tracking-wider uppercase bg-earth-500/15 border border-earth-500/30 text-earth-600 dark:text-earth-400 rounded-full hover:bg-earth-500/25 transition-colors shrink-0 whitespace-nowrap"
+            >
+              <div className="w-2 h-2 rounded-full bg-earth-500 animate-pulse" />
+              <span>{member.status === "APPROVED" ? "MEMBER" : "APPLICANT"}</span>
+            </Link>
+          )}
+
           <Link
             href="/membership/become-a-member"
             onClick={() => setActiveGroup(null)}
             className="hidden sm:inline-flex items-center justify-center px-3.5 py-1.5 xl:px-4 xl:py-1.5 2xl:px-5 2xl:py-2 text-[10.5px] xl:text-[11px] 2xl:text-xs font-sans tracking-widest uppercase font-semibold text-bone-50 bg-[#120e0c] dark:bg-earth-600 hover:bg-earth-600 dark:hover:bg-earth-500 transition-all duration-200 rounded-full focus:outline-none focus:ring-2 focus:ring-earth-500/40 shadow-sm shrink-0 whitespace-nowrap"
           >
-            Join the Network
+            {mounted && member ? "Member Account" : "Join the Network"}
           </Link>
 
           <button

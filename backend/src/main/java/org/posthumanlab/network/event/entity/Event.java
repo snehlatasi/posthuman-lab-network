@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "events", uniqueConstraints = {
     @UniqueConstraint(columnNames = "slug")
+}, indexes = {
+    @Index(name = "idx_event_status_start", columnList = "status, start_date_time"),
+    @Index(name = "idx_event_slug", columnList = "slug")
 })
 public class Event {
 

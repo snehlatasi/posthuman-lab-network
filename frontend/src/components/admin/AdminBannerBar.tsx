@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import React from "react";
 import Link from "next/link";
@@ -7,8 +8,13 @@ import { ShieldCheck, Settings, LogOut, ExternalLink } from "lucide-react";
 
 export const AdminBannerBar: React.FC = () => {
   const { isAdmin, adminEmail, logout } = useAuth();
+  const [mounted, setMounted] = React.useState(false);
 
-  if (!isAdmin) return null;
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || !isAdmin) return null;
 
   return (
     <div className="bg-moss-950 border-b border-moss-500/30 text-moss-300 px-4 py-2 text-xs font-mono flex flex-wrap items-center justify-between z-[60] relative">

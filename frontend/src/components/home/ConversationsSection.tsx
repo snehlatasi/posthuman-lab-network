@@ -1,14 +1,45 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { conversationsList } from "@/data/homepage";
 import { Container } from "../layout/Primitives";
 import { Reveal, StaggerItem } from "../ui/Reveal";
+import { cmsApi } from "@/lib/api/cms";
+
+const fallbackList = conversationsList.map((c, i) => ({
+  number: String(i + 1).padStart(2, "0"),
+  title: c.title,
+  tag: c.tag,
+  description: c.description,
+  href: c.href
+}));
 
 export const ConversationsSection: React.FC = () => {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [items, setItems] = useState<Array<{ number: string; title: string; tag: string; description: string; href: string }>>([]);
+
+  useEffect(() => {
+    cmsApi.getConversations()
+      .then((res) => {
+        if (res && res.length > 0) {
+          const mapped = res.map((c, i) => ({
+            number: c.displayNumber || String(i + 1).padStart(2, "0"),
+            title: c.title,
+            tag: c.category || "Research Focus",
+            description: c.shortDescription,
+            href: `/learning`
+          }));
+          setItems(mapped);
+        } else {
+          setItems(fallbackList);
+        }
+      })
+      .catch(() => setItems(fallbackList));
+  }, []);
+
+  const displayItems = items.length > 0 ? items : fallbackList;
 
   return (
     <section id="conversations" className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300">
@@ -34,7 +65,7 @@ export const ConversationsSection: React.FC = () => {
 
         {/* Structured Row List - 12 Column Aligned Grid */}
         <Reveal staggerChildren={0.12} className="border-t border-carbon-950/10 dark:border-bone-50/12 pt-2">
-          {conversationsList.map((item, idx) => {
+          {displayItems.map((item, idx) => {
             const isHovered = hoveredIdx === idx;
             return (
               <StaggerItem key={item.title} yOffset={20}>
