@@ -32,7 +32,18 @@ public class BlogPostService {
 
     @Transactional(readOnly = true)
     public List<BlogPostDto> getPublishedPosts() {
-        List<BlogPost> posts = blogPostRepository.findByStatusOrderByPublishedAtDesc(BlogPostStatus.PUBLISHED);
+        return getPublishedPosts(null, null);
+    }
+
+    @Transactional(readOnly = true)
+    public List<BlogPostDto> getPublishedPosts(Integer page, Integer size) {
+        List<BlogPost> posts;
+        if (page != null && size != null && page >= 0 && size > 0) {
+            org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+            posts = blogPostRepository.findByStatusOrderByPublishedAtDesc(BlogPostStatus.PUBLISHED, pageable).getContent();
+        } else {
+            posts = blogPostRepository.findByStatusOrderByPublishedAtDesc(BlogPostStatus.PUBLISHED);
+        }
         List<BlogPostDto> dtos = new ArrayList<BlogPostDto>();
         for (BlogPost post : posts) {
             dtos.add(mapToDto(post));

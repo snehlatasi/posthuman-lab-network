@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { useState, useEffect } from "react";
 import { publicationsApi, PublicationApiDto } from "@/lib/api/publications";
@@ -39,6 +38,7 @@ export default function AdminPublicationsPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadPublications();
   }, []);
 

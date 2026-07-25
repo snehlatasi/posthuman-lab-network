@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { useState, useEffect } from "react";
 import { blogApi, BlogPost } from "@/lib/api/blog";
@@ -33,6 +32,7 @@ export default function AdminBlogPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadPosts();
   }, []);
 

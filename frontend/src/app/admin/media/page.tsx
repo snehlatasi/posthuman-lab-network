@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { useState, useEffect } from "react";
 import { cmsApi, MediaAssetDto } from "@/lib/api/cms";
@@ -24,6 +23,7 @@ export default function AdminMediaPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadMedia();
   }, []);
 

@@ -62,20 +62,30 @@ public class MediaStorageService {
         return mediaAssetRepository.save(asset);
     }
 
+    private static final long MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024; // 50MB max
+    private static final List<String> ALLOWED_EXTENSIONS = List.of(".jpg", ".jpeg", ".png", ".webp", ".gif", ".mp4", ".webm", ".mp3", ".wav", ".pdf");
+
     public MediaAsset uploadFile(MultipartFile file, String title, String altText) throws IOException {
         if (file.isEmpty()) {
             throw new IllegalArgumentException("Uploaded file cannot be empty.");
         }
-
-        File uploadDirFolder = new File(UPLOAD_DIR);
-        if (!uploadDirFolder.exists()) {
-            uploadDirFolder.mkdirs();
+        if (file.getSize() > MAX_FILE_SIZE_BYTES) {
+            throw new IllegalArgumentException("File size exceeds maximum allowed limit of 50MB.");
         }
 
         String originalName = file.getOriginalFilename();
         String extension = "";
         if (originalName != null && originalName.contains(".")) {
-            extension = originalName.substring(originalName.lastIndexOf("."));
+            extension = originalName.substring(originalName.lastIndexOf(".")).toLowerCase();
+        }
+
+        if (!ALLOWED_EXTENSIONS.contains(extension)) {
+            throw new IllegalArgumentException("Invalid file extension: " + extension + ". Allowed file types: " + String.join(", ", ALLOWED_EXTENSIONS));
+        }
+
+        File uploadDirFolder = new File(UPLOAD_DIR);
+        if (!uploadDirFolder.exists()) {
+            uploadDirFolder.mkdirs();
         }
 
         String uniqueFilename = UUID.randomUUID().toString() + extension;
@@ -115,6 +125,18 @@ public class MediaStorageService {
     }
 
     public void deleteMedia(Long id) {
-        mediaAssetRepository.deleteById(id);
+        Optional<MediaAsset> assetOpt = mediaAssetRepository.findById(id);
+        if (assetOpt.isPresent()) {
+            MediaAsset asset = assetOpt.get();
+            if (asset.getProvider() == MediaProvider.LOCAL && asset.getFilename() != null) {
+                try {
+                    Path filePath = Paths.get(UPLOAD_DIR).resolve(asset.getFilename());
+                    Files.deleteIfExists(filePath);
+                } catch (IOException ignored) {
+                    // Log warning if physical file delete fails
+                }
+            }
+            mediaAssetRepository.deleteById(id);
+        }
     }
 }

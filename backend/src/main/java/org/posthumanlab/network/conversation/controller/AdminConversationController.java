@@ -1,5 +1,6 @@
 package org.posthumanlab.network.conversation.controller;
 
+import jakarta.validation.Valid;
 import org.posthumanlab.network.conversation.entity.Conversation;
 import org.posthumanlab.network.conversation.repository.ConversationRepository;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class AdminConversationController {
     }
 
     @PostMapping
-    public ResponseEntity<Conversation> createConversation(@RequestBody Conversation conversation) {
+    public ResponseEntity<Conversation> createConversation(@Valid @RequestBody Conversation conversation) {
         if (conversation.getSlug() == null || conversation.getSlug().isBlank()) {
             conversation.setSlug(conversation.getTitle().toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-+|-+$", ""));
         }
@@ -33,7 +34,7 @@ public class AdminConversationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Conversation> updateConversation(@PathVariable("id") Long id, @RequestBody Conversation conversation) {
+    public ResponseEntity<Conversation> updateConversation(@PathVariable("id") Long id, @Valid @RequestBody Conversation conversation) {
         conversation.setId(id);
         Conversation updated = conversationRepository.save(conversation);
         return ResponseEntity.ok(updated);

@@ -1,5 +1,6 @@
 package org.posthumanlab.network.curation.controller;
 
+import jakarta.validation.Valid;
 import org.posthumanlab.network.curation.entity.HomepageCuration;
 import org.posthumanlab.network.curation.repository.HomepageCurationRepository;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class AdminCurationController {
     }
 
     @PutMapping
-    public ResponseEntity<HomepageCuration> updateCurationSettings(@RequestBody HomepageCuration curation) {
+    public ResponseEntity<HomepageCuration> updateCurationSettings(@Valid @RequestBody HomepageCuration curation) {
         curation.setId(1L);
         HomepageCuration updated = homepageCurationRepository.save(curation);
         return ResponseEntity.ok(updated);

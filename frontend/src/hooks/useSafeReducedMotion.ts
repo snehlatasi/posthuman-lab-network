@@ -1,6 +1,7 @@
-/* eslint-disable react-hooks/set-state-in-effect */
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 import { useReducedMotion } from "framer-motion";
+
+const emptySubscribe = () => () => {};
 
 /**
  * A safe wrapper around Framer Motion's useReducedMotion hook.
@@ -8,12 +9,12 @@ import { useReducedMotion } from "framer-motion";
  * media queries until the component is mounted.
  */
 export function useSafeReducedMotion(): boolean {
-  const [mounted, setMounted] = useState(false);
+  const isClient = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
   const isReduced = useReducedMotion();
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  return mounted ? !!isReduced : false;
+  return isClient ? !!isReduced : false;
 }

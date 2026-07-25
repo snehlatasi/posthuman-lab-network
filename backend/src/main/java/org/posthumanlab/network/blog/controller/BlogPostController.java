@@ -21,8 +21,10 @@ public class BlogPostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BlogPostDto>> getPublishedPosts() {
-        return ResponseEntity.ok(blogPostService.getPublishedPosts());
+    public ResponseEntity<List<BlogPostDto>> getPublishedPosts(
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size) {
+        return ResponseEntity.ok(blogPostService.getPublishedPosts(page, size));
     }
 
     @GetMapping("/admin/all")

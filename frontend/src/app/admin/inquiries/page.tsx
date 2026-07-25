@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { useState, useEffect } from "react";
 import { contactApi, ContactResponseDto } from "@/lib/api/contact";
@@ -34,6 +33,7 @@ export default function AdminInquiriesPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadInquiries();
   }, []);
 

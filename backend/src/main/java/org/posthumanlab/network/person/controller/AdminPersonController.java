@@ -1,5 +1,6 @@
 package org.posthumanlab.network.person.controller;
 
+import jakarta.validation.Valid;
 import org.posthumanlab.network.person.entity.Person;
 import org.posthumanlab.network.person.repository.PersonRepository;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class AdminPersonController {
     }
 
     @PostMapping
-    public ResponseEntity<Person> createPerson(@RequestBody Person person) {
+    public ResponseEntity<Person> createPerson(@Valid @RequestBody Person person) {
         if (person.getSlug() == null || person.getSlug().isBlank()) {
             person.setSlug(person.getName().toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-+|-+$", ""));
         }
@@ -33,7 +34,7 @@ public class AdminPersonController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Person> updatePerson(@PathVariable("id") Long id, @RequestBody Person person) {
+    public ResponseEntity<Person> updatePerson(@PathVariable("id") Long id, @Valid @RequestBody Person person) {
         person.setId(id);
         Person updated = personRepository.save(person);
         return ResponseEntity.ok(updated);

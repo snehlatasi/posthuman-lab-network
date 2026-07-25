@@ -1,5 +1,6 @@
 package org.posthumanlab.network.learning.controller;
 
+import jakarta.validation.Valid;
 import org.posthumanlab.network.learning.entity.LearningResource;
 import org.posthumanlab.network.learning.repository.LearningResourceRepository;
 import org.springframework.http.HttpStatus;
@@ -24,7 +25,7 @@ public class AdminLearningResourceController {
     }
 
     @PostMapping
-    public ResponseEntity<LearningResource> createResource(@RequestBody LearningResource resource) {
+    public ResponseEntity<LearningResource> createResource(@Valid @RequestBody LearningResource resource) {
         if (resource.getSlug() == null || resource.getSlug().isBlank()) {
             resource.setSlug(resource.getTitle().toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-+|-+$", ""));
         }
@@ -33,7 +34,7 @@ public class AdminLearningResourceController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<LearningResource> updateResource(@PathVariable("id") Long id, @RequestBody LearningResource resource) {
+    public ResponseEntity<LearningResource> updateResource(@PathVariable("id") Long id, @Valid @RequestBody LearningResource resource) {
         resource.setId(id);
         LearningResource updated = learningResourceRepository.save(resource);
         return ResponseEntity.ok(updated);

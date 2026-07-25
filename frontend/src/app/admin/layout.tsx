@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
@@ -46,19 +45,24 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const pathname = usePathname();
 
-  const [mounted, setMounted] = useState<boolean>(false);
   const [authorized, setAuthorized] = useState<boolean>(false);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [loadingTelemetry, setLoadingTelemetry] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const emptySubscribe = React.useCallback(() => () => {}, []);
+  const mounted = React.useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   useEffect(() => {
-    setMounted(true);
     if (pathname === "/admin/login") return;
 
     const token = getStoredToken();
     if (!token) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAuthorized(false);
       router.push("/admin/login");
     } else {

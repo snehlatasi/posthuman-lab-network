@@ -16,8 +16,11 @@ public class JwtTokenProvider {
     private final long jwtExpirationMs;
 
     public JwtTokenProvider(
-            @Value("${app.jwt.secret:PosthumanLabNetworkSuperSecretSigningKey2026SecureKey!}") String secret,
+            @Value("${app.jwt.secret:}") String secret,
             @Value("${app.jwt.expiration-ms:86400000}") long jwtExpirationMs) {
+        if (secret == null || secret.trim().isEmpty() || secret.getBytes(StandardCharsets.UTF_8).length < 32) {
+            throw new IllegalStateException("CRITICAL SECURITY ERROR: app.jwt.secret must be explicitly configured with a secure key of at least 32 characters (256 bits). Cannot start application with an unconfigured or insecure secret!");
+        }
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
         this.jwtExpirationMs = jwtExpirationMs;
     }

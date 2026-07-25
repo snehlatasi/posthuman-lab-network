@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
 import React from "react";
 import Link from "next/link";
@@ -7,11 +6,7 @@ import { navigationConfig } from "@/lib/navigation";
 import { ArrowRight, Github, Twitter, Youtube, Globe } from "lucide-react";
 
 export const Footer: React.FC = () => {
-  const [currentYear, setCurrentYear] = React.useState(2026);
-
-  React.useEffect(() => {
-    setCurrentYear(new Date().getFullYear());
-  }, []);
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="relative bg-bone-50/80 dark:bg-carbon-950/85 border-t border-carbon-950/8 dark:border-bone-50/12 mt-auto pt-16 pb-8 z-20 backdrop-blur-md transition-colors duration-300">

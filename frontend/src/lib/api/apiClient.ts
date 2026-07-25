@@ -1,4 +1,5 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080";
+const rawBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+const BASE_URL = rawBaseUrl.replace(/\/api\/v1\/?$/, "").replace(/\/+$/, "");
 
 export function getStoredToken(): string | null {
   if (typeof window === "undefined") return null;

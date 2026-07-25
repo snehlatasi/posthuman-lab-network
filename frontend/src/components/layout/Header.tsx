@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
@@ -23,13 +22,15 @@ export const Header: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [mounted, setMounted] = useState(false);
+  const emptySubscribe = React.useCallback(() => () => {}, []);
+  const mounted = React.useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOpen(false);
     setActiveGroup(null);
   }, [pathname]);

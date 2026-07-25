@@ -1,5 +1,6 @@
 package org.posthumanlab.network.media.controller;
 
+import jakarta.validation.Valid;
 import org.posthumanlab.network.media.entity.GalleryAlbum;
 import org.posthumanlab.network.media.entity.GalleryImage;
 import org.posthumanlab.network.media.entity.MediaAsset;
@@ -59,7 +60,7 @@ public class AdminMediaController {
     }
 
     @PostMapping("/albums")
-    public ResponseEntity<GalleryAlbum> createAlbum(@RequestBody GalleryAlbum album) {
+    public ResponseEntity<GalleryAlbum> createAlbum(@Valid @RequestBody GalleryAlbum album) {
         if (album.getSlug() == null || album.getSlug().isBlank()) {
             album.setSlug(album.getTitle().toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-+|-+$", ""));
         }
@@ -68,7 +69,7 @@ public class AdminMediaController {
     }
 
     @PostMapping("/albums/{id}/images")
-    public ResponseEntity<GalleryImage> addImageToAlbum(@PathVariable("id") Long albumId, @RequestBody GalleryImage image) {
+    public ResponseEntity<GalleryImage> addImageToAlbum(@PathVariable("id") Long albumId, @Valid @RequestBody GalleryImage image) {
         image.setAlbumId(albumId);
         GalleryImage saved = galleryImageRepository.save(image);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);

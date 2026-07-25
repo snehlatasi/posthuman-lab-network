@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { memberAuthApi, GoogleAuthResponseDto, GoogleAuthRequestDto } from "@/lib/api/memberAuth";
@@ -29,22 +28,58 @@ const MemberContext = createContext<MemberContextType>({
 });
 
 export const MemberProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [member, setMember] = useState<MemberUser | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
+  const [member, setMember] = useState<MemberUser | null>(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("posthuman_member_user");
       if (stored) {
         try {
-          const parsed = JSON.parse(stored);
-          setMember(parsed);
+          return JSON.parse(stored);
         } catch {
           localStorage.removeItem("posthuman_member_user");
         }
       }
     }
-    setLoading(false);
+    return null;
+  });
+
+  const [loading] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return false;
+    }
+    return true;
+  });
+
+  useEffect(() => {
+    // Background re-validation of cached member status against backend
+    const stored = typeof window !== "undefined" ? localStorage.getItem("posthuman_member_user") : null;
+    if (stored) {
+      try {
+        const cached: MemberUser = JSON.parse(stored);
+        if (cached && cached.googleSubjectId) {
+          memberAuthApi
+            .verifyGoogleIdentity({
+              googleSubjectId: cached.googleSubjectId,
+              email: cached.email,
+              fullName: cached.fullName,
+              profileImageUrl: cached.profileImageUrl
+            })
+            .then((res) => {
+              if (res && res.status && res.status !== cached.status) {
+                const updated: MemberUser = { ...cached, status: res.status };
+                setMember(updated);
+                if (typeof window !== "undefined") {
+                  localStorage.setItem("posthuman_member_user", JSON.stringify(updated));
+                }
+              }
+            })
+            .catch(() => {
+              // Ignore network errors on background revalidation
+            });
+        }
+      } catch {
+        // Ignore parse error
+      }
+    }
   }, []);
 
   const loginWithGoogle = async (googleData: GoogleAuthRequestDto): Promise<GoogleAuthResponseDto> => {

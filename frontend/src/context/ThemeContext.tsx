@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
@@ -41,7 +40,12 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const initial = getInitialTheme();
     return initial === "system" ? getSystemTheme() : initial;
   });
-  const [mounted, setMounted] = useState(false);
+  const emptySubscribe = React.useCallback(() => () => {}, []);
+  const mounted = React.useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
 
   const applyThemeToDOM = (resolved: ResolvedTheme) => {
     if (typeof document === "undefined") return;
@@ -60,13 +64,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   useEffect(() => {
-    setMounted(true);
-    const initialTheme = getInitialTheme();
-    setThemeState(initialTheme);
-    const activeResolved = initialTheme === "system" ? getSystemTheme() : initialTheme;
-    setResolvedTheme(activeResolved);
-    applyThemeToDOM(activeResolved);
-  }, []);
+    applyThemeToDOM(resolvedTheme);
+  }, [resolvedTheme]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;

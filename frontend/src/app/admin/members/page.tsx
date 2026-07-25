@@ -1,5 +1,4 @@
 "use client";
-/* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { useState, useEffect } from "react";
 import { memberAuthApi, MemberDto } from "@/lib/api/memberAuth";
@@ -23,6 +22,7 @@ export default function AdminMembersPage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadMembers();
   }, []);
 

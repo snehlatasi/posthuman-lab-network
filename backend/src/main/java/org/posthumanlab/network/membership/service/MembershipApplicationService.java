@@ -16,19 +16,34 @@ public class MembershipApplicationService {
 
     private final MembershipApplicationRepository applicationRepository;
     private final MemberRepository memberRepository;
+    private final GoogleTokenVerifierService tokenVerifier;
 
     public MembershipApplicationService(
             MembershipApplicationRepository applicationRepository,
-            MemberRepository memberRepository) {
+            MemberRepository memberRepository,
+            GoogleTokenVerifierService tokenVerifier) {
         this.applicationRepository = applicationRepository;
         this.memberRepository = memberRepository;
+        this.tokenVerifier = tokenVerifier;
     }
 
     public GoogleAuthResponse verifyGoogleIdentity(GoogleAuthRequest req) {
-        // 1. Check if user is already an approved member
-        Optional<Member> existingMember = memberRepository.findByGoogleSubjectId(req.getGoogleSubjectId());
+        // 1. Perform cryptographic Google ID token verification
+        GoogleTokenVerifierService.VerifiedGoogleToken verified = tokenVerifier.verify(
+                req.getIdToken(),
+                req.getGoogleSubjectId(),
+                req.getEmail(),
+                req.getFullName(),
+                req.getProfileImageUrl()
+        );
+
+        String subjectId = verified.getSubjectId();
+        String email = verified.getEmail();
+
+        // 2. Check if user is already an approved member
+        Optional<Member> existingMember = memberRepository.findByGoogleSubjectId(subjectId);
         if (!existingMember.isPresent()) {
-            existingMember = memberRepository.findByEmail(req.getEmail());
+            existingMember = memberRepository.findByEmail(email);
         }
 
         if (existingMember.isPresent()) {
@@ -36,10 +51,10 @@ public class MembershipApplicationService {
             return new GoogleAuthResponse("APPROVED", null, m.getId(), m.getEmail(), m.getFullName(), m.getProfileImageUrl());
         }
 
-        // 2. Check if user has an existing application
-        Optional<MembershipApplication> existingApp = applicationRepository.findByGoogleSubjectId(req.getGoogleSubjectId());
+        // 3. Check if user has an existing application
+        Optional<MembershipApplication> existingApp = applicationRepository.findByGoogleSubjectId(subjectId);
         if (!existingApp.isPresent()) {
-            existingApp = applicationRepository.findByEmail(req.getEmail());
+            existingApp = applicationRepository.findByEmail(email);
         }
 
         if (existingApp.isPresent()) {
@@ -47,8 +62,8 @@ public class MembershipApplicationService {
             return new GoogleAuthResponse(app.getStatus().name(), app.getId(), null, app.getEmail(), app.getFullName(), app.getProfileImageUrl());
         }
 
-        // 3. Not applied yet
-        return new GoogleAuthResponse("NOT_APPLIED", null, null, req.getEmail(), req.getFullName(), req.getProfileImageUrl());
+        // 4. Not applied yet
+        return new GoogleAuthResponse("NOT_APPLIED", null, null, email, verified.getName(), verified.getPictureUrl());
     }
 
     @Transactional
