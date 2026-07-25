@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -267,6 +268,81 @@ public class DomainControllersTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email", is("priya@example.com")))
                 .andExpect(jsonPath("$.status", is("PENDING")));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ROLE_ADMIN")
+    public void testAdminCanDeactivateWronglyApprovedMember() throws Exception {
+        String signupPayload = """
+                {
+                  "fullName": "Wrong Approval",
+                  "email": "wrong-approval@example.com",
+                  "password": "MemberPass123!"
+                }
+                """;
+
+        String challengeJson = mockMvc.perform(post("/api/members/auth/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(signupPayload))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String otp = objectMapper.readTree(challengeJson).get("devOtp").asText();
+        String verifyPayload = """
+                {
+                  "email": "wrong-approval@example.com",
+                  "otp": "%s"
+                }
+                """.formatted(otp);
+
+        String authJson = mockMvc.perform(post("/api/members/auth/verify-otp")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(verifyPayload))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String accountSubjectId = objectMapper.readTree(authJson).get("accountSubjectId").asText();
+        String applicationPayload = """
+                {
+                  "googleSubjectId": "%s",
+                  "email": "wrong-approval@example.com",
+                  "fullName": "Wrong Approval",
+                  "areasOfInterest": "review correction"
+                }
+                """.formatted(accountSubjectId);
+
+        String applicationJson = mockMvc.perform(post("/api/members/apply")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(applicationPayload))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        long applicationId = objectMapper.readTree(applicationJson).get("id").asLong();
+        mockMvc.perform(put("/api/admin/members/applications/{id}/approve", applicationId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is("APPROVED")));
+
+        String membersJson = mockMvc.perform(get("/api/admin/members/list"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].status", is("ACTIVE")))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        long memberId = objectMapper.readTree(membersJson).get(0).get("id").asLong();
+        mockMvc.perform(put("/api/admin/members/list/{id}/deactivate", memberId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is("SUSPENDED")));
+
+        mockMvc.perform(get("/api/members/directory"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test

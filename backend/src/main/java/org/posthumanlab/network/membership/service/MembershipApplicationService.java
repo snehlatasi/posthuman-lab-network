@@ -131,12 +131,36 @@ public class MembershipApplicationService {
         return applicationRepository.save(app);
     }
 
+    @Transactional
+    public Member deactivateMember(Long id, String reviewerEmail) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Member not found with ID: " + id));
+
+        member.setStatus(MemberStatus.SUSPENDED);
+        Member savedMember = memberRepository.save(member);
+
+        Optional<MembershipApplication> existingApplication = applicationRepository.findByGoogleSubjectId(member.getGoogleSubjectId());
+        if (!existingApplication.isPresent()) {
+            existingApplication = applicationRepository.findByEmail(member.getEmail());
+        }
+
+        if (existingApplication.isPresent()) {
+            MembershipApplication app = existingApplication.get();
+            app.setStatus(MembershipApplicationStatus.REJECTED);
+            app.setReviewedAt(LocalDateTime.now());
+            app.setReviewedBy(reviewerEmail);
+            applicationRepository.save(app);
+        }
+
+        return savedMember;
+    }
+
     public List<Member> getAllApprovedMembers() {
-        return memberRepository.findByStatusOrderByJoinedAtDesc(MemberStatus.ACTIVE);
+        return memberRepository.findAllByOrderByJoinedAtDesc();
     }
 
     public List<PublicMemberDto> getPublicDirectory() {
-        return getAllApprovedMembers().stream()
+        return memberRepository.findByStatusOrderByJoinedAtDesc(MemberStatus.ACTIVE).stream()
                 .map(m -> new PublicMemberDto(
                         m.getId(),
                         m.getFullName(),

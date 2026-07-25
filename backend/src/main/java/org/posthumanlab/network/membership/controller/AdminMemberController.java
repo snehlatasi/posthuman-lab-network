@@ -40,4 +40,10 @@ public class AdminMemberController {
     public ResponseEntity<List<Member>> getAllApprovedMembers() {
         return ResponseEntity.ok(applicationService.getAllApprovedMembers());
     }
+
+    @PutMapping("/list/{id}/deactivate")
+    public ResponseEntity<Member> deactivateMember(@PathVariable("id") Long id, Authentication auth) {
+        String reviewer = auth != null ? auth.getName() : "admin@posthumanlab.org";
+        return ResponseEntity.ok(applicationService.deactivateMember(id, reviewer));
+    }
 }

@@ -131,4 +131,9 @@ export const memberAuthApi = {
     }),
 
   getAdminMembersList: () => fetchJson<MemberDto[]>("/api/admin/members/list"),
+
+  deactivateMember: (id: number) =>
+    fetchJson<MemberDto>(`/api/admin/members/list/${id}/deactivate`, {
+      method: "PUT",
+    }),
 };

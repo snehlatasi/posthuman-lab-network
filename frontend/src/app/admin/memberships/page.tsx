@@ -1,12 +1,13 @@
 ﻿"use client";
 
 import { useState, useEffect } from "react";
-import type { MembershipApplicationResponseDto } from "@/lib/api/memberAuth";
+import type { MemberDto, MembershipApplicationResponseDto } from "@/lib/api/memberAuth";
 import { memberAuthApi } from "@/lib/api/memberAuth";
 import { AlertTriangle } from "lucide-react";
 
 export default function AdminMembershipsPage() {
   const [applications, setApplications] = useState<MembershipApplicationResponseDto[]>([]);
+  const [members, setMembers] = useState<MemberDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionFeedback, setActionFeedback] = useState<string | null>(null);
 
@@ -20,8 +21,12 @@ export default function AdminMembershipsPage() {
   const loadApplications = async () => {
     setLoading(true);
     try {
-      const res = await memberAuthApi.getAdminApplications();
-      setApplications(res);
+      const [applicationRes, memberRes] = await Promise.all([
+        memberAuthApi.getAdminApplications(),
+        memberAuthApi.getAdminMembersList(),
+      ]);
+      setApplications(applicationRes);
+      setMembers(memberRes);
     } catch {
       // API fallback
     } finally {
@@ -155,6 +160,97 @@ export default function AdminMembershipsPage() {
                     className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase tracking-widest"
                   >
                     No membership applications recorded.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">Approved Members</h2>
+          <p className="font-sans text-xs text-bone-200 font-medium">
+            Deactivate members that were approved by mistake or should no longer have access.
+          </p>
+        </div>
+        <span className="font-mono text-xs text-earth-400 font-bold uppercase">
+          Total: {members.length}
+        </span>
+      </div>
+
+      <div className="bg-carbon-900/90 rounded-2xl overflow-hidden border border-bone-50/15 shadow-md">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs font-sans min-w-[760px]">
+            <thead className="bg-carbon-950 border-b border-bone-50/15 font-mono uppercase text-[10px] text-bone-200/60 tracking-widest">
+              <tr>
+                <th className="p-4">Member</th>
+                <th className="p-4">Email</th>
+                <th className="p-4">Role / Country</th>
+                <th className="p-4">Status</th>
+                <th className="p-4 text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-bone-50/5 text-bone-200 font-medium">
+              {members.map((member) => (
+                <tr key={member.id} className="hover:bg-carbon-950/40 transition-colors">
+                  <td className="p-4">
+                    <span className="font-semibold text-bone-50 block">{member.fullName}</span>
+                    <span className="font-mono text-[10px] text-bone-200/50 block">
+                      Joined {new Date(member.joinedAt).toLocaleDateString()}
+                    </span>
+                  </td>
+                  <td className="p-4 font-mono text-[11px] text-bone-200/70">{member.email}</td>
+                  <td className="p-4">
+                    <span className="text-earth-400 font-mono text-[10px] font-bold block uppercase">
+                      {member.role || "Researcher"}
+                    </span>
+                    <span className="text-bone-200/60 text-[11px] block">
+                      {member.country || "International"}
+                    </span>
+                  </td>
+                  <td className="p-4">
+                    <span
+                      className={`px-2.5 py-1 text-[9px] font-mono rounded-full uppercase tracking-wider font-bold ${
+                        member.status === "ACTIVE"
+                          ? "bg-moss-500/20 text-moss-400 border border-moss-500/30"
+                          : "bg-carbon-950 text-bone-200/40 border border-bone-50/10"
+                      }`}
+                    >
+                      {member.status}
+                    </span>
+                  </td>
+                  <td className="p-4 text-right">
+                    {member.status === "ACTIVE" && (
+                      <button
+                        onClick={() => {
+                          setConfirmModal({
+                            isOpen: true,
+                            title: "Deactivate Member",
+                            description: `Deactivate ${member.fullName}? They will be removed from active membership access and public member listings.`,
+                            onConfirm: async () => {
+                              await memberAuthApi.deactivateMember(member.id);
+                              triggerFeedback(`Deactivated member ${member.fullName}`);
+                              loadApplications();
+                            },
+                          });
+                        }}
+                        className="px-3 py-1 bg-earth-600/20 hover:bg-earth-600/40 text-earth-400 text-[10px] font-mono rounded-lg uppercase font-bold cursor-pointer transition-colors border border-earth-500/30"
+                      >
+                        Deactivate
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+              {members.length === 0 && !loading && (
+                <tr>
+                  <td
+                    colSpan={5}
+                    className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase tracking-widest"
+                  >
+                    No approved members recorded.
                   </td>
                 </tr>
               )}

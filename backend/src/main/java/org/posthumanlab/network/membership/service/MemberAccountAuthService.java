@@ -3,6 +3,7 @@ package org.posthumanlab.network.membership.service;
 import org.posthumanlab.network.membership.dto.*;
 import org.posthumanlab.network.membership.entity.Member;
 import org.posthumanlab.network.membership.entity.MemberAccount;
+import org.posthumanlab.network.membership.entity.MemberStatus;
 import org.posthumanlab.network.membership.entity.MembershipApplication;
 import org.posthumanlab.network.membership.repository.MemberAccountRepository;
 import org.posthumanlab.network.membership.repository.MemberRepository;
@@ -131,7 +132,8 @@ public class MemberAccountAuthService {
 
         if (existingMember.isPresent()) {
             Member member = existingMember.get();
-            return new MemberAuthResponse("APPROVED", null, member.getId(), subjectId, member.getEmail(), member.getFullName(), member.getProfileImageUrl());
+            String status = member.getStatus() == MemberStatus.ACTIVE ? "APPROVED" : "REJECTED";
+            return new MemberAuthResponse(status, null, member.getId(), subjectId, member.getEmail(), member.getFullName(), member.getProfileImageUrl());
         }
 
         Optional<MembershipApplication> existingApplication = applicationRepository.findByGoogleSubjectId(subjectId);
