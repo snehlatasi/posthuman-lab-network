@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { ContentPageLayout } from "@/components/layout/Templates";
 import { ContentCard } from "@/components/layout/Primitives";
 import { Reveal } from "@/components/ui/Reveal";

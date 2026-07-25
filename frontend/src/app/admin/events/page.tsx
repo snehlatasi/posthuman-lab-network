@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { EventApiDto } from "@/lib/api/events";
 import { eventsApi } from "@/lib/api/events";
 import { Plus, Trash2, AlertTriangle } from "lucide-react";

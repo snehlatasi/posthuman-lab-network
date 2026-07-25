@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { MediaAssetDto } from "@/lib/api/cms";
 import { cmsApi } from "@/lib/api/cms";
 import { Image as ImageIcon, Plus, Trash2, ExternalLink } from "lucide-react";

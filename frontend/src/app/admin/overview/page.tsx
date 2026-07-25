@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { fetchJson } from "@/lib/api/apiClient";
 import { FileText, Calendar, BookOpen, Users, Plus, ArrowRight } from "lucide-react";

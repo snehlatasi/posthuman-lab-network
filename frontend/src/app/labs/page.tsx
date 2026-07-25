@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { ListingPageLayout } from "@/components/layout/Templates";
 import { ContentCard, AnimatedLink } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";

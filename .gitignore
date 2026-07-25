@@ -52,6 +52,9 @@ logs/
 *.log
 backend/logs/
 
+# Local visual verification captures
+universe-*.png
+
 # OS specific files
 .DS_Store
 .DS_Store?

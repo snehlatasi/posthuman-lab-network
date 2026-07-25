@@ -7,14 +7,7 @@ import { Play } from "lucide-react";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { MagneticButton } from "../ui/Magnetic";
 import { SplitText } from "../ui/Reveal";
-import dynamic from "next/dynamic";
 import { Container } from "../layout/Primitives";
-
-// Dynamically import Three.js scene with SSR disabled
-const ImmersiveHero3D = dynamic(
-  () => import("./ImmersiveHero3D").then((mod) => mod.ImmersiveHero3D),
-  { ssr: false }
-);
 
 export const HeroSection: React.FC = () => {
   const shouldReduceMotion = useSafeReducedMotion();
@@ -38,13 +31,10 @@ export const HeroSection: React.FC = () => {
       className="min-h-screen flex flex-col justify-between relative overflow-hidden pt-28 pb-12 transition-colors duration-300"
     >
       {/* Dynamic Theme Atmospheric Background Overlay */}
-      <div className="absolute inset-0 organic-mesh opacity-40 z-0 pointer-events-none" />
-
-      {/* Interactive 3D Canvas Visual */}
-      <ImmersiveHero3D />
+      <div className="absolute inset-0 organic-mesh opacity-20 z-0 pointer-events-none" />
 
       {/* Side Gradient Mask for text legibility */}
-      <div className="absolute inset-0 bg-gradient-to-r from-bone-100/80 via-bone-100/20 to-transparent dark:from-[#10120f]/80 dark:via-[#10120f]/20 to-transparent z-10 pointer-events-none transition-colors duration-500" />
+      <div className="absolute inset-0 bg-gradient-to-r from-carbon-950/88 via-carbon-950/30 to-transparent z-10 pointer-events-none transition-colors duration-500" />
 
       {/* Vertical Scroll Indicator */}
       <div className="absolute left-6 bottom-24 hidden xl:flex flex-col items-center space-y-4 z-20 select-none pointer-events-none">
@@ -68,7 +58,7 @@ export const HeroSection: React.FC = () => {
               initial="hidden"
               animate="visible"
               custom={0.1}
-              className="font-mono text-xs text-[#984e32] dark:text-[#ca7555] font-bold uppercase tracking-[0.25em] block mb-2"
+              className="font-mono text-xs text-[#ff9a76] font-bold uppercase tracking-[0.25em] block mb-2"
             >
               A GLOBAL COLLABORATIVE SPACE FOR
             </motion.span>
@@ -78,7 +68,7 @@ export const HeroSection: React.FC = () => {
               as="h1"
               delay={0.2}
               stagger={0.06}
-              className="font-serif-display text-5xl sm:text-6xl md:text-7xl font-bold text-[#120e0c] dark:text-[#f3ebd9] leading-[0.92] tracking-tight uppercase"
+              className="font-serif-display text-5xl sm:text-6xl md:text-7xl font-bold text-[#f8fdff] leading-[0.92] tracking-tight uppercase"
             />
 
             <motion.p
@@ -86,7 +76,7 @@ export const HeroSection: React.FC = () => {
               initial="hidden"
               animate="visible"
               custom={0.4}
-              className="font-sans text-base md:text-lg text-[#1b1613] dark:text-[#d5d0c4] leading-relaxed font-medium"
+              className="font-sans text-base md:text-lg text-[#d9e8ee] leading-relaxed font-medium"
             >
               Connecting thought, creativity, education and research across boundaries. Together we
               question, imagine and create more livable futures.
@@ -102,7 +92,7 @@ export const HeroSection: React.FC = () => {
               <MagneticButton strength={0.35}>
                 <Link
                   href="/about"
-                  className="inline-flex items-center justify-center px-6 py-3.5 text-xs font-sans tracking-widest uppercase font-semibold text-bone-50 bg-[#120e0c] dark:bg-earth-600 hover:bg-[#7b3e27] dark:hover:bg-earth-500 hover:text-bone-50 transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-earth-500/50 shadow-md"
+                  className="inline-flex items-center justify-center px-6 py-3.5 text-xs font-sans tracking-widest uppercase font-semibold text-carbon-950 bg-bone-50 hover:bg-[#9ff8ff] transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-300/50 shadow-md"
                 >
                   Explore the Network
                 </Link>
@@ -117,10 +107,10 @@ export const HeroSection: React.FC = () => {
                       target.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth" });
                     }
                   }}
-                  className="inline-flex items-center space-x-2.5 px-6 py-3.5 text-xs font-sans tracking-widest uppercase font-semibold text-[#120e0c] dark:text-[#f3ebd9] hover:text-earth-600 dark:hover:text-earth-400 transition-colors focus:outline-none cursor-pointer"
+                  className="inline-flex items-center space-x-2.5 px-6 py-3.5 text-xs font-sans tracking-widest uppercase font-semibold text-[#f8fdff] hover:text-[#9ff8ff] transition-colors focus:outline-none cursor-pointer"
                 >
-                  <div className="p-2 border border-[#120e0c]/15 dark:border-bone-50/20 rounded-full bg-bone-100/90 dark:bg-carbon-900/90 shadow-sm">
-                    <Play className="w-3 h-3 fill-[#120e0c] dark:fill-[#f3ebd9] text-[#120e0c] dark:text-[#f3ebd9]" />
+                  <div className="p-2 border border-bone-50/20 rounded-full bg-carbon-950/70 shadow-sm">
+                    <Play className="w-3 h-3 fill-[#f8fdff] text-[#f8fdff]" />
                   </div>
                   <span>Watch Intro</span>
                 </button>

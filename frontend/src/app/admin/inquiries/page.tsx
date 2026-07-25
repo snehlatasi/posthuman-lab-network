@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { ContactResponseDto } from "@/lib/api/contact";
 import { contactApi } from "@/lib/api/contact";
 import type { CollaborationResponseDto } from "@/lib/api/collaboration";

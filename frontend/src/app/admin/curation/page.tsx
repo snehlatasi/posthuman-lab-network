@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { HomepageCurationDto } from "@/lib/api/cms";
 import { cmsApi } from "@/lib/api/cms";
 import { CheckCircle2 } from "lucide-react";

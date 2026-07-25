@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { MemberDto } from "@/lib/api/memberAuth";
 import { memberAuthApi } from "@/lib/api/memberAuth";
 import { Search } from "lucide-react";

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ContentPageLayout } from "@/components/layout/Templates";
 import { ContentCard } from "@/components/layout/Primitives";
 import { Reveal } from "@/components/ui/Reveal";

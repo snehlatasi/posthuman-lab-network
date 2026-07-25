@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import type { ReactNode } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { getStoredToken, fetchJson } from "@/lib/api/apiClient";
@@ -41,7 +42,7 @@ interface AdminStats {
   totalCollaborationRequests: number;
 }
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default function AdminLayout({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -50,8 +51,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [loadingTelemetry, setLoadingTelemetry] = useState(false);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
-  const emptySubscribe = React.useCallback(() => () => {}, []);
-  const mounted = React.useSyncExternalStore(
+  const emptySubscribe = useCallback(() => () => {}, []);
+  const mounted = useSyncExternalStore(
     emptySubscribe,
     () => true,
     () => false

@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { ContentPageLayout } from "@/components/layout/Templates";
 import { ContentCard, AnimatedLink } from "@/components/layout/Primitives";
 import { Reveal, StaggerItem } from "@/components/ui/Reveal";

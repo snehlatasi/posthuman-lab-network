@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { EditorialPageLayout } from "@/components/layout/Templates";
 import { Breadcrumb } from "@/components/layout/Breadcrumb";

@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Database, Server } from "lucide-react";
 
 export default function AdminSettingsPage() {

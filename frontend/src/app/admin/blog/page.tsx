@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import type { BlogPost } from "@/lib/api/blog";
 import { blogApi } from "@/lib/api/blog";
 import { Plus, Trash2, AlertTriangle } from "lucide-react";

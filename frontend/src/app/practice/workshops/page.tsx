@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { EditorialPageLayout } from "@/components/layout/Templates";
 
 const practiceSidebar = [
