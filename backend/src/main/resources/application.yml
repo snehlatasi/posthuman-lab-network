@@ -1,5 +1,17 @@
 server:
   port: ${PORT:8080}
+  compression:
+    enabled: ${SERVER_COMPRESSION_ENABLED:true}
+    min-response-size: ${SERVER_COMPRESSION_MIN_RESPONSE_SIZE:1024}
+    mime-types:
+      - application/json
+      - application/xml
+      - text/html
+      - text/xml
+      - text/plain
+      - text/css
+      - text/javascript
+      - application/javascript
 
 spring:
   application:
