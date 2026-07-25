@@ -24,7 +24,7 @@ export const Section: React.FC<{
     <section id={id} className={`py-16 md:py-24 relative ${className}`}>
       <Container>
         {(tag || title || description) && (
-          <div className="mb-12 md:mb-16 space-y-4 max-w-2xl">
+          <div className="mb-12 md:mb-16 space-y-4 max-w-3xl">
             {tag && (
               <span className="font-mono text-[11px] text-earth-600 dark:text-earth-400 font-semibold uppercase tracking-[0.22em] block">
                 {tag}
@@ -34,11 +34,11 @@ export const Section: React.FC<{
               <SplitText
                 text={title}
                 as="h2"
-                className="font-serif-display text-4xl md:text-5xl font-semibold tracking-tight text-carbon-950 dark:text-bone-50 text-balance leading-[1.02]"
+                className="font-serif-display text-4xl md:text-5xl font-semibold text-carbon-950 dark:text-bone-50 text-balance leading-[1.06]"
               />
             )}
             {description && (
-              <p className="font-sans text-sm md:text-lg text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
+              <p className="font-sans text-sm md:text-lg text-carbon-800 dark:text-bone-200 leading-[1.75] font-medium max-w-2xl">
                 {description}
               </p>
             )}
@@ -59,7 +59,7 @@ export const PageHeader: React.FC<{
   parentHref?: string;
 }> = ({ tag, title, subtitle, parentLabel, parentHref }) => {
   return (
-    <div className="pt-32 pb-18 border-b border-carbon-950/8 dark:border-bone-50/12 bg-gradient-to-b from-bone-50/80 via-bone-50/55 to-transparent dark:from-carbon-950/80 dark:via-carbon-950/55 dark:to-transparent relative overflow-hidden transition-colors duration-300">
+    <div className="pt-32 pb-18 border-b border-carbon-950/8 dark:border-bone-50/12 bg-gradient-to-b from-bone-50/86 via-bone-50/62 to-transparent dark:from-carbon-950/86 dark:via-carbon-950/62 dark:to-transparent relative overflow-hidden transition-colors duration-300">
       <div className="absolute inset-0 organic-mesh opacity-35 z-0 pointer-events-none" />
       <div className="absolute inset-x-[8%] bottom-0 h-px ink-rule z-0 pointer-events-none" />
       <Container className="relative z-10 space-y-4">
@@ -90,11 +90,11 @@ export const PageHeader: React.FC<{
           as="h1"
           delay={0.1}
           stagger={0.04}
-          className="font-serif-display text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 max-w-4xl leading-[0.96] text-balance uppercase"
+          className="font-serif-display text-5xl md:text-6xl lg:text-7xl font-bold text-carbon-950 dark:text-bone-50 max-w-4xl leading-[1] text-balance uppercase"
         />
 
         {subtitle && (
-          <p className="font-sans text-base md:text-xl text-carbon-800 dark:text-bone-200 leading-relaxed max-w-2xl pt-2 font-medium">
+          <p className="font-sans text-base md:text-xl text-carbon-800 dark:text-bone-200 leading-[1.75] max-w-2xl pt-2 font-medium">
             {subtitle}
           </p>
         )}
@@ -111,7 +111,7 @@ export const ContentCard: React.FC<{
 }> = ({ children, className = "", href }) => {
   const cardContent = (
     <div
-      className={`glass-panel glass-panel-hover p-6 md:p-8 rounded-[28px] h-full flex flex-col justify-between ${className}`}
+      className={`glass-panel glass-panel-hover p-6 md:p-8 rounded-lg h-full flex flex-col justify-between ${className}`}
     >
       {children}
     </div>

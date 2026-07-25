@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import type { FC } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,7 +13,7 @@ import { useAuth } from "@/context/AuthContext";
 import { useMember } from "@/context/MemberContext";
 import { ThemeSelector } from "@/components/ui/ThemeSelector";
 
-export const Header: React.FC = () => {
+export const Header: FC = () => {
   const { isAdmin, openLoginModal } = useAuth();
   const { member } = useMember();
   const [isOpen, setIsOpen] = useState(false);
@@ -23,8 +24,8 @@ export const Header: React.FC = () => {
   const headerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const emptySubscribe = React.useCallback(() => () => {}, []);
-  const mounted = React.useSyncExternalStore(
+  const emptySubscribe = useCallback(() => () => {}, []);
+  const mounted = useSyncExternalStore(
     emptySubscribe,
     () => true,
     () => false
@@ -80,6 +81,20 @@ export const Header: React.FC = () => {
     setActiveGroup((current) => (current === label ? null : label));
   };
 
+  const isOverlayingHero = pathname === "/" && !isScrolled && !activeGroup && !isOpen;
+  const brandTextClass = isOverlayingHero
+    ? "text-bone-50 drop-shadow-[0_5px_20px_rgba(0,0,0,0.55)] group-hover:text-[#9ff8ff]"
+    : "text-[#120e0c] dark:text-[#f3ebd9] group-hover:text-earth-600 dark:group-hover:text-earth-400";
+  const brandSubTextClass = isOverlayingHero
+    ? "text-bone-100/85 drop-shadow-[0_4px_16px_rgba(0,0,0,0.55)]"
+    : "text-[#1b1613] dark:text-[#d5d0c4]";
+  const ctaClass = isOverlayingHero
+    ? "text-carbon-950 bg-bone-50 hover:bg-[#9ff8ff] shadow-[0_12px_34px_rgba(159,248,255,0.18)]"
+    : "text-bone-50 bg-[#120e0c] dark:bg-earth-600 hover:bg-earth-600 dark:hover:bg-earth-500 shadow-sm";
+  const mobileToggleClass = isOverlayingHero
+    ? "text-bone-50 hover:text-[#9ff8ff] hover:bg-bone-50/10"
+    : "text-[#120e0c] dark:text-bone-100 hover:text-earth-600 hover:bg-bone-200/50 dark:hover:bg-carbon-900/80";
+
   return (
     <header
       ref={headerRef}
@@ -97,10 +112,14 @@ export const Header: React.FC = () => {
           aria-label="Posthuman Lab Network Homepage"
           onClick={() => setActiveGroup(null)}
         >
-          <span className="font-serif text-base sm:text-lg md:text-xl xl:text-xl 2xl:text-2xl font-bold tracking-[0.08em] leading-none text-[#120e0c] dark:text-[#f3ebd9] group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
+          <span
+            className={`font-serif text-base sm:text-lg md:text-xl xl:text-xl 2xl:text-2xl font-bold tracking-[0.08em] leading-none transition-colors ${brandTextClass}`}
+          >
             POSTHUMAN
           </span>
-          <span className="font-sans text-[7.5px] sm:text-[8px] md:text-[9px] 2xl:text-[10px] tracking-[0.3em] font-bold text-[#1b1613] dark:text-[#d5d0c4] leading-none mt-1 uppercase">
+          <span
+            className={`font-sans text-[7.5px] sm:text-[8px] md:text-[9px] 2xl:text-[10px] tracking-[0.3em] font-bold leading-none mt-1 uppercase ${brandSubTextClass}`}
+          >
             Lab Network
           </span>
         </Link>
@@ -131,8 +150,12 @@ export const Header: React.FC = () => {
                     href={link.href}
                     className={`px-1.5 xl:px-2 2xl:px-2.5 py-1 text-[11px] xl:text-[11.5px] 2xl:text-xs font-sans tracking-wider uppercase transition-all duration-200 relative whitespace-nowrap ${
                       isActive
-                        ? "text-earth-600 dark:text-earth-400 font-bold"
-                        : "text-[#1b1613] dark:text-[#d5d0c4] font-semibold hover:text-earth-600 dark:hover:text-earth-400"
+                        ? isOverlayingHero
+                          ? "text-[#9ff8ff] font-bold drop-shadow-[0_3px_12px_rgba(0,0,0,0.55)]"
+                          : "text-earth-600 dark:text-earth-400 font-bold"
+                        : isOverlayingHero
+                          ? "text-bone-100/82 font-semibold hover:text-[#9ff8ff] drop-shadow-[0_3px_12px_rgba(0,0,0,0.55)]"
+                          : "text-[#1b1613] dark:text-[#d5d0c4] font-semibold hover:text-earth-600 dark:hover:text-earth-400"
                     }`}
                   >
                     <span>{link.label}</span>
@@ -183,7 +206,11 @@ export const Header: React.FC = () => {
           {mounted && !isAdmin && (
             <button
               onClick={openLoginModal}
-              className="hidden xl:inline-flex items-center space-x-1 px-2.5 py-1.5 2xl:px-3 2xl:py-2 text-[10.5px] xl:text-[11px] 2xl:text-xs font-mono tracking-wider uppercase text-[#3a2e28] dark:text-[#d5d0c4] hover:text-earth-600 dark:hover:text-earth-400 border border-[#120e0c]/15 dark:border-bone-50/20 hover:border-earth-500/40 rounded-full transition-colors cursor-pointer bg-bone-100/80 dark:bg-carbon-900/80 whitespace-nowrap shrink-0"
+              className={`hidden xl:inline-flex items-center space-x-1 px-2.5 py-1.5 2xl:px-3 2xl:py-2 text-[10.5px] xl:text-[11px] 2xl:text-xs font-mono tracking-wider uppercase border rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
+                isOverlayingHero
+                  ? "text-bone-100 hover:text-[#9ff8ff] border-bone-50/20 hover:border-[#9ff8ff]/45 bg-carbon-950/45"
+                  : "text-[#3a2e28] dark:text-[#d5d0c4] hover:text-earth-600 dark:hover:text-earth-400 border-[#120e0c]/15 dark:border-bone-50/20 hover:border-earth-500/40 bg-bone-100/80 dark:bg-carbon-900/80"
+              }`}
             >
               <ShieldCheck className="w-3 h-3 xl:w-3.5 xl:h-3.5" />
               <span>Admin Login</span>
@@ -204,7 +231,7 @@ export const Header: React.FC = () => {
           <Link
             href="/membership/become-a-member"
             onClick={() => setActiveGroup(null)}
-            className="hidden sm:inline-flex items-center justify-center px-3.5 py-1.5 xl:px-4 xl:py-1.5 2xl:px-5 2xl:py-2 text-[10.5px] xl:text-[11px] 2xl:text-xs font-sans tracking-widest uppercase font-semibold text-bone-50 bg-[#120e0c] dark:bg-earth-600 hover:bg-earth-600 dark:hover:bg-earth-500 transition-all duration-200 rounded-full focus:outline-none focus:ring-2 focus:ring-earth-500/40 shadow-sm shrink-0 whitespace-nowrap"
+            className={`hidden sm:inline-flex items-center justify-center px-3.5 py-1.5 xl:px-4 xl:py-1.5 2xl:px-5 2xl:py-2 text-[10.5px] xl:text-[11px] 2xl:text-xs font-sans tracking-widest uppercase font-semibold transition-all duration-200 rounded-full focus:outline-none focus:ring-2 focus:ring-earth-500/40 shrink-0 whitespace-nowrap ${ctaClass}`}
           >
             {mounted && member ? "Member Account" : "Join the Network"}
           </Link>
@@ -213,7 +240,7 @@ export const Header: React.FC = () => {
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
             aria-label="Toggle Mobile Menu"
-            className="xl:hidden p-1.5 text-[#120e0c] dark:text-bone-100 hover:text-earth-600 focus:outline-none rounded-md hover:bg-bone-200/50 dark:hover:bg-carbon-900/80 cursor-pointer"
+            className={`xl:hidden p-1.5 focus:outline-none rounded-md cursor-pointer transition-colors ${mobileToggleClass}`}
           >
             {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -246,7 +273,7 @@ export const Header: React.FC = () => {
                         </span>
                         <div className="h-[1px] w-8 bg-earth-500/40" />
                       </div>
-                      <h2 className="font-serif text-4xl font-bold tracking-tight text-[#120e0c] dark:text-[#f3ebd9]">
+                      <h2 className="font-serif text-4xl font-bold text-[#120e0c] dark:text-[#f3ebd9] leading-[1.05]">
                         {group.label.toUpperCase()}
                       </h2>
                       <p className="text-sm text-[#1b1613] dark:text-[#d5d0c4] leading-relaxed font-sans max-w-xs font-medium">
@@ -265,7 +292,7 @@ export const Header: React.FC = () => {
                       key={item.href}
                       href={item.href}
                       onClick={() => setActiveGroup(null)}
-                      className="group flex flex-col justify-between p-5 rounded-[24px] bg-white dark:bg-carbon-900/90 hover:bg-bone-100 dark:hover:bg-carbon-900 border border-carbon-950/10 dark:border-bone-50/15 hover:border-earth-600 dark:hover:border-earth-400 shadow-sm transition-all duration-200"
+                      className="group flex flex-col justify-between p-5 rounded-lg bg-white dark:bg-carbon-900/90 hover:bg-bone-100 dark:hover:bg-carbon-900 border border-carbon-950/10 dark:border-bone-50/15 hover:border-earth-600 dark:hover:border-earth-400 shadow-sm transition-all duration-200"
                     >
                       <div className="space-y-1.5">
                         <div className="flex items-center justify-between">
@@ -322,11 +349,11 @@ export const Header: React.FC = () => {
                   Join the Network
                 </Link>
 
-                <div className="flex justify-center space-x-6 text-xs tracking-wider uppercase font-mono text-[#1b1613] dark:text-[#d5d0c4] font-bold">
+                <div className="flex flex-wrap justify-center gap-x-3 gap-y-2 text-xs tracking-wider uppercase font-mono text-[#1b1613] dark:text-[#d5d0c4] font-bold">
                   <span>Open Access</span>
-                  <span>•</span>
+                  <span className="text-earth-600 dark:text-earth-400">/</span>
                   <span>Sustainable Tech</span>
-                  <span>•</span>
+                  <span className="text-earth-600 dark:text-earth-400">/</span>
                   <span>Embodied Gatherings</span>
                 </div>
               </div>
@@ -338,7 +365,7 @@ export const Header: React.FC = () => {
   );
 };
 
-const MobileAccordionGroup: React.FC<{
+const MobileAccordionGroup: FC<{
   group: NavigationGroup;
   onClose: () => void;
 }> = ({ group, onClose }) => {

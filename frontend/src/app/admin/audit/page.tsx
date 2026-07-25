@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import type { AuditLogDto } from "@/lib/api/cms";
@@ -27,7 +27,7 @@ export default function AdminAuditPage() {
   return (
     <div className="space-y-6 font-sans">
       <div>
-        <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
+        <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
           Administrative Audit Trail
         </h2>
         <p className="font-sans text-xs text-bone-200 font-medium">

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Image from "next/image";
@@ -37,7 +37,7 @@ export const Virtual360LabViewer: React.FC = () => {
             <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-[0.25em] block">
               SPACES OF PRACTICE
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 leading-tight uppercase">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-carbon-950 dark:text-bone-50 leading-tight uppercase">
               THE NETWORK LIVES IN REAL SPACES, NOT JUST INTERFACES
             </h2>
             <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium max-w-xl">
@@ -117,7 +117,7 @@ export const Virtual360LabViewer: React.FC = () => {
               </div>
 
               <div className="grid sm:grid-cols-2 gap-4 pt-2">
-                <div className="rounded-[24px] bg-white dark:bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15 p-5 space-y-3 shadow-sm">
+                <div className="rounded-lg bg-white dark:bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15 p-5 space-y-3 shadow-sm">
                   <Leaf className="w-5 h-5 text-moss-600 dark:text-moss-300" />
                   <h4 className="font-serif text-2xl font-bold text-carbon-950 dark:text-bone-100">
                     More relevant
@@ -126,7 +126,7 @@ export const Virtual360LabViewer: React.FC = () => {
                     Aligns the visuals with scholarship, ecology, workshops, and retreat culture.
                   </p>
                 </div>
-                <div className="rounded-[24px] bg-white dark:bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15 p-5 space-y-3 shadow-sm">
+                <div className="rounded-lg bg-white dark:bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15 p-5 space-y-3 shadow-sm">
                   <Microscope className="w-5 h-5 text-earth-600 dark:text-earth-400" />
                   <h4 className="font-serif text-2xl font-bold text-carbon-950 dark:text-bone-100">
                     More readable

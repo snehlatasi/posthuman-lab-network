@@ -53,7 +53,7 @@ export const EditorialPageLayout: React.FC<EditorialPageLayoutProps> = ({
         <div className="py-16 md:py-24 relative">
           <Container className="grid grid-cols-12 gap-8 lg:gap-16">
             <aside className="col-span-12 lg:col-span-4 space-y-8 lg:sticky lg:top-28 lg:h-fit self-start">
-              <div className="editorial-surface p-6 rounded-[28px] space-y-6 border border-carbon-950/8 dark:border-bone-50/12">
+              <div className="editorial-surface p-6 rounded-lg space-y-6 border border-carbon-950/8 dark:border-bone-50/12">
                 <div className="flex items-center space-x-2 text-[10px] font-mono tracking-[0.22em] text-earth-600 dark:text-earth-400 uppercase font-semibold">
                   <BookOpen className="w-3.5 h-3.5" />
                   <span>{sidebarTitle}</span>

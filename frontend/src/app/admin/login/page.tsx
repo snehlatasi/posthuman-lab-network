@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -64,7 +64,7 @@ export default function AdminLoginPage() {
           </div>
 
           <div className="pt-2 space-y-1">
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-bone-50 tracking-tight uppercase">
+            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-bone-50 uppercase">
               Administration
             </h1>
             <p className="font-sans text-xs text-bone-200 font-medium max-w-xs mx-auto leading-relaxed">

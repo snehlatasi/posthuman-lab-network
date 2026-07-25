@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import type { MediaAssetDto } from "@/lib/api/cms";
@@ -58,7 +58,7 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect, onClose }) =
       <div className="bg-carbon-900 border border-bone-50/15 p-6 sm:p-8 rounded-3xl max-w-3xl w-full space-y-6 shadow-2xl flex flex-col max-h-[85vh]">
         <div className="flex items-center justify-between border-b border-bone-50/10 pb-4 shrink-0">
           <div>
-            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase tracking-tight">
+            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase">
               Select Media Asset
             </h3>
             <p className="font-sans text-xs text-bone-200">

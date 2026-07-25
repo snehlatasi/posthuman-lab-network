@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -25,7 +25,7 @@ export const JoinNetworkSection: React.FC = () => {
           as="h2"
           delay={0.2}
           stagger={0.05}
-          className="font-serif-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 leading-[1.05] uppercase"
+          className="font-serif-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-carbon-950 dark:text-bone-50 leading-[1.05] uppercase"
         />
 
         <Reveal delay={0.35} yOffset={28}>

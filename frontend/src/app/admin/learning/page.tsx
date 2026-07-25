@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import type { LearningResourceDto } from "@/lib/api/cms";
@@ -37,7 +37,7 @@ export default function AdminLearningPage() {
     <div className="space-y-6 font-sans">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
+          <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
             Masterclasses & Learning Hub
           </h2>
           <p className="font-sans text-xs text-bone-200 font-medium">

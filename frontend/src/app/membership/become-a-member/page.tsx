@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -95,7 +95,7 @@ export default function BecomeMemberPage() {
             </div>
 
             <div className="space-y-2">
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-carbon-950 dark:text-bone-50 uppercase tracking-tight">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-carbon-950 dark:text-bone-50 uppercase">
                 Authentication Required
               </h2>
               <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed max-w-lg mx-auto font-medium">
@@ -159,7 +159,7 @@ export default function BecomeMemberPage() {
             </div>
 
             <div className="space-y-2">
-              <h2 className="font-serif text-2xl font-bold text-carbon-950 dark:text-bone-50 uppercase tracking-tight">
+              <h2 className="font-serif text-2xl font-bold text-carbon-950 dark:text-bone-50 uppercase">
                 Membership Application Form
               </h2>
               <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">
@@ -291,7 +291,7 @@ export default function BecomeMemberPage() {
               <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-widest block">
                 STATUS: PENDING REVIEW
               </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-carbon-950 dark:text-bone-50 uppercase tracking-tight">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-carbon-950 dark:text-bone-50 uppercase">
                 Application Received
               </h2>
               <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed max-w-lg mx-auto font-medium">
@@ -334,7 +334,7 @@ export default function BecomeMemberPage() {
               <span className="font-mono text-xs text-moss-400 font-bold uppercase tracking-widest block">
                 STATUS: APPROVED NETWORK MEMBER
               </span>
-              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-carbon-950 dark:text-bone-50 uppercase tracking-tight">
+              <h2 className="font-serif text-2xl sm:text-3xl font-bold text-carbon-950 dark:text-bone-50 uppercase">
                 Welcome Back, {member.fullName}
               </h2>
               <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed max-w-lg mx-auto font-medium">
@@ -368,7 +368,7 @@ export default function BecomeMemberPage() {
             </div>
 
             <div className="space-y-2">
-              <h2 className="font-serif text-2xl font-bold text-carbon-950 dark:text-bone-50 uppercase tracking-tight">
+              <h2 className="font-serif text-2xl font-bold text-carbon-950 dark:text-bone-50 uppercase">
                 Application Status Update
               </h2>
               <p className="text-xs sm:text-sm text-carbon-800 dark:text-bone-200 leading-relaxed max-w-lg mx-auto font-medium">

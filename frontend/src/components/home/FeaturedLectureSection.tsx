@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -18,7 +18,7 @@ export const FeaturedLectureSection: React.FC = () => {
           <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-[0.25em] block">
             ARCHIVED KNOWLEDGE
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 leading-tight uppercase">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-carbon-950 dark:text-bone-50 leading-tight uppercase">
             Featured Masterclass & Live Telemetry
           </h2>
         </div>

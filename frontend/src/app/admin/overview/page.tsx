@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -33,7 +33,7 @@ export default function AdminOverviewPage() {
         <span className="font-mono text-xs text-earth-400 font-bold uppercase tracking-[0.25em] block">
           OPERATIONAL OVERVIEW
         </span>
-        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-bone-50 uppercase tracking-tight">
+        <h2 className="font-serif text-2xl sm:text-3xl font-bold text-bone-50 uppercase">
           Welcome Back, Administrator
         </h2>
         <p className="font-sans text-xs sm:text-sm text-bone-200 leading-relaxed font-medium max-w-xl">
@@ -99,7 +99,7 @@ export default function AdminOverviewPage() {
 
       {/* Quick Action Navigation */}
       <div className="p-6 sm:p-8 rounded-3xl bg-carbon-900/80 border border-bone-50/15 space-y-4 shadow-md">
-        <h3 className="font-serif text-xl font-bold text-bone-50 uppercase tracking-tight">
+        <h3 className="font-serif text-xl font-bold text-bone-50 uppercase">
           Quick Action Shortcuts
         </h3>
         <div className="flex flex-wrap gap-4 pt-1">

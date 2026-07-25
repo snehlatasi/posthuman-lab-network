@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -28,7 +28,7 @@ export const GlobalVoicesSection: React.FC = () => {
               <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-[0.25em] block">
                 GLOBAL CONNECTION
               </span>
-              <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 leading-[1.05] uppercase">
+              <h2 className="font-serif text-4xl sm:text-5xl lg:text-6xl font-bold text-carbon-950 dark:text-bone-50 leading-[1.05] uppercase">
                 Many Voices.
                 <br />
                 <span className="italic font-normal text-earth-600 dark:text-earth-400">

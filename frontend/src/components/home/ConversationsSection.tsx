@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
@@ -58,7 +58,7 @@ export const ConversationsSection: React.FC = () => {
             </span>
           </Reveal>
           <Reveal delay={0.25}>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 leading-tight uppercase">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-carbon-950 dark:text-bone-50 leading-tight uppercase">
               Current Global Conversations
             </h2>
           </Reveal>

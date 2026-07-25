@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import type { ContactResponseDto } from "@/lib/api/contact";
@@ -54,7 +54,7 @@ export default function AdminInquiriesPage() {
 
       {/* General Contact Messages */}
       <div className="space-y-4">
-        <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
+        <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
           General Inquiries ({messages.length})
         </h2>
         <div className="bg-carbon-900/90 rounded-2xl overflow-hidden border border-bone-50/15 shadow-md">
@@ -115,7 +115,7 @@ export default function AdminInquiriesPage() {
 
       {/* Collaboration Proposals */}
       <div className="space-y-4">
-        <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
+        <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
           Collaboration Proposals ({collaborations.length})
         </h2>
         <div className="bg-carbon-900/90 rounded-2xl overflow-hidden border border-bone-50/15 shadow-md">

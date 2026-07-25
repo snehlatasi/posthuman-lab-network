@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -17,7 +17,7 @@ export const LearningHubSection: React.FC = () => {
             <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-[0.25em] block">
               EDUCATIONAL MISSION
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 uppercase leading-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-carbon-950 dark:text-bone-50 uppercase leading-tight">
               &ldquo;Knowledge should be accessible, not exclusive.&rdquo;
             </h2>
           </div>

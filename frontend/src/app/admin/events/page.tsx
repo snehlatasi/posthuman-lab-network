@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import type { EventApiDto } from "@/lib/api/events";
@@ -60,7 +60,7 @@ export default function AdminEventsPage() {
 
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
+          <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
             Events & Gatherings Catalog
           </h2>
           <p className="font-sans text-xs text-bone-200 font-medium">
@@ -147,9 +147,7 @@ export default function AdminEventsPage() {
       {showNewModal && (
         <div className="fixed inset-0 bg-carbon-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-carbon-900 border border-bone-50/15 p-6 sm:p-8 rounded-3xl max-w-lg w-full space-y-4 shadow-2xl">
-            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase tracking-tight">
-              Create Event
-            </h3>
+            <h3 className="font-serif text-xl font-bold text-bone-50 uppercase">Create Event</h3>
             <div className="space-y-3 text-xs">
               <input
                 type="text"

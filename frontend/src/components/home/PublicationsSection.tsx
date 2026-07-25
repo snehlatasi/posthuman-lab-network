@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -22,7 +22,7 @@ export const PublicationsSection: React.FC = () => {
             </span>
             <SplitText
               text="Latest Publications"
-              className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 leading-tight uppercase"
+              className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-carbon-950 dark:text-bone-50 leading-tight uppercase"
             />
           </div>
           <Link

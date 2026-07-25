@@ -180,7 +180,7 @@ export const SplitText: React.FC<SplitTextProps> = ({
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-10% 0px" }}
-        className="inline-block flex-wrap"
+        className="inline-flex flex-wrap"
       >
         {items.map((item, index) => (
           <span

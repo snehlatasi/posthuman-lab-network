@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import type { LabContentDto } from "@/lib/api/cms";
@@ -37,7 +37,7 @@ export default function AdminLabsPage() {
     <div className="space-y-6 font-sans">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase tracking-tight">
+          <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
             Research Labs Catalog
           </h2>
           <p className="font-sans text-xs text-bone-200 font-medium">

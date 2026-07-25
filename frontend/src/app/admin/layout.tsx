@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import type { ReactNode } from "react";
@@ -257,9 +257,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </button>
             <div className="flex items-center space-x-3">
               <div className="w-2.5 h-2.5 rounded-full bg-moss-500 animate-pulse" />
-              <h1 className="font-serif font-bold text-lg text-bone-50 tracking-tight uppercase">
-                POSTHUMAN CMS
-              </h1>
+              <h1 className="font-serif font-bold text-lg text-bone-50 uppercase">POSTHUMAN CMS</h1>
             </div>
           </div>
 

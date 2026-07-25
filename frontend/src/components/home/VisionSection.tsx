@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -76,7 +76,7 @@ export const VisionSection: React.FC = () => {
             </span>
           </Reveal>
           <Reveal delay={0.25}>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-carbon-950 dark:text-bone-50 leading-tight uppercase">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-carbon-950 dark:text-bone-50 leading-tight uppercase">
               Building the Posthuman Future Together
             </h2>
           </Reveal>
@@ -98,7 +98,7 @@ export const VisionSection: React.FC = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <h3 className="font-serif text-base font-bold text-carbon-950 dark:text-bone-50 group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors tracking-tight">
+                      <h3 className="font-serif text-base font-bold text-carbon-950 dark:text-bone-50 group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
                         {pillar.title}
                       </h3>
                       <p className="font-sans text-xs text-carbon-800 dark:text-bone-200 leading-relaxed font-medium">

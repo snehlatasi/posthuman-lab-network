@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 /* eslint-disable react-hooks/set-state-in-effect */
 
 import React, { useState, useCallback, useEffect } from "react";
@@ -443,7 +443,7 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
                   </span>
                 </div>
 
-                <h3 className="font-serif text-2xl md:text-3xl font-bold tracking-tight text-bone-50">
+                <h3 className="font-serif text-2xl md:text-3xl font-bold text-bone-50">
                   {selectedLoc.name}
                 </h3>
 

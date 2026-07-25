@@ -112,7 +112,7 @@
 
 .font-serif-display {
   font-family: var(--font-cormorant), Georgia, serif;
-  letter-spacing: -0.025em;
+  letter-spacing: 0;
   line-height: 0.98;
   font-optical-sizing: auto;
 }
@@ -355,4 +355,40 @@ body::before {
 
 .text-balance {
   text-wrap: balance;
+}
+
+.hero-readability-mask {
+  background:
+    radial-gradient(
+      circle at 54% 47%,
+      rgba(2, 7, 19, 0.02) 0%,
+      rgba(2, 7, 19, 0.1) 36%,
+      rgba(2, 7, 19, 0.34) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(2, 7, 19, 0.94) 0%,
+      rgba(2, 7, 19, 0.86) 28%,
+      rgba(2, 7, 19, 0.42) 58%,
+      rgba(2, 7, 19, 0.14) 100%
+    );
+}
+
+@media (max-width: 767px) {
+  .hero-readability-mask {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(2, 7, 19, 0.82) 0%,
+        rgba(2, 7, 19, 0.5) 32%,
+        rgba(2, 7, 19, 0.38) 58%,
+        rgba(2, 7, 19, 0.72) 100%
+      ),
+      radial-gradient(
+        circle at 50% 54%,
+        rgba(2, 7, 19, 0.08) 0%,
+        rgba(2, 7, 19, 0.34) 62%,
+        rgba(2, 7, 19, 0.72) 100%
+      );
+  }
 }

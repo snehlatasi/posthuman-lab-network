@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -27,7 +27,7 @@ export const ManifestoSection: React.FC = () => {
           </Reveal>
 
           <Reveal delay={0.25} yOffset={30} className="space-y-4">
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-carbon-950 dark:text-bone-50 leading-[1.05] uppercase tracking-tight">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-carbon-950 dark:text-bone-50 leading-[1.05] uppercase">
               Beyond Human.
               <br />
               Beyond Boundaries.
