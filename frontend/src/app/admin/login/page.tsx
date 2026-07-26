@@ -9,9 +9,8 @@ import { authApi } from "@/lib/api/auth";
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("admin@posthumanlab.org");
-  const [password, setPassword] = useState("AdminSecret123!");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showForgotModal, setShowForgotModal] = useState(false);
@@ -77,7 +76,7 @@ export default function AdminLoginPage() {
 
         {/* Login Form Panel */}
         <div className="bg-carbon-900/90 backdrop-blur-xl p-8 sm:p-10 rounded-3xl border border-carbon-950/10 dark:border-bone-50/15 shadow-2xl space-y-6">
-          <form onSubmit={handleLogin} className="space-y-5" noValidate>
+          <form onSubmit={handleLogin} className="space-y-5" autoComplete="off" noValidate>
             {/* Email / Username */}
             <div className="space-y-1.5">
               <label
@@ -90,9 +89,9 @@ export default function AdminLoginPage() {
                 <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-bone-200/60" />
                 <input
                   id="admin-email"
-                  name="username"
+                  name="admin-email"
                   type="email"
-                  autoComplete="username"
+                  autoComplete="off"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -123,9 +122,9 @@ export default function AdminLoginPage() {
                 <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-bone-200/60" />
                 <input
                   id="admin-pass"
-                  name="password"
+                  name="admin-pass"
                   type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -141,23 +140,6 @@ export default function AdminLoginPage() {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
-            </div>
-
-            {/* Remember Me */}
-            <div className="flex items-center space-x-2 pt-1">
-              <input
-                id="remember-me"
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                className="w-4 h-4 rounded bg-carbon-950 border-bone-50/20 text-earth-500 focus:ring-earth-400 cursor-pointer"
-              />
-              <label
-                htmlFor="remember-me"
-                className="text-xs text-bone-200 font-sans cursor-pointer select-none"
-              >
-                Remember me on this browser
-              </label>
             </div>
 
             {/* Error Feedback */}

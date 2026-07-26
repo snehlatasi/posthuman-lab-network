@@ -7,7 +7,7 @@ import { ShieldCheck, Mail, Lock, X, ArrowRight } from "lucide-react";
 export const AdminLoginModal: React.FC = () => {
   const { showLoginModal, closeLoginModal, login } = useAuth();
   const [email, setEmail] = useState("admin@posthumanlab.org");
-  const [password, setPassword] = useState("AdminSecret123!");
+  const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -48,7 +48,7 @@ export const AdminLoginModal: React.FC = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
           <div className="space-y-1">
             <label
               htmlFor="modal-admin-email"
@@ -60,7 +60,9 @@ export const AdminLoginModal: React.FC = () => {
               <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-bone-200/40" />
               <input
                 id="modal-admin-email"
+                name="modal-admin-email"
                 type="email"
+                autoComplete="off"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -80,7 +82,9 @@ export const AdminLoginModal: React.FC = () => {
               <Lock className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-bone-200/40" />
               <input
                 id="modal-admin-pass"
+                name="modal-admin-pass"
                 type="password"
+                autoComplete="new-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
