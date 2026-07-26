@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useSyncExternalStore } from "react";
 import type {
   MemberAuthResponseDto,
   MemberOtpChallengeResponseDto,
@@ -43,38 +43,89 @@ const MemberContext = createContext<MemberContextType>({
   updateMemberStatus: () => {},
 });
 
+const MEMBER_STORAGE_KEY = "posthuman_member_user";
+const DEMO_MEMBER_STORAGE_KEY = "posthuman_demo_google_identity";
+const MEMBER_CHANGE_EVENT = "posthuman-member-change";
+
 const isDemoMember = (member: MemberUser): boolean =>
   "googleSubjectId" in member ||
   member.accountSubjectId?.startsWith("demo-google-") ||
   member.accountSubjectId?.startsWith("google-sub-");
 
-export const MemberProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [member, setMember] = useState<MemberUser | null>(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("posthuman_member_user");
-      if (stored) {
-        try {
-          const cached = JSON.parse(stored) as MemberUser;
-          if (isDemoMember(cached)) {
-            localStorage.removeItem("posthuman_member_user");
-            localStorage.removeItem("posthuman_demo_google_identity");
-            return null;
-          }
-          return cached;
-        } catch {
-          localStorage.removeItem("posthuman_member_user");
-        }
-      }
-    }
-    return null;
-  });
+let cachedMemberRaw: string | null | undefined;
+let cachedMember: MemberUser | null = null;
 
-  const [loading] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return false;
+const notifyMemberChanged = () => {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(MEMBER_CHANGE_EVENT));
+  }
+};
+
+const getStoredMemberSnapshot = (): MemberUser | null => {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const stored = localStorage.getItem(MEMBER_STORAGE_KEY);
+  if (stored === cachedMemberRaw) {
+    return cachedMember;
+  }
+
+  cachedMemberRaw = stored;
+  cachedMember = null;
+
+  if (!stored) {
+    return null;
+  }
+
+  try {
+    const parsed = JSON.parse(stored) as MemberUser;
+    if (isDemoMember(parsed)) {
+      localStorage.removeItem(MEMBER_STORAGE_KEY);
+      localStorage.removeItem(DEMO_MEMBER_STORAGE_KEY);
+      cachedMemberRaw = null;
+      return null;
     }
-    return true;
-  });
+
+    cachedMember = parsed;
+    return cachedMember;
+  } catch {
+    localStorage.removeItem(MEMBER_STORAGE_KEY);
+    cachedMemberRaw = null;
+    return null;
+  }
+};
+
+const getServerMemberSnapshot = (): MemberUser | null => null;
+
+const subscribeToMember = (callback: () => void) => {
+  window.addEventListener(MEMBER_CHANGE_EVENT, callback);
+  window.addEventListener("storage", callback);
+  return () => {
+    window.removeEventListener(MEMBER_CHANGE_EVENT, callback);
+    window.removeEventListener("storage", callback);
+  };
+};
+
+const persistMember = (member: MemberUser | null) => {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  if (member) {
+    localStorage.setItem(MEMBER_STORAGE_KEY, JSON.stringify(member));
+  } else {
+    localStorage.removeItem(MEMBER_STORAGE_KEY);
+  }
+  notifyMemberChanged();
+};
+
+export const MemberProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const member = useSyncExternalStore(
+    subscribeToMember,
+    getStoredMemberSnapshot,
+    getServerMemberSnapshot,
+  );
 
   const signup = (data: MemberSignupRequestDto) => memberAuthApi.signup(data);
   const signin = (data: MemberSigninRequestDto) => memberAuthApi.signin(data);
@@ -88,33 +139,24 @@ export const MemberProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       profileImageUrl: res.profileImageUrl,
       status: res.status,
     };
-    setMember(userState);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("posthuman_member_user", JSON.stringify(userState));
-    }
+    persistMember(userState);
     return res;
   };
 
   const logoutMember = () => {
-    setMember(null);
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("posthuman_member_user");
-    }
+    persistMember(null);
   };
 
   const updateMemberStatus = (status: MemberUser["status"]) => {
     if (member) {
       const updated = { ...member, status };
-      setMember(updated);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("posthuman_member_user", JSON.stringify(updated));
-      }
+      persistMember(updated);
     }
   };
 
   return (
     <MemberContext.Provider
-      value={{ member, loading, signup, signin, verifyOtp, logoutMember, updateMemberStatus }}
+      value={{ member, loading: false, signup, signin, verifyOtp, logoutMember, updateMemberStatus }}
     >
       {children}
     </MemberContext.Provider>
