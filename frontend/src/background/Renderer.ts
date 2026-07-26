@@ -32,11 +32,12 @@ export function isWebGLAvailable(): boolean {
 
   try {
     canvas = document.createElement("canvas");
+    if (!window.WebGLRenderingContext) return false;
+
     return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true }) ||
-        canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true }) ||
-        canvas.getContext("experimental-webgl", { failIfMajorPerformanceCaveat: true }))
+      canvas.getContext("webgl2") ||
+      canvas.getContext("webgl") ||
+      canvas.getContext("experimental-webgl")
     );
   } catch {
     return false;

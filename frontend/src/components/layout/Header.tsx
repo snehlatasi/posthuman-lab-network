@@ -11,11 +11,13 @@ import type { NavigationGroup } from "@/lib/navigation";
 import { navigationConfig } from "@/lib/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useMember } from "@/context/MemberContext";
+import { useTheme } from "@/context/ThemeContext";
 import { ThemeSelector } from "@/components/ui/ThemeSelector";
 
 export const Header: FC = () => {
   const { isAdmin, openLoginModal } = useAuth();
   const { member } = useMember();
+  const { resolvedTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -110,7 +112,8 @@ export const Header: FC = () => {
     setActiveGroup((current) => (current === label ? null : label));
   };
 
-  const isOverlayingHero = pathname === "/" && !isScrolled && !activeGroup && !isOpen;
+  const isOverlayingHero =
+    resolvedTheme === "dark" && pathname === "/" && !isScrolled && !activeGroup && !isOpen;
   const brandTextClass = isOverlayingHero
     ? "text-bone-50 drop-shadow-[0_5px_20px_rgba(0,0,0,0.55)] group-hover:text-[#9ff8ff]"
     : "text-[#120e0c] dark:text-[#f3ebd9] group-hover:text-earth-600 dark:group-hover:text-earth-400";

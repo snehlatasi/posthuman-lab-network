@@ -14,7 +14,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   variant = "pills",
   className = "",
 }) => {
-  const { theme, setTheme, mounted } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -33,14 +33,6 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
     { value: "light", label: "Light", icon: <Sun className="w-3 h-3 2xl:w-3.5 2xl:h-3.5" /> },
     { value: "dark", label: "Dark", icon: <Moon className="w-3 h-3 2xl:w-3.5 2xl:h-3.5" /> },
   ];
-
-  if (!mounted) {
-    return (
-      <div
-        className={`h-7 w-20 bg-carbon-950/5 dark:bg-bone-50/5 rounded-full animate-pulse ${className}`}
-      />
-    );
-  }
 
   if (variant === "pills") {
     return (

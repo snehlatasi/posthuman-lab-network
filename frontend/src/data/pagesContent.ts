@@ -1,3 +1,5 @@
+import { allSubpages } from "@/lib/navigation";
+
 export interface PageItem {
   title: string;
   subtitle?: string;
@@ -979,3 +981,132 @@ export const pagesContentMap: Record<string, PageContent> = {
     ],
   },
 };
+
+const sectionLabels: Record<string, string> = {
+  about: "About",
+  blog: "Blog",
+  community: "Community",
+  contact: "Contact",
+  events: "Events",
+  labs: "Labs",
+  learning: "Learning",
+  media: "Media",
+  membership: "Membership",
+  practice: "Practice",
+  publications: "Publications",
+  support: "Support",
+};
+
+const sectionDescriptions: Record<string, string> = {
+  about: "Explore the ideas, histories, and values that shape the Posthuman Lab Network.",
+  blog: "Read reflections, field notes, and research diaries from the network.",
+  community: "Connect with reading circles, reflections, creative showcases, and shared projects.",
+  contact: "Reach the network for collaborations, speaking invitations, media, and partnerships.",
+  events: "Browse gatherings, registrations, workshops, dialogues, and event archives.",
+  labs: "Enter research, creative, ecological, media, and collaboration cells.",
+  learning: "Access learning pathways, concepts, recorded sessions, downloads, and open archives.",
+  media: "Browse lectures, conversations, interviews, visual essays, and community media.",
+  membership: "Find pathways for members, contributors, volunteers, ambassadors, and scholars.",
+  practice: "Explore embodied practices, retreats, workshops, collective learning, and meetups.",
+  publications: "Browse publishing pathways, journals, archives, creative writing, and submissions.",
+  support: "Learn how to support open-access research, sustainability, and ethical partnerships.",
+};
+
+const routeAliases: Record<string, string> = {
+  "community/reflections": "community/collaborations",
+  "community/reading-circles": "community/discussions",
+  "community/future-diaries": "community/collaborations",
+  "community/creative-showcase": "community/collaborations",
+  "community/shared-experiences": "community/collaborations",
+  "community/projects": "community/collaborations",
+  "events/community-conversations": "events/global-conversations",
+  "events/international-dialogues": "events/global-conversations",
+  "events/discussion-themes": "events/global-conversations",
+  "events/archive": "events/past",
+  "learning/archive": "learning/open-archive",
+  "media/posthuman-conversations": "media/podcasts",
+  "media/visual-essays": "media/documentaries",
+  "media/community-projects": "practice/community-projects",
+  "membership/apply": "membership/participate",
+  "membership/guidelines": "membership/benefits",
+  "membership/volunteer": "membership/participate",
+  "membership/contributor": "membership/participate",
+  "membership/researcher-artist-educator": "membership/benefits",
+  "membership/global-ambassadors": "membership/participate",
+  "membership/emerging-scholars": "membership/benefits",
+  "practice/retreats": "practice/gatherings",
+  "practice/embodied-practices": "practice/embodied-practice",
+  "publications/emerging-scholars": "publications/articles",
+  "publications/first-time-writers": "publications/essays",
+  "publications/collaborative": "publications/research",
+  "publications/creative-writing": "publications/creative-work",
+  "publications/community-work": "practice/community-projects",
+  "publications/digital-journal": "publications/articles",
+  "publications/archive": "publications/articles",
+  "support/current-needs": "support/contribute",
+  "support/become-supporter": "support/contribute",
+  "support/ethical-partnerships": "support/contribute",
+  "support/sponsorship": "support/contribute",
+  "support/sustainability": "support/contribute",
+};
+
+function titleFromSlug(slug: string) {
+  return slug
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function buildFallbackPage(section: string, subpage: string): PageContent {
+  const sectionLabel = sectionLabels[section] || titleFromSlug(section);
+  const title = titleFromSlug(subpage).toUpperCase();
+
+  return {
+    slug: subpage,
+    title,
+    eyebrow: sectionLabel,
+    description: sectionDescriptions[section] || `Explore ${titleFromSlug(subpage)}.`,
+    layout: "listing",
+    parentLabel: sectionLabel,
+    parentHref: `/${section}`,
+    items: [
+      {
+        title: titleFromSlug(subpage),
+        description:
+          "This section gathers current pathways, resources, and invitations connected to this part of the network.",
+        tag: sectionLabel,
+      },
+      {
+        title: "How to participate",
+        description:
+          "Use the related section links, membership pathways, or contact forms to move from reading into collaboration.",
+        tag: "Next Step",
+      },
+    ],
+    relatedLinks: [
+      { label: sectionLabel, href: `/${section}` },
+      { label: "Contact", href: "/contact" },
+    ],
+  };
+}
+
+Object.entries(routeAliases).forEach(([target, source]) => {
+  const sourcePage = pagesContentMap[source];
+  if (!pagesContentMap[target] && sourcePage) {
+    const [, subpage] = target.split("/");
+    pagesContentMap[target] = {
+      ...sourcePage,
+      slug: subpage,
+      title: titleFromSlug(subpage).toUpperCase(),
+    };
+  }
+});
+
+Object.entries(allSubpages).forEach(([section, subpages]) => {
+  subpages.forEach((subpage) => {
+    const key = `${section}/${subpage}`;
+    if (!pagesContentMap[key]) {
+      pagesContentMap[key] = buildFallbackPage(section, subpage);
+    }
+  });
+});

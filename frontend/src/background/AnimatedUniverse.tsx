@@ -5,12 +5,14 @@ import { universeConfig } from "./config/animation";
 import { useUniverseControls } from "./hooks/useUniverseControls";
 import { isWebGLAvailable, UniverseRenderer } from "./Renderer";
 import { StaticUniverseFallback } from "./StaticUniverseFallback";
+import { useTheme } from "@/context/ThemeContext";
 
 export function AnimatedUniverse() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<UniverseRenderer | null>(null);
   const [webglUnavailable, setWebglUnavailable] = useState(false);
   const controls = useUniverseControls();
+  const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     if (webglUnavailable) return;
@@ -77,14 +79,33 @@ export function AnimatedUniverse() {
     return <StaticUniverseFallback />;
   }
 
+  const isDark = resolvedTheme === "dark";
+
   return (
     <div
-      className="fixed inset-0 z-0 min-h-dvh w-full overflow-hidden bg-[#020611] pointer-events-none"
+      className={`fixed inset-0 z-0 min-h-dvh w-full overflow-hidden pointer-events-none transition-colors duration-300 ${
+        isDark ? "bg-[#020611]" : "bg-[#f8f1e6]"
+      }`}
       aria-hidden="true"
     >
-      <canvas ref={canvasRef} className="universe-canvas h-full w-full" />
-      <div className="pointer-events-none absolute inset-0 bg-carbon-950/28 dark:bg-carbon-950/34" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_52%_42%,transparent_0%,rgba(0,0,0,0.08)_42%,rgba(0,0,0,0.48)_100%)]" />
+      <canvas
+        ref={canvasRef}
+        className={`universe-canvas h-full w-full transition-opacity duration-300 ${
+          isDark ? "opacity-100" : "opacity-18"
+        }`}
+      />
+      <div
+        className={`pointer-events-none absolute inset-0 transition-colors duration-300 ${
+          isDark ? "bg-carbon-950/34" : "bg-bone-50/86"
+        }`}
+      />
+      <div
+        className={`pointer-events-none absolute inset-0 ${
+          isDark
+            ? "bg-[radial-gradient(circle_at_52%_42%,transparent_0%,rgba(0,0,0,0.08)_42%,rgba(0,0,0,0.48)_100%)]"
+            : "bg-[linear-gradient(90deg,rgba(255,250,240,0.96)_0%,rgba(255,250,240,0.9)_38%,rgba(248,241,230,0.82)_68%,rgba(248,241,230,0.94)_100%)]"
+        }`}
+      />
       <div className="pointer-events-none absolute inset-0 backdrop-blur-[0.2px]" />
     </div>
   );

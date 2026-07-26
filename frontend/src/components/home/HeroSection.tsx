@@ -6,20 +6,29 @@ import { Play } from "lucide-react";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { MagneticButton } from "../ui/Magnetic";
 import { Container } from "../layout/Primitives";
+import { useTheme } from "@/context/ThemeContext";
 
 export const HeroSection: React.FC = () => {
   const shouldReduceMotion = useSafeReducedMotion();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   return (
     <section
       id="hero"
-      className="min-h-dvh flex flex-col justify-between relative overflow-hidden pt-28 md:pt-32 pb-12 transition-colors duration-300"
+      className="min-h-screen flex flex-col justify-between relative overflow-hidden pt-28 md:pt-32 pb-12 transition-colors duration-300"
     >
       {/* Dynamic Theme Atmospheric Background Overlay */}
       <div className="absolute inset-0 organic-mesh opacity-20 z-0 pointer-events-none" />
 
       {/* Side Gradient Mask for text legibility */}
-      <div className="absolute inset-0 hero-readability-mask z-10 pointer-events-none transition-colors duration-500" />
+      <div
+        className={`absolute inset-0 z-10 pointer-events-none transition-colors duration-500 ${
+          isDark
+            ? "hero-readability-mask"
+            : "bg-[linear-gradient(90deg,rgba(255,250,240,0.98)_0%,rgba(255,250,240,0.94)_42%,rgba(255,250,240,0.7)_62%,rgba(255,250,240,0.42)_100%)]"
+        }`}
+      />
 
       {/* Vertical Scroll Indicator */}
       <div className="absolute left-6 bottom-24 hidden xl:flex flex-col items-center space-y-4 z-20 select-none pointer-events-none">
@@ -42,11 +51,23 @@ export const HeroSection: React.FC = () => {
               A GLOBAL COLLABORATIVE SPACE FOR
             </span>
 
-            <h1 className="font-serif-display text-[clamp(3.1rem,15vw,4.5rem)] md:text-7xl font-bold text-[#fbfeff] leading-[1] uppercase text-balance drop-shadow-[0_10px_34px_rgba(0,0,0,0.42)]">
+            <h1
+              className={`font-serif-display text-5xl sm:text-6xl md:text-7xl font-bold leading-[1] uppercase text-balance ${
+                isDark
+                  ? "text-[#fbfeff] drop-shadow-[0_10px_34px_rgba(0,0,0,0.42)]"
+                  : "text-carbon-950"
+              }`}
+            >
               POSTHUMAN FUTURES
             </h1>
 
-            <p className="font-sans text-base md:text-lg text-[#e3f0f3] leading-[1.75] font-medium max-w-[34rem] drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)]">
+            <p
+              className={`font-sans text-base md:text-lg leading-[1.75] font-medium max-w-[34rem] ${
+                isDark
+                  ? "text-[#e3f0f3] drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)]"
+                  : "text-carbon-900"
+              }`}
+            >
               Connecting thought, creativity, education and research across boundaries. Together we
               question, imagine and create more livable futures.
             </p>
@@ -70,10 +91,24 @@ export const HeroSection: React.FC = () => {
                       target.scrollIntoView({ behavior: shouldReduceMotion ? "auto" : "smooth" });
                     }
                   }}
-                  className="inline-flex min-h-12 items-center space-x-2.5 px-1 sm:px-4 py-3 text-xs font-sans tracking-widest uppercase font-bold text-[#f8fdff] hover:text-[#9ff8ff] transition-colors focus:outline-none cursor-pointer"
+                  className={`inline-flex min-h-12 items-center space-x-2.5 px-1 sm:px-4 py-3 text-xs font-sans tracking-widest uppercase font-bold transition-colors focus:outline-none cursor-pointer ${
+                    isDark
+                      ? "text-[#f8fdff] hover:text-[#9ff8ff]"
+                      : "text-carbon-950 hover:text-earth-600"
+                  }`}
                 >
-                  <div className="p-2 border border-bone-50/20 rounded-full bg-carbon-950/70 shadow-sm">
-                    <Play className="w-3 h-3 fill-[#f8fdff] text-[#f8fdff]" />
+                  <div
+                    className={`p-2 rounded-full shadow-sm ${
+                      isDark
+                        ? "border border-bone-50/20 bg-carbon-950/70"
+                        : "border border-carbon-950/15 bg-white/80"
+                    }`}
+                  >
+                    <Play
+                      className={`w-3 h-3 ${
+                        isDark ? "fill-[#f8fdff] text-[#f8fdff]" : "fill-carbon-950 text-carbon-950"
+                      }`}
+                    />
                   </div>
                   <span>Watch Intro</span>
                 </button>
