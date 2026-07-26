@@ -13,9 +13,37 @@ interface RendererOptions {
   scroll: ScrollState;
   reducedMotion: boolean;
   lowPower: boolean;
+  onFatalError?: (error: unknown) => void;
 }
 
 const PETAL_COUNT = 42;
+
+export class UniverseRendererUnavailableError extends Error {
+  constructor(message: string, options?: ErrorOptions) {
+    super(message, options);
+    this.name = "UniverseRendererUnavailableError";
+  }
+}
+
+export function isWebGLAvailable(): boolean {
+  if (typeof document === "undefined") return false;
+
+  let canvas: HTMLCanvasElement | null = null;
+
+  try {
+    canvas = document.createElement("canvas");
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext("webgl2", { failIfMajorPerformanceCaveat: true }) ||
+        canvas.getContext("webgl", { failIfMajorPerformanceCaveat: true }) ||
+        canvas.getContext("experimental-webgl", { failIfMajorPerformanceCaveat: true }))
+    );
+  } catch {
+    return false;
+  } finally {
+    canvas?.remove();
+  }
+}
 
 interface PetalMeshState {
   mesh: THREE.Mesh;
@@ -146,6 +174,8 @@ export class UniverseRenderer {
   private readonly pointer: PointerState;
   private readonly scroll: ScrollState;
   private readonly config: UniverseConfig;
+  private readonly canvas: HTMLCanvasElement;
+  private readonly onFatalError?: (error: unknown) => void;
   private readonly nebulaMaterial: THREE.ShaderMaterial;
   private readonly flowerMaterials: THREE.ShaderMaterial[] = [];
   private readonly particleMaterial: THREE.ShaderMaterial;
@@ -165,15 +195,25 @@ export class UniverseRenderer {
     this.scroll = options.scroll;
     this.reducedMotion = options.reducedMotion;
     this.lowPower = options.lowPower;
+    this.canvas = options.canvas;
+    this.onFatalError = options.onFatalError;
 
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: options.canvas,
-      alpha: false,
-      antialias: !options.lowPower,
-      depth: true,
-      stencil: false,
-      powerPreference: "high-performance",
-    });
+    try {
+      this.renderer = new THREE.WebGLRenderer({
+        canvas: options.canvas,
+        alpha: false,
+        antialias: !options.lowPower,
+        depth: true,
+        stencil: false,
+        powerPreference: options.lowPower ? "low-power" : "high-performance",
+      });
+    } catch (error) {
+      console.warn("Universe background disabled: WebGLRenderer creation failed.", error);
+      throw new UniverseRendererUnavailableError("Unable to create the universe WebGL renderer.", {
+        cause: error,
+      });
+    }
+
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
     this.renderer.toneMappingExposure = options.lowPower ? 0.96 : 1.15;
@@ -196,6 +236,7 @@ export class UniverseRenderer {
 
     this.resize();
     window.addEventListener("resize", this.resize);
+    this.canvas.addEventListener("webglcontextlost", this.handleContextLost, false);
   }
 
   setReducedMotion(value: boolean) {
@@ -219,7 +260,12 @@ export class UniverseRenderer {
     if (this.animationId !== null || !this.visible) return;
     const tick = () => {
       if (!this.visible) return;
-      this.render();
+      try {
+        this.render();
+      } catch (error) {
+        this.stopAfterFailure(error);
+        return;
+      }
       this.animationId = requestAnimationFrame(tick);
     };
     this.animationId = requestAnimationFrame(tick);
@@ -229,8 +275,22 @@ export class UniverseRenderer {
     if (this.animationId !== null) cancelAnimationFrame(this.animationId);
     this.animationId = null;
     window.removeEventListener("resize", this.resize);
+    this.canvas.removeEventListener("webglcontextlost", this.handleContextLost);
     this.disposables.forEach((item) => item.dispose());
     this.renderer.dispose();
+  }
+
+  private readonly handleContextLost = (event: Event) => {
+    event.preventDefault();
+    this.stopAfterFailure(new Error("Universe WebGL context was lost."));
+  };
+
+  private stopAfterFailure(error: unknown) {
+    if (this.animationId !== null) cancelAnimationFrame(this.animationId);
+    this.animationId = null;
+    this.visible = false;
+    console.warn("Universe background disabled: WebGL rendering failed.", error);
+    this.onFatalError?.(error);
   }
 
   private readonly resize = () => {

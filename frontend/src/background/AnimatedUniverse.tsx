@@ -1,35 +1,69 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { universeConfig } from "./config/animation";
 import { useUniverseControls } from "./hooks/useUniverseControls";
-import { UniverseRenderer } from "./Renderer";
+import { isWebGLAvailable, UniverseRenderer } from "./Renderer";
+import { StaticUniverseFallback } from "./StaticUniverseFallback";
 
 export function AnimatedUniverse() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<UniverseRenderer | null>(null);
+  const [webglUnavailable, setWebglUnavailable] = useState(false);
   const controls = useUniverseControls();
 
   useEffect(() => {
-    if (!canvasRef.current) return;
+    if (webglUnavailable) return;
 
-    const renderer = new UniverseRenderer({
-      canvas: canvasRef.current,
-      config: universeConfig,
-      pointer: controls.pointerRef.current,
-      scroll: controls.scrollRef.current,
-      reducedMotion: controls.reducedMotion,
-      lowPower: controls.lowPower,
-    });
+    let cancelled = false;
+    let renderer: UniverseRenderer | null = null;
 
-    rendererRef.current = renderer;
-    renderer.start();
+    const initializeRenderer = () => {
+      if (cancelled || !canvasRef.current) return;
+
+      if (!isWebGLAvailable()) {
+        console.warn("Universe background disabled: WebGL is unavailable in this browser.");
+        setWebglUnavailable(true);
+        return;
+      }
+
+      try {
+        renderer = new UniverseRenderer({
+          canvas: canvasRef.current,
+          config: universeConfig,
+          pointer: controls.pointerRef.current,
+          scroll: controls.scrollRef.current,
+          reducedMotion: controls.reducedMotion,
+          lowPower: controls.lowPower,
+          onFatalError: () => {
+            setWebglUnavailable(true);
+          },
+        });
+
+        rendererRef.current = renderer;
+        renderer.start();
+      } catch {
+        setWebglUnavailable(true);
+      }
+    };
+
+    const frameId = requestAnimationFrame(initializeRenderer);
 
     return () => {
-      renderer.dispose();
-      rendererRef.current = null;
+      cancelled = true;
+      cancelAnimationFrame(frameId);
+      renderer?.dispose();
+      if (rendererRef.current === renderer) {
+        rendererRef.current = null;
+      }
     };
-  }, [controls.lowPower, controls.pointerRef, controls.reducedMotion, controls.scrollRef]);
+  }, [
+    controls.lowPower,
+    controls.pointerRef,
+    controls.reducedMotion,
+    controls.scrollRef,
+    webglUnavailable,
+  ]);
 
   useEffect(() => {
     rendererRef.current?.setReducedMotion(controls.reducedMotion);
@@ -38,6 +72,10 @@ export function AnimatedUniverse() {
   useEffect(() => {
     rendererRef.current?.setVisible(controls.visible);
   }, [controls.visible]);
+
+  if (webglUnavailable) {
+    return <StaticUniverseFallback />;
+  }
 
   return (
     <div
