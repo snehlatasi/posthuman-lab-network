@@ -34,7 +34,6 @@ export function AnimatedUniverse() {
           canvas: canvasRef.current,
           config: universeConfig,
           pointer: controls.pointerRef.current,
-          scroll: controls.scrollRef.current,
           reducedMotion: controls.reducedMotion,
           lowPower: controls.lowPower,
           onFatalError: () => {
@@ -63,7 +62,6 @@ export function AnimatedUniverse() {
     controls.lowPower,
     controls.pointerRef,
     controls.reducedMotion,
-    controls.scrollRef,
     webglUnavailable,
   ]);
 

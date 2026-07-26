@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import type { UniverseConfig } from "./config/animation";
-import type { PointerState, ScrollState } from "./types";
+import type { PointerState } from "./types";
 import { nebulaFragmentShader, nebulaVertexShader } from "./shaders/background/nebula";
 import { flowerFragmentShader, flowerVertexShader } from "./shaders/flower/flower";
 import { particleFragmentShader, particleVertexShader } from "./shaders/particles/particles";
@@ -10,7 +10,6 @@ interface RendererOptions {
   canvas: HTMLCanvasElement;
   config: UniverseConfig;
   pointer: PointerState;
-  scroll: ScrollState;
   reducedMotion: boolean;
   lowPower: boolean;
   onFatalError?: (error: unknown) => void;
@@ -173,7 +172,6 @@ export class UniverseRenderer {
   private reducedMotion: boolean;
   private readonly lowPower: boolean;
   private readonly pointer: PointerState;
-  private readonly scroll: ScrollState;
   private readonly config: UniverseConfig;
   private readonly canvas: HTMLCanvasElement;
   private readonly onFatalError?: (error: unknown) => void;
@@ -193,7 +191,6 @@ export class UniverseRenderer {
   constructor(options: RendererOptions) {
     this.config = options.config;
     this.pointer = options.pointer;
-    this.scroll = options.scroll;
     this.reducedMotion = options.reducedMotion;
     this.lowPower = options.lowPower;
     this.canvas = options.canvas;
@@ -319,29 +316,25 @@ export class UniverseRenderer {
       this.pointer.y * this.config.mouseSensitivity * 0.58,
       0.035
     );
-    this.camera.position.z = THREE.MathUtils.lerp(
-      this.camera.position.z,
-      7.6 - this.scroll.progress * 1.15,
-      0.025
-    );
+    this.camera.position.z = THREE.MathUtils.lerp(this.camera.position.z, 7.6, 0.025);
     this.camera.lookAt(0, 0, 0);
 
     const pointerEnergy = Math.min(
       1,
       this.pointer.velocity * 0.9 + Math.hypot(this.pointer.x, this.pointer.y) * 0.75
     );
-    const scrollSurge = Math.min(1, Math.abs(this.scroll.velocity) * 9.5);
+    const cosmicPulse = 0.5 + 0.5 * Math.sin(t * 0.72);
+    const orbitalEnergy = 0.34 + cosmicPulse * 0.22;
     this.pointer.velocity *= 0.9;
-    this.scroll.velocity *= 0.88;
 
     this.root.rotation.z =
-      t * 0.045 + Math.sin(t * 0.24) * 0.026 + this.scroll.progress * 0.12 + pointerEnergy * 0.025;
-    this.root.rotation.x = this.pointer.y * 0.045 + this.scroll.progress * 0.04;
-    this.root.rotation.y = this.pointer.x * 0.055 + Math.sin(t * 0.18) * 0.035;
+      t * 0.072 + Math.sin(t * 0.24) * 0.026 + pointerEnergy * 0.025;
+    this.root.rotation.x = this.pointer.y * 0.045 + Math.sin(t * 0.16) * 0.035;
+    this.root.rotation.y = this.pointer.x * 0.055 + Math.sin(t * 0.18) * 0.04;
     this.outlineGroup.rotation.z =
-      Math.sin(t * 0.52) * 0.105 + scrollSurge * 0.12 + pointerEnergy * 0.08;
+      t * -0.038 + Math.sin(t * 0.52) * 0.105 + pointerEnergy * 0.08;
     this.outlineGroup.scale.setScalar(
-      1 + Math.sin(t * 1.1) * 0.045 + scrollSurge * 0.07 + pointerEnergy * 0.04
+      1 + Math.sin(t * 1.1) * 0.045 + orbitalEnergy * 0.035 + pointerEnergy * 0.04
     );
 
     this.petalMeshes.forEach(({ mesh, baseAngle, baseScale, layer, seed }) => {
@@ -349,18 +342,18 @@ export class UniverseRenderer {
       const cosmicPull = Math.sin(t * 0.28 + layer * 1.7) * Math.cos(t * 0.22 + baseAngle);
       const hoverWave = Math.sin(t * 2.8 + seed * 21.0) * pointerEnergy;
       const unfurl =
-        1 + independentBreath * 0.075 + cosmicPull * 0.045 + scrollSurge * 0.1 + hoverWave * 0.06;
+        1 + independentBreath * 0.075 + cosmicPull * 0.045 + orbitalEnergy * 0.045 + hoverWave * 0.06;
       const round = 1 + Math.cos(t * (0.54 + layer * 0.07) + baseAngle) * 0.05;
       mesh.rotation.z =
         baseAngle +
         Math.sin(t * (0.35 + layer * 0.06) + baseAngle * 1.5) * 0.045 +
-        scrollSurge * 0.08 +
+        Math.sin(t * (0.22 + layer * 0.04) + seed * 8.0) * 0.035 +
         hoverWave * 0.04;
       mesh.rotation.x =
         0.06 +
         layer * 0.06 +
         Math.sin(t * (0.42 + layer * 0.06) + baseAngle) * 0.08 +
-        scrollSurge * 0.08 +
+        Math.sin(t * 0.3 + seed * 4.0) * 0.035 +
         pointerEnergy * 0.04;
       mesh.rotation.y =
         Math.cos(t * (0.44 + layer * 0.05) + baseAngle) * 0.07 + this.pointer.x * 0.045;
@@ -369,53 +362,53 @@ export class UniverseRenderer {
 
     this.nebulaMaterial.uniforms.uTime.value = t;
     this.nebulaMaterial.uniforms.uPointer.value.set(this.pointer.x, this.pointer.y);
-    this.nebulaMaterial.uniforms.uScroll.value = this.scroll.progress;
+    this.nebulaMaterial.uniforms.uScroll.value = 0;
 
     this.flowerMaterials.forEach((material) => {
       material.uniforms.uTime.value = t;
       material.uniforms.uPointer.value.set(this.pointer.x, this.pointer.y);
-      material.uniforms.uScroll.value = this.scroll.progress;
-      material.uniforms.uScrollVelocity.value = scrollSurge;
+      material.uniforms.uScroll.value = 0;
+      material.uniforms.uScrollVelocity.value = orbitalEnergy;
       material.uniforms.uPointerEnergy.value = pointerEnergy;
       material.uniforms.uReduced.value = this.reducedMotion ? 1 : 0;
     });
 
     this.outlineMaterials.forEach((material) => {
       material.uniforms.uTime.value = t;
-      material.uniforms.uScrollVelocity.value = scrollSurge;
+      material.uniforms.uScrollVelocity.value = orbitalEnergy;
       material.uniforms.uPointerEnergy.value = pointerEnergy;
     });
 
     this.waveMaterials.forEach((material) => {
       material.uniforms.uTime.value = t;
-      material.uniforms.uScrollVelocity.value = scrollSurge;
+      material.uniforms.uScrollVelocity.value = orbitalEnergy;
       material.uniforms.uPointerEnergy.value = pointerEnergy;
     });
 
     this.particleMaterial.uniforms.uTime.value = t;
     this.particleMaterial.uniforms.uPixelRatio.value = this.renderer.getPixelRatio();
     this.particleMaterial.uniforms.uPointer.value.set(this.pointer.x, this.pointer.y);
-    this.particleMaterial.uniforms.uScroll.value = this.scroll.progress;
+    this.particleMaterial.uniforms.uScroll.value = 0;
     this.particleMaterial.uniforms.uTurbulence.value = this.reducedMotion
       ? 0.18
       : this.config.turbulence;
 
     this.streamMaterial.uniforms.uTime.value = t;
     this.streamMaterial.uniforms.uMouse.value = this.pointer.velocity;
-    this.streamMaterial.uniforms.uScroll.value = this.scroll.progress;
-    this.streamMaterial.uniforms.uRotation.value = this.scroll.progress * 0.55;
+    this.streamMaterial.uniforms.uScroll.value = 0;
+    this.streamMaterial.uniforms.uRotation.value = t * 0.11;
 
     this.coreMaterial.uniforms.uTime.value = t;
     this.coreMaterial.uniforms.uPointerEnergy.value = pointerEnergy;
-    this.coreMaterial.uniforms.uScrollVelocity.value = scrollSurge;
+    this.coreMaterial.uniforms.uScrollVelocity.value = orbitalEnergy;
     this.corneaMaterial.uniforms.uTime.value = t;
     this.corneaMaterial.uniforms.uPointerEnergy.value = pointerEnergy;
-    this.corneaMaterial.uniforms.uScrollVelocity.value = scrollSurge;
+    this.corneaMaterial.uniforms.uScrollVelocity.value = orbitalEnergy;
     this.coreLight.intensity =
       this.config.energyEmission *
       (this.reducedMotion
-        ? 1.2
-        : 3.2 + Math.sin(t * 3.8) * 1.05 + pointerEnergy * 1.7 + scrollSurge * 1.4);
+        ? 0.72
+        : 1.45 + Math.sin(t * 2.2) * 0.22 + pointerEnergy * 0.55 + orbitalEnergy * 0.24);
 
     this.renderer.autoClear = true;
     this.renderer.render(this.screenScene, this.screenCamera);
@@ -714,12 +707,15 @@ export class UniverseRenderer {
         varying vec3 vPosition;
         void main() {
           float fresnel = pow(1.0 - max(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0), 2.4);
-          float blink = pow(0.5 + 0.5 * sin(uTime * 4.6), 4.0);
-          float pulse = 0.62 + sin(uTime * uPulse) * 0.26 + sin(uTime * 2.7) * 0.1;
-          pulse += blink * 0.34 + uPointerEnergy * 0.45 + uScrollVelocity * 0.36;
+          float blink = pow(0.5 + 0.5 * sin(uTime * 3.4), 4.0);
+          float pulse = 0.48 + sin(uTime * uPulse) * 0.16 + sin(uTime * 2.1) * 0.07;
+          pulse += blink * 0.12 + uPointerEnergy * 0.2 + uScrollVelocity * 0.16;
           float center = 1.0 - smoothstep(0.0, 0.95, length(vPosition));
-          vec3 color = mix(uCyan, uWhite, center) + uRose * fresnel * 0.9;
-          gl_FragColor = vec4(color * (2.4 + pulse * 4.1 + fresnel), 0.18 + center * 0.4 + fresnel * 0.2);
+          float innerMist = smoothstep(0.18, 0.9, center);
+          vec3 color = mix(uCyan, uRose, fresnel * 0.55 + blink * 0.16);
+          color = mix(color, uWhite, innerMist * 0.34);
+          color += uRose * fresnel * 0.42;
+          gl_FragColor = vec4(color * (1.18 + pulse * 1.35 + fresnel * 0.55), 0.12 + center * 0.24 + fresnel * 0.13);
         }
       `,
       uniforms: {
@@ -741,7 +737,7 @@ export class UniverseRenderer {
       new THREE.MeshBasicMaterial({
         color: this.config.palette.cyan,
         transparent: true,
-        opacity: 0.11 * this.config.bloomIntensity,
+        opacity: 0.055 * this.config.bloomIntensity,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       })
@@ -767,19 +763,19 @@ export class UniverseRenderer {
           vec2 uv = vUv * 2.0 - 1.0;
           float r = length(uv);
           float angle = atan(uv.y, uv.x);
-          float eyelid = 0.92 + sin(uTime * 3.8) * 0.07 + pow(sin(uTime * 1.05) * 0.5 + 0.5, 7.0) * 0.12;
-          eyelid += uPointerEnergy * 0.08 + uScrollVelocity * 0.08;
+          float eyelid = 0.9 + sin(uTime * 3.2) * 0.055 + pow(sin(uTime * 1.05) * 0.5 + 0.5, 7.0) * 0.08;
+          eyelid += uPointerEnergy * 0.05 + uScrollVelocity * 0.04;
           float eyeMask = smoothstep(eyelid, eyelid - 0.22, abs(uv.y));
-          float iris = exp(-r * 4.2);
-          float pupil = exp(-r * 18.0);
+          float iris = exp(-r * 4.8);
+          float pupil = exp(-r * 22.0);
           float ring = exp(-abs(r - 0.48 - sin(uTime * 2.0) * 0.04) * 22.0);
           float spokes = pow(1.0 - abs(sin(angle * 18.0 + uTime * 2.7)), 8.0) * smoothstep(0.72, 0.12, r);
-          float blinkGlow = pow(0.5 + 0.5 * sin(uTime * 5.6), 6.0);
+          float blinkGlow = pow(0.5 + 0.5 * sin(uTime * 4.2), 6.0);
           vec3 color = mix(uCyan, uRose, ring * 0.62 + spokes * 0.38);
-          color = mix(color, uWhite, iris * 0.32 + pupil * 0.82 + blinkGlow * 0.24);
+          color = mix(color, uWhite, iris * 0.16 + pupil * 0.34 + blinkGlow * 0.1);
           float alpha = smoothstep(0.98, 0.08, r) * eyeMask;
-          float eyelight = 2.4 + iris * 2.4 + ring * 2.4 + spokes * 1.7 + blinkGlow * 2.2 + uPointerEnergy;
-          gl_FragColor = vec4(color * eyelight, alpha * (0.78 + ring * 0.22));
+          float eyelight = 1.15 + iris * 0.75 + ring * 1.25 + spokes * 1.0 + blinkGlow * 0.75 + uPointerEnergy * 0.35;
+          gl_FragColor = vec4(color * eyelight, alpha * (0.46 + ring * 0.16));
         }
       `,
       uniforms: {
@@ -799,14 +795,14 @@ export class UniverseRenderer {
     const whiteBloom = new THREE.Mesh(
       new THREE.SphereGeometry(0.78, 48, 48),
       new THREE.MeshBasicMaterial({
-        color: this.config.palette.white,
+        color: this.config.palette.cyan,
         transparent: true,
-        opacity: 0.34,
+        opacity: 0.13,
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       })
     );
-    const light = new THREE.PointLight(this.config.palette.cyan, 4, 10, 1.8);
+    const light = new THREE.PointLight(this.config.palette.cyan, 1.4, 9, 1.8);
     this.root.add(bloom, whiteBloom, mesh, whitePoint, light);
     this.disposables.push(
       mesh.geometry,
