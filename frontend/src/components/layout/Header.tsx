@@ -318,10 +318,10 @@ export const Header: FC = () => {
         {isOpen && (
           <motion.div
             initial={shouldReduceMotion ? {} : { opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "100vh" }}
+            animate={{ opacity: 1, height: "100dvh" }}
             exit={shouldReduceMotion ? {} : { opacity: 0, height: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="xl:hidden fixed top-[60px] left-0 right-0 bottom-0 bg-bone-50/98 dark:bg-carbon-950/98 backdrop-blur-xl border-t border-carbon-950/10 dark:border-bone-50/15 overflow-y-auto z-40"
+            className="xl:hidden fixed top-0 left-0 right-0 bottom-0 bg-bone-50/98 dark:bg-carbon-950/98 backdrop-blur-xl border-t border-carbon-950/10 dark:border-bone-50/15 overflow-y-auto z-40 pt-20"
           >
             <div className="px-6 py-8 space-y-6">
               {/* Theme Preference in Mobile Drawer */}

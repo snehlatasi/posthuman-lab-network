@@ -13,7 +13,7 @@ export const HeroSection: React.FC = () => {
   return (
     <section
       id="hero"
-      className="min-h-screen flex flex-col justify-between relative overflow-hidden pt-28 md:pt-32 pb-12 transition-colors duration-300"
+      className="min-h-dvh flex flex-col justify-between relative overflow-hidden pt-28 md:pt-32 pb-12 transition-colors duration-300"
     >
       {/* Dynamic Theme Atmospheric Background Overlay */}
       <div className="absolute inset-0 organic-mesh opacity-20 z-0 pointer-events-none" />
@@ -42,7 +42,7 @@ export const HeroSection: React.FC = () => {
               A GLOBAL COLLABORATIVE SPACE FOR
             </span>
 
-            <h1 className="font-serif-display text-5xl sm:text-6xl md:text-7xl font-bold text-[#fbfeff] leading-[1] uppercase text-balance drop-shadow-[0_10px_34px_rgba(0,0,0,0.42)]">
+            <h1 className="font-serif-display text-[clamp(3.1rem,15vw,4.5rem)] md:text-7xl font-bold text-[#fbfeff] leading-[1] uppercase text-balance drop-shadow-[0_10px_34px_rgba(0,0,0,0.42)]">
               POSTHUMAN FUTURES
             </h1>
 

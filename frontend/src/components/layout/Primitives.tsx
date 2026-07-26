@@ -59,7 +59,7 @@ export const PageHeader: React.FC<{
   parentHref?: string;
 }> = ({ tag, title, subtitle, parentLabel, parentHref }) => {
   return (
-    <div className="pt-32 pb-18 border-b border-carbon-950/8 dark:border-bone-50/12 bg-gradient-to-b from-bone-50/86 via-bone-50/62 to-transparent dark:from-carbon-950/86 dark:via-carbon-950/62 dark:to-transparent relative overflow-hidden transition-colors duration-300">
+    <div className="pt-28 sm:pt-32 pb-14 sm:pb-18 border-b border-carbon-950/8 dark:border-bone-50/12 bg-gradient-to-b from-bone-50/86 via-bone-50/62 to-transparent dark:from-carbon-950/86 dark:via-carbon-950/62 dark:to-transparent relative overflow-hidden transition-colors duration-300">
       <div className="absolute inset-0 organic-mesh opacity-35 z-0 pointer-events-none" />
       <div className="absolute inset-x-[8%] bottom-0 h-px ink-rule z-0 pointer-events-none" />
       <Container className="relative z-10 space-y-4">
@@ -90,7 +90,7 @@ export const PageHeader: React.FC<{
           as="h1"
           delay={0.1}
           stagger={0.04}
-          className="font-serif-display text-5xl md:text-6xl lg:text-7xl font-bold text-carbon-950 dark:text-bone-50 max-w-4xl leading-[1] text-balance uppercase"
+          className="font-serif-display text-[clamp(2.6rem,14vw,4rem)] md:text-6xl lg:text-7xl font-bold text-carbon-950 dark:text-bone-50 max-w-4xl leading-[1] text-balance uppercase"
         />
 
         {subtitle && (

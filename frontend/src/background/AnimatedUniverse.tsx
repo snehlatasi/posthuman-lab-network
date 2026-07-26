@@ -41,7 +41,7 @@ export function AnimatedUniverse() {
 
   return (
     <div
-      className="fixed inset-0 z-0 h-screen w-screen overflow-hidden bg-[#020611] pointer-events-none"
+      className="fixed inset-0 z-0 min-h-dvh w-full overflow-hidden bg-[#020611] pointer-events-none"
       aria-hidden="true"
     >
       <canvas ref={canvasRef} className="universe-canvas h-full w-full" />
