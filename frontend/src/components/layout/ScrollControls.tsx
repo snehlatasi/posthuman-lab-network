@@ -112,6 +112,7 @@ export const ScrollControls: React.FC = () => {
     >
       {/* Scroll Up Control */}
       <button
+        suppressHydrationWarning
         type="button"
         onClick={scrollUp}
         disabled={!showUp}
@@ -131,6 +132,7 @@ export const ScrollControls: React.FC = () => {
 
       {/* Scroll Down Control */}
       <button
+        suppressHydrationWarning
         type="button"
         onClick={scrollDown}
         disabled={!showDown}

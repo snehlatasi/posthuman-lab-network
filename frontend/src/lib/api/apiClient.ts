@@ -1,8 +1,33 @@
 const rawBaseUrl =
   process.env.NEXT_PUBLIC_API_BASE_URL ||
   process.env.NEXT_PUBLIC_API_URL ||
-  "http://localhost:8080";
-const BASE_URL = rawBaseUrl.replace(/\/api\/v1\/?$/, "").replace(/\/+$/, "");
+  "";
+export const AUTH_CHANGE_EVENT = "posthuman-auth-change";
+
+function isLoopbackHost(hostname: string) {
+  return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "::1";
+}
+
+function getBaseUrl() {
+  if (!rawBaseUrl) return "";
+
+  const normalizedBaseUrl = rawBaseUrl.replace(/\/api\/v1\/?$/, "").replace(/\/+$/, "");
+
+  if (typeof window === "undefined") {
+    return normalizedBaseUrl;
+  }
+
+  try {
+    const configuredUrl = new URL(normalizedBaseUrl);
+    if (isLoopbackHost(configuredUrl.hostname)) {
+      return "";
+    }
+  } catch {
+    return normalizedBaseUrl;
+  }
+
+  return normalizedBaseUrl;
+}
 
 export function getStoredToken(): string | null {
   if (typeof window === "undefined") return null;
@@ -16,10 +41,11 @@ export function setStoredToken(token: string | null): void {
   } else {
     localStorage.removeItem("posthuman_auth_token");
   }
+  window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
 }
 
 export async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
-  const url = `${BASE_URL}${path}`;
+  const url = `${getBaseUrl()}${path}`;
   const token = getStoredToken();
 
   const headers: Record<string, string> = {

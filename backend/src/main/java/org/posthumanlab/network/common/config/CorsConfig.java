@@ -21,6 +21,7 @@ public class CorsConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(corsProperties.getAllowedOrigins());
+        configuration.setAllowedOriginPatterns(corsProperties.getAllowedOriginPatterns());
         configuration.setAllowedMethods(corsProperties.getAllowedMethods());
         configuration.setAllowedHeaders(corsProperties.getAllowedHeaders());
         configuration.setAllowCredentials(corsProperties.isAllowCredentials());
@@ -38,6 +39,7 @@ public class CorsConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
                         .allowedOrigins(corsProperties.getAllowedOrigins().toArray(String[]::new))
+                        .allowedOriginPatterns(corsProperties.getAllowedOriginPatterns().toArray(String[]::new))
                         .allowedMethods(corsProperties.getAllowedMethods().toArray(String[]::new))
                         .allowedHeaders(corsProperties.getAllowedHeaders().toArray(String[]::new))
                         .allowCredentials(corsProperties.isAllowCredentials())

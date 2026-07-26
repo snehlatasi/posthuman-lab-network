@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import type { PointerState } from "../types";
 
@@ -17,6 +18,7 @@ function detectLowPowerDevice(): boolean {
 
 export function useUniverseControls() {
   const reducedMotion = useSafeReducedMotion();
+  const mobilePerformanceMode = useMobilePerformanceMode();
   const pointerRef = useRef<PointerState>(createPointerState());
   const [visible, setVisible] = useState(true);
   const [lowPower] = useState(() =>
@@ -24,6 +26,8 @@ export function useUniverseControls() {
   );
 
   useEffect(() => {
+    if (mobilePerformanceMode) return;
+
     let lastX = 0;
     let lastY = 0;
 
@@ -49,7 +53,7 @@ export function useUniverseControls() {
       window.removeEventListener("pointermove", handlePointerMove);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, []);
+  }, [mobilePerformanceMode]);
 
   return useMemo(
     () => ({

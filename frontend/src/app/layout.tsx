@@ -53,7 +53,7 @@ const themeInitScript = `
     try {
       var key = 'posthuman-theme-preference';
       var savedTheme = localStorage.getItem(key);
-      var theme = savedTheme && ['light', 'dark', 'system'].indexOf(savedTheme) !== -1 ? savedTheme : 'system';
+      var theme = savedTheme && ['light', 'system'].indexOf(savedTheme) !== -1 ? savedTheme : 'system';
       var resolved = theme;
       if (theme === 'system') {
         resolved = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';

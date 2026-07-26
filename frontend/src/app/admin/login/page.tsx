@@ -26,6 +26,7 @@ export default function AdminLoginPage() {
     try {
       const res = await authApi.login({ email, password });
       if (res?.token) {
+        localStorage.setItem("posthuman_admin_email", res.email || email);
         router.push("/admin");
       } else {
         setErrorMsg("Unable to sign in with those credentials.");

@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import type { ThemePreference } from "@/context/ThemeContext";
 import { useTheme } from "@/context/ThemeContext";
-import { Sun, Moon, Monitor, ChevronDown } from "lucide-react";
+import { Sun, Monitor, ChevronDown } from "lucide-react";
 
 interface ThemeSelectorProps {
   variant?: "dropdown" | "pills" | "compact";
@@ -31,7 +31,6 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   const options: { value: ThemePreference; label: string; icon: React.ReactNode }[] = [
     { value: "system", label: "System", icon: <Monitor className="w-3 h-3 2xl:w-3.5 2xl:h-3.5" /> },
     { value: "light", label: "Light", icon: <Sun className="w-3 h-3 2xl:w-3.5 2xl:h-3.5" /> },
-    { value: "dark", label: "Dark", icon: <Moon className="w-3 h-3 2xl:w-3.5 2xl:h-3.5" /> },
   ];
 
   if (variant === "pills") {
@@ -45,13 +44,14 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
           const isActive = theme === opt.value;
           return (
             <button
+              suppressHydrationWarning
               key={opt.value}
               type="button"
               role="radio"
               aria-checked={isActive}
               aria-label={`Set theme to ${opt.label}`}
               onClick={() => setTheme(opt.value)}
-              className={`inline-flex items-center justify-center px-1.5 py-1 2xl:px-2 text-[9px] 2xl:text-[10px] font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-200 cursor-pointer focus:outline-none focus:ring-1 focus:ring-earth-500 gap-1 ${
+              className={`inline-flex min-h-8 items-center justify-center px-2 py-1 2xl:px-2.5 text-[9px] 2xl:text-[10px] font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-200 cursor-pointer focus:outline-none focus:ring-1 focus:ring-earth-500 gap-1 ${
                 isActive
                   ? "bg-earth-600 dark:bg-earth-500 text-bone-50 shadow-sm"
                   : "text-carbon-800 dark:text-bone-200 hover:text-earth-600 dark:hover:text-earth-400 hover:bg-bone-200/50 dark:hover:bg-carbon-800/60"
@@ -72,6 +72,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
     return (
       <div className={`relative inline-block text-left shrink-0 ${className}`} ref={dropdownRef}>
         <button
+          suppressHydrationWarning
           type="button"
           onClick={() => setIsOpen(!isOpen)}
           className="inline-flex items-center justify-center p-1.5 text-carbon-950 dark:text-bone-100 hover:text-earth-600 dark:hover:text-earth-400 border border-carbon-950/10 dark:border-bone-50/15 bg-bone-100/90 dark:bg-carbon-900/90 rounded-full focus:outline-none transition-colors backdrop-blur-md cursor-pointer"
@@ -88,6 +89,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
               const isActive = theme === opt.value;
               return (
                 <button
+                  suppressHydrationWarning
                   key={opt.value}
                   type="button"
                   onClick={() => {
@@ -115,6 +117,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
   return (
     <div className={`relative inline-block text-left shrink-0 ${className}`} ref={dropdownRef}>
       <button
+        suppressHydrationWarning
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className="inline-flex items-center space-x-1.5 px-3 py-1 text-xs font-sans font-semibold uppercase tracking-wider text-carbon-950 dark:text-bone-100 bg-bone-100/90 dark:bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15 rounded-full hover:border-earth-500 focus:outline-none transition-all duration-200 shadow-sm backdrop-blur-md cursor-pointer"
@@ -133,6 +136,7 @@ export const ThemeSelector: React.FC<ThemeSelectorProps> = ({
             const isActive = theme === opt.value;
             return (
               <button
+                suppressHydrationWarning
                 key={opt.value}
                 type="button"
                 onClick={() => {

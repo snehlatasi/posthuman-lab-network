@@ -1015,6 +1015,7 @@ const sectionDescriptions: Record<string, string> = {
 const routeAliases: Record<string, string> = {
   "community/reflections": "community/collaborations",
   "community/reading-circles": "community/discussions",
+  "learning/reading-circles": "community/reading-circles",
   "community/future-diaries": "community/collaborations",
   "community/creative-showcase": "community/collaborations",
   "community/shared-experiences": "community/collaborations",

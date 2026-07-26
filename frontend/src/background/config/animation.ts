@@ -30,12 +30,12 @@ export interface UniverseConfig {
 }
 
 export const universeConfig: UniverseConfig = {
-  particleCount: 4600,
-  mobileParticleCount: 2200,
+  particleCount: 3200,
+  mobileParticleCount: 900,
   reducedMotionParticleCount: 700,
-  dustCount: 1300,
-  streamCount: 18,
-  streamSegments: 96,
+  dustCount: 900,
+  streamCount: 14,
+  streamSegments: 72,
   bloomIntensity: 2.8,
   animationSpeed: 0.74,
   turbulence: 0.52,
@@ -45,7 +45,7 @@ export const universeConfig: UniverseConfig = {
   flowerScale: 2.05,
   pulseFrequency: 0.92,
   energyEmission: 3.2,
-  maxDpr: 1.65,
+  maxDpr: 1.35,
   lowPowerMaxDpr: 1,
   palette: {
     void: "#020713",

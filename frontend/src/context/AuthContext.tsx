@@ -1,7 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
-import { getStoredToken } from "@/lib/api/apiClient";
+import React, { createContext, useCallback, useContext, useState, useSyncExternalStore } from "react";
+import { AUTH_CHANGE_EVENT, getStoredToken } from "@/lib/api/apiClient";
 import type { LoginRequestDto } from "@/lib/api/auth";
 import { authApi } from "@/lib/api/auth";
 
@@ -28,45 +28,36 @@ const AuthContext = createContext<AuthContextType>({
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAdmin, setIsAdmin] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return !!getStoredToken();
-    }
-    return false;
-  });
-  const [adminEmail, setAdminEmail] = useState<string | null>(() => {
-    if (typeof window !== "undefined" && getStoredToken()) {
-      return localStorage.getItem("posthuman_admin_email") || "admin@posthumanlab.org";
-    }
-    return null;
-  });
-  const [loading] = useState(false);
+  const isAdmin = useSyncExternalStore(subscribeToAuth, getAuthSnapshot, getServerAuthSnapshot);
+  const adminEmail = useSyncExternalStore(
+    subscribeToAuth,
+    getAdminEmailSnapshot,
+    getServerEmailSnapshot
+  );
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  const login = async (credentials: LoginRequestDto) => {
+  const login = useCallback(async (credentials: LoginRequestDto) => {
     const res = await authApi.login(credentials);
     if (res?.token) {
-      setIsAdmin(true);
       const email = res.email || credentials.email || "admin@posthumanlab.org";
-      setAdminEmail(email);
       localStorage.setItem("posthuman_admin_email", email);
+      window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
       setShowLoginModal(false);
     }
-  };
+  }, []);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     authApi.logout();
     localStorage.removeItem("posthuman_admin_email");
-    setIsAdmin(false);
-    setAdminEmail(null);
-  };
+    window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         isAdmin,
         adminEmail,
-        loading,
+        loading: false,
         login,
         logout,
         showLoginModal,
@@ -80,3 +71,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+function subscribeToAuth(callback: () => void) {
+  if (typeof window === "undefined") return () => {};
+
+  const handleStorage = (event: StorageEvent) => {
+    if (
+      event.key === "posthuman_auth_token" ||
+      event.key === "posthuman_admin_email"
+    ) {
+      callback();
+    }
+  };
+
+  window.addEventListener("storage", handleStorage);
+  window.addEventListener(AUTH_CHANGE_EVENT, callback);
+
+  return () => {
+    window.removeEventListener("storage", handleStorage);
+    window.removeEventListener(AUTH_CHANGE_EVENT, callback);
+  };
+}
+
+function getAuthSnapshot() {
+  return !!getStoredToken();
+}
+
+function getServerAuthSnapshot() {
+  return false;
+}
+
+function getAdminEmailSnapshot() {
+  if (typeof window === "undefined" || !getStoredToken()) return null;
+  return localStorage.getItem("posthuman_admin_email") || "admin@posthumanlab.org";
+}
+
+function getServerEmailSnapshot() {
+  return null;
+}

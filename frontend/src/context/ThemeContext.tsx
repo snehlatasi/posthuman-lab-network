@@ -9,7 +9,7 @@ import React, {
   useSyncExternalStore,
 } from "react";
 
-export type ThemePreference = "light" | "dark" | "system";
+export type ThemePreference = "light" | "system";
 export type ResolvedTheme = "light" | "dark";
 
 interface ThemeContextType {
@@ -22,7 +22,7 @@ const STORAGE_KEY = "posthuman-theme-preference";
 const THEME_CHANGE_EVENT = "posthuman-theme-change";
 
 const isThemePreference = (value: string | null): value is ThemePreference =>
-  value === "light" || value === "dark" || value === "system";
+  value === "light" || value === "system";
 
 const getStoredTheme = (): ThemePreference => {
   if (typeof window === "undefined") return "system";

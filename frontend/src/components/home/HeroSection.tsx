@@ -75,6 +75,7 @@ export const HeroSection: React.FC = () => {
             <div className="pt-5 flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center">
               <MagneticButton strength={0.35}>
                 <Link
+                  suppressHydrationWarning
                   href="/about"
                   className="inline-flex min-h-12 items-center justify-center px-6 py-3 text-xs font-sans tracking-widest uppercase font-bold text-carbon-950 bg-bone-50 hover:bg-[#9ff8ff] transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-cyan-300/50 shadow-[0_18px_40px_-26px_rgba(155,248,255,0.8)]"
                 >
@@ -84,6 +85,7 @@ export const HeroSection: React.FC = () => {
 
               <MagneticButton strength={0.25}>
                 <button
+                  suppressHydrationWarning
                   type="button"
                   onClick={() => {
                     const target = document.getElementById("about-us");

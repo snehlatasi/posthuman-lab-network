@@ -7,9 +7,10 @@ export interface LoginRequestDto {
 
 export interface LoginResponseDto {
   token: string;
-  type: string;
+  type?: string;
   email: string;
-  role: string;
+  name?: string;
+  role?: string;
 }
 
 export const authApi = {

@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import { motion, useSpring, useMotionValue } from "framer-motion";
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 
 interface MagneticProps {
@@ -16,6 +17,7 @@ export const MagneticButton: React.FC<MagneticProps> = ({
   className = "",
 }) => {
   const shouldReduceMotion = useSafeReducedMotion();
+  const mobilePerformanceMode = useMobilePerformanceMode();
   const ref = useRef<HTMLDivElement>(null);
 
   const x = useMotionValue(0);
@@ -25,7 +27,7 @@ export const MagneticButton: React.FC<MagneticProps> = ({
   const springX = useSpring(x, springConfig);
   const springY = useSpring(y, springConfig);
 
-  if (shouldReduceMotion) {
+  if (shouldReduceMotion || mobilePerformanceMode) {
     return <div className={className}>{children}</div>;
   }
 

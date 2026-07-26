@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 import { StaticUniverseFallback } from "./StaticUniverseFallback";
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 
 const AnimatedUniverse = dynamic(
   () => import("./AnimatedUniverse").then((module) => module.AnimatedUniverse),
@@ -40,6 +41,12 @@ class UniverseErrorBoundary extends Component<
 }
 
 export function UniverseLayer() {
+  const mobilePerformanceMode = useMobilePerformanceMode();
+
+  if (mobilePerformanceMode) {
+    return <StaticUniverseFallback animated />;
+  }
+
   return (
     <UniverseErrorBoundary>
       <AnimatedUniverse />

@@ -9,7 +9,13 @@ import java.util.List;
 @ConfigurationProperties(prefix = "app.cors")
 public class CorsProperties {
 
-    private List<String> allowedOrigins = List.of("http://localhost:3000");
+    private List<String> allowedOrigins = List.of(
+            "http://localhost:3000",
+            "http://127.0.0.1:3000"
+    );
+    private List<String> allowedOriginPatterns = List.of(
+            "https://*.ngrok-free.dev"
+    );
     private List<String> allowedMethods = List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH");
     private List<String> allowedHeaders = List.of("*");
     private boolean allowCredentials = true;
@@ -21,6 +27,14 @@ public class CorsProperties {
 
     public void setAllowedOrigins(List<String> allowedOrigins) {
         this.allowedOrigins = allowedOrigins;
+    }
+
+    public List<String> getAllowedOriginPatterns() {
+        return allowedOriginPatterns;
+    }
+
+    public void setAllowedOriginPatterns(List<String> allowedOriginPatterns) {
+        this.allowedOriginPatterns = allowedOriginPatterns;
     }
 
     public List<String> getAllowedMethods() {

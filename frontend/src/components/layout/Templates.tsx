@@ -61,6 +61,7 @@ export const EditorialPageLayout: React.FC<EditorialPageLayoutProps> = ({
                 <nav className="flex flex-col space-y-1">
                   {sidebarLinks.map((link) => (
                     <Link
+                      suppressHydrationWarning
                       key={link.href}
                       href={link.href}
                       className={`text-xs font-sans font-bold tracking-[0.12em] uppercase py-3 px-4 rounded-full transition-colors focus:outline-none ${
@@ -86,6 +87,7 @@ export const EditorialPageLayout: React.FC<EditorialPageLayoutProps> = ({
               {nextPageLabel && nextPageHref && (
                 <div className="pt-8 border-t border-carbon-950/8 dark:border-bone-50/12 flex justify-end">
                   <Link
+                    suppressHydrationWarning
                     href={nextPageHref}
                     className="group inline-flex items-center space-x-3 text-right focus:outline-none"
                   >
@@ -156,6 +158,7 @@ export const ListingPageLayout: React.FC<ListingPageLayoutProps> = ({
               <div className="flex flex-wrap gap-2 pb-4 border-b border-carbon-950/8 dark:border-bone-50/12">
                 {filters.map((filter, idx) => (
                   <button
+                    suppressHydrationWarning
                     key={idx}
                     onClick={filter.onClick}
                     className={`px-4 py-2 text-xs font-mono tracking-[0.16em] uppercase font-semibold rounded-full border transition-all focus:outline-none ${

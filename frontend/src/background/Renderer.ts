@@ -16,6 +16,7 @@ interface RendererOptions {
 }
 
 const PETAL_COUNT = 42;
+const LOW_POWER_PETAL_COUNT = 24;
 
 export class UniverseRendererUnavailableError extends Error {
   constructor(message: string, options?: ErrorOptions) {
@@ -145,8 +146,8 @@ function createStreamGeometry(streamCount: number, segments: number) {
   return geometry;
 }
 
-function createPetalGeometry(index: number) {
-  const geometry = new THREE.PlaneGeometry(0.92, 1.52, 24, 52);
+function createPetalGeometry(index: number, lowPower: boolean) {
+  const geometry = new THREE.PlaneGeometry(0.92, 1.52, lowPower ? 10 : 24, lowPower ? 24 : 52);
   geometry.translate(0, 0.58, 0);
 
   const count = geometry.attributes.position.count;
@@ -444,7 +445,9 @@ export class UniverseRenderer {
   }
 
   private createFlower() {
-    for (let index = 0; index < PETAL_COUNT; index++) {
+    const petalCount = this.lowPower ? LOW_POWER_PETAL_COUNT : PETAL_COUNT;
+
+    for (let index = 0; index < petalCount; index++) {
       const material = new THREE.ShaderMaterial({
         vertexShader: flowerVertexShader,
         fragmentShader: flowerFragmentShader,
@@ -467,8 +470,8 @@ export class UniverseRenderer {
         blending: THREE.AdditiveBlending,
         depthWrite: false,
       });
-      const mesh = new THREE.Mesh(createPetalGeometry(index), material);
-      const layerSize = PETAL_COUNT / 3;
+      const mesh = new THREE.Mesh(createPetalGeometry(index, this.lowPower), material);
+      const layerSize = petalCount / 3;
       const layer = Math.floor(index / layerSize);
       const localIndex = index % layerSize;
       const angle = (localIndex / layerSize) * Math.PI * 2 + layer * (Math.PI / layerSize);
@@ -487,9 +490,9 @@ export class UniverseRenderer {
 
   private createPetalOutlines() {
     const layers = [
-      { count: 14, length: 2.12, width: 0.54, opacity: 0.36, z: -0.08 },
-      { count: 14, length: 1.55, width: 0.4, opacity: 0.3, z: 0.02 },
-      { count: 14, length: 1.05, width: 0.3, opacity: 0.24, z: 0.12 },
+      { count: this.lowPower ? 8 : 14, length: 2.12, width: 0.54, opacity: 0.36, z: -0.08 },
+      { count: this.lowPower ? 8 : 14, length: 1.55, width: 0.4, opacity: 0.3, z: 0.02 },
+      { count: this.lowPower ? 8 : 14, length: 1.05, width: 0.3, opacity: 0.24, z: 0.12 },
     ];
     const cyan = new THREE.Color(this.config.palette.cyan);
     const rose = new THREE.Color(this.config.palette.rose);
@@ -501,10 +504,12 @@ export class UniverseRenderer {
         const tangent = new THREE.Vector3(-Math.sin(angle), Math.cos(angle) * 0.68, 0);
         const points: THREE.Vector3[] = [];
 
-        for (let step = 0; step <= 28; step++) {
+        const outlineSteps = this.lowPower ? 14 : 28;
+
+        for (let step = 0; step <= outlineSteps; step++) {
           points.push(
             this.getPetalOutlinePoint(
-              step / 28,
+              step / outlineSteps,
               1,
               layer.length,
               layer.width,
@@ -514,10 +519,10 @@ export class UniverseRenderer {
             )
           );
         }
-        for (let step = 28; step >= 0; step--) {
+        for (let step = outlineSteps; step >= 0; step--) {
           points.push(
             this.getPetalOutlinePoint(
-              step / 28,
+              step / outlineSteps,
               -1,
               layer.length,
               layer.width,
@@ -535,8 +540,10 @@ export class UniverseRenderer {
         const seeds = new Float32Array(points.length);
         points.forEach((_, pointIndex) => {
           progress[pointIndex] =
-            pointIndex <= 28 ? pointIndex / 28 : (points.length - 1 - pointIndex) / 28;
-          sides[pointIndex] = pointIndex <= 28 ? 1 : -1;
+            pointIndex <= outlineSteps
+              ? pointIndex / outlineSteps
+              : (points.length - 1 - pointIndex) / outlineSteps;
+          sides[pointIndex] = pointIndex <= outlineSteps ? 1 : -1;
           seeds[pointIndex] = seeded(index * 3.1 + layerIndex * 11.7);
         });
         geometry.setAttribute("aProgress", new THREE.BufferAttribute(progress, 1));
@@ -620,7 +627,7 @@ export class UniverseRenderer {
 
   private createEnergyWaves() {
     const ringCount = this.lowPower ? 3 : 6;
-    const pointCount = 160;
+    const pointCount = this.lowPower ? 80 : 160;
     const basePositions = new Float32Array((pointCount + 1) * 3);
     const angleAttr = new Float32Array(pointCount + 1);
 
@@ -851,7 +858,10 @@ export class UniverseRenderer {
   }
 
   private createStreams() {
-    const geometry = createStreamGeometry(this.config.streamCount, this.config.streamSegments);
+    const geometry = createStreamGeometry(
+      this.lowPower ? Math.max(6, Math.floor(this.config.streamCount * 0.5)) : this.config.streamCount,
+      this.lowPower ? Math.max(36, Math.floor(this.config.streamSegments * 0.6)) : this.config.streamSegments
+    );
     const material = new THREE.ShaderMaterial({
       vertexShader: streamVertexShader,
       fragmentShader: streamFragmentShader,
@@ -877,7 +887,7 @@ export class UniverseRenderer {
 
   private createRays() {
     const geometry = new THREE.BufferGeometry();
-    const rayCount = 142;
+    const rayCount = this.lowPower ? 56 : 142;
     const positions = new Float32Array(rayCount * 2 * 3);
     const colors = new Float32Array(rayCount * 2 * 3);
     const cyan = new THREE.Color(this.config.palette.cyan);

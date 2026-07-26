@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 
 interface RevealProps {
@@ -26,9 +27,9 @@ export const Reveal: React.FC<RevealProps> = ({
   staggerChildren = 0,
 }) => {
   const shouldReduceMotion = useSafeReducedMotion();
+  const mobilePerformanceMode = useMobilePerformanceMode();
 
-  // If user prefers reduced motion, bypass standard transform displacements
-  if (shouldReduceMotion) {
+  if (shouldReduceMotion || mobilePerformanceMode) {
     return <div className={className}>{children}</div>;
   }
 
@@ -95,8 +96,9 @@ export const StaggerItem: React.FC<{
   yOffset?: number;
 }> = ({ children, className = "", yOffset = 16 }) => {
   const shouldReduceMotion = useSafeReducedMotion();
+  const mobilePerformanceMode = useMobilePerformanceMode();
 
-  if (shouldReduceMotion) {
+  if (shouldReduceMotion || mobilePerformanceMode) {
     return <div className={className}>{children}</div>;
   }
 
@@ -138,9 +140,10 @@ export const SplitText: React.FC<SplitTextProps> = ({
   as: Component = "h2",
 }) => {
   const shouldReduceMotion = useSafeReducedMotion();
+  const mobilePerformanceMode = useMobilePerformanceMode();
   const Tag = Component as React.ElementType<{ className?: string; children?: React.ReactNode }>;
 
-  if (shouldReduceMotion) {
+  if (shouldReduceMotion || mobilePerformanceMode) {
     return <Tag className={className}>{text}</Tag>;
   }
 

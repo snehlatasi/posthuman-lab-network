@@ -139,6 +139,7 @@ export const Header: FC = () => {
       <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 flex items-center justify-between gap-3 xl:gap-4 2xl:gap-6">
         {/* Group 1: Brand Logo */}
         <Link
+          suppressHydrationWarning
           href="/"
           className="group flex flex-col focus:outline-none shrink-0"
           aria-label="Posthuman Lab Network Homepage"
@@ -178,6 +179,7 @@ export const Header: FC = () => {
                   link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
                 return (
                   <Link
+                    suppressHydrationWarning
                     key={link.label}
                     href={link.href}
                     className={`px-1.5 xl:px-2 2xl:px-2.5 py-1 text-[11px] xl:text-[11.5px] 2xl:text-xs font-sans tracking-wider uppercase transition-all duration-200 relative whitespace-nowrap ${
@@ -207,6 +209,7 @@ export const Header: FC = () => {
                     onMouseLeave={handleMouseLeave}
                   >
                     <button
+                      suppressHydrationWarning
                       onClick={() => toggleGroupClick(group.label)}
                       aria-expanded={isDropdownActive}
                       aria-haspopup="true"
@@ -233,10 +236,13 @@ export const Header: FC = () => {
         {/* Group 3: Header Actions (Theme Selector + Admin Login + Join CTA + Mobile Toggle) */}
         <div className="flex items-center space-x-2 xl:space-x-3 2xl:space-x-4 shrink-0">
           {/* Segmented Theme Preference Control */}
-          <ThemeSelector variant="pills" />
+          <div className="hidden md:block">
+            <ThemeSelector variant="pills" />
+          </div>
 
           {mounted && !isAdmin && (
             <button
+              suppressHydrationWarning
               onClick={openLoginModal}
               className={`hidden xl:inline-flex items-center space-x-1 px-2.5 py-1.5 2xl:px-3 2xl:py-2 text-[10.5px] xl:text-[11px] 2xl:text-xs font-mono tracking-wider uppercase border rounded-full transition-colors cursor-pointer whitespace-nowrap shrink-0 ${
                 isOverlayingHero
@@ -252,6 +258,7 @@ export const Header: FC = () => {
           {/* Member State Indicator */}
           {mounted && member && (
             <Link
+              suppressHydrationWarning
               href="/membership/become-a-member"
               className="hidden xl:inline-flex items-center space-x-1.5 px-2.5 py-1.5 text-[10.5px] font-mono tracking-wider uppercase bg-earth-500/15 border border-earth-500/30 text-earth-600 dark:text-earth-400 rounded-full hover:bg-earth-500/25 transition-colors shrink-0 whitespace-nowrap"
             >
@@ -261,6 +268,7 @@ export const Header: FC = () => {
           )}
 
           <Link
+            suppressHydrationWarning
             href="/membership/become-a-member"
             onClick={() => setActiveGroup(null)}
             className={`hidden sm:inline-flex items-center justify-center px-3.5 py-1.5 xl:px-4 xl:py-1.5 2xl:px-5 2xl:py-2 text-[10.5px] xl:text-[11px] 2xl:text-xs font-sans tracking-widest uppercase font-semibold transition-all duration-200 rounded-full focus:outline-none focus:ring-2 focus:ring-earth-500/40 shrink-0 whitespace-nowrap ${ctaClass}`}
@@ -269,6 +277,7 @@ export const Header: FC = () => {
           </Link>
 
           <button
+            suppressHydrationWarning
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
             aria-label="Toggle Mobile Menu"
@@ -321,6 +330,7 @@ export const Header: FC = () => {
                   .find((group) => group.label === activeGroup)
                   ?.items.map((item) => (
                     <Link
+                      suppressHydrationWarning
                       key={item.href}
                       href={item.href}
                       onClick={() => setActiveGroup(null)}
@@ -379,6 +389,7 @@ export const Header: FC = () => {
 
               <div className="pt-6 border-t border-carbon-950/10 dark:border-bone-50/15 flex flex-col space-y-4">
                 <Link
+                  suppressHydrationWarning
                   href="/membership/become-a-member"
                   onClick={() => setIsOpen(false)}
                   className="w-full text-center py-3 text-sm font-sans tracking-widest uppercase font-bold text-bone-50 bg-[#120e0c] dark:bg-earth-600 hover:bg-earth-600 dark:hover:bg-earth-500 transition-colors rounded-full shadow-md"
@@ -412,6 +423,7 @@ const MobileAccordionGroup: FC<{
   return (
     <div className="border-b border-carbon-950/10 dark:border-bone-50/10 pb-4">
       <button
+        suppressHydrationWarning
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full flex items-center justify-between py-2 text-left focus:outline-none cursor-pointer"
       >
@@ -442,6 +454,7 @@ const MobileAccordionGroup: FC<{
             <div className="mt-3 pl-2 flex flex-col space-y-4 pt-1">
               {group.items.map((item) => (
                 <Link
+                  suppressHydrationWarning
                   key={item.href}
                   href={item.href}
                   onClick={onClose}

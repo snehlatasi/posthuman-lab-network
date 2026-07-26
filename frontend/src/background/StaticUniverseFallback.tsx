@@ -2,7 +2,14 @@
 
 import { useTheme } from "@/context/ThemeContext";
 
-export function StaticUniverseFallback() {
+interface StaticUniverseFallbackProps {
+  animated?: boolean;
+}
+
+const petalIndexes = Array.from({ length: 18 }, (_, index) => index);
+const waveIndexes = Array.from({ length: 4 }, (_, index) => index);
+
+export function StaticUniverseFallback({ animated = false }: StaticUniverseFallbackProps) {
   const { resolvedTheme } = useTheme();
   const isDark = resolvedTheme === "dark";
 
@@ -24,10 +31,33 @@ export function StaticUniverseFallback() {
       <div
         className={`absolute left-1/2 top-[42%] h-[68vw] max-h-[360px] w-[68vw] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[1px] ${
           isDark
-            ? "bg-[radial-gradient(circle,rgba(255,255,255,0.78)_0%,rgba(159,248,255,0.42)_13%,rgba(69,236,255,0.18)_31%,transparent_68%)]"
-            : "bg-[radial-gradient(circle,rgba(255,255,255,0.72)_0%,rgba(159,248,255,0.1)_18%,rgba(202,117,85,0.08)_36%,transparent_70%)]"
+            ? "bg-[radial-gradient(circle,rgba(255,255,255,0.42)_0%,rgba(159,248,255,0.28)_15%,rgba(255,121,207,0.14)_34%,transparent_70%)]"
+            : "bg-[radial-gradient(circle,rgba(255,255,255,0.42)_0%,rgba(69,236,255,0.08)_20%,rgba(152,78,50,0.08)_42%,transparent_74%)]"
         }`}
       />
+      {animated && (
+        <div className="mobile-universe-orbit absolute left-1/2 top-[42%] h-[72vw] max-h-[360px] w-[72vw] max-w-[360px] -translate-x-1/2 -translate-y-1/2">
+          {petalIndexes.map((index) => (
+            <span
+              key={index}
+              className={`mobile-universe-petal ${isDark ? "mobile-universe-petal-dark" : "mobile-universe-petal-light"}`}
+              style={
+                {
+                  "--petal-angle": `${index * 20}deg`,
+                  "--petal-delay": `${index * -0.42}s`,
+                } as React.CSSProperties
+              }
+            />
+          ))}
+          {waveIndexes.map((index) => (
+            <span
+              key={index}
+              className={`mobile-universe-wave ${isDark ? "mobile-universe-wave-dark" : "mobile-universe-wave-light"}`}
+              style={{ "--wave-delay": `${index * -1.4}s` } as React.CSSProperties}
+            />
+          ))}
+        </div>
+      )}
       <div
         className={`absolute inset-0 ${
           isDark

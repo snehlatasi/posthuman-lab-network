@@ -65,6 +65,7 @@ export const PageHeader: React.FC<{
       <Container className="relative z-10 space-y-4">
         <div className="flex items-center space-x-2 text-xs font-mono tracking-[0.22em] uppercase text-carbon-900 dark:text-bone-200 font-bold">
           <Link
+            suppressHydrationWarning
             href="/"
             className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors"
           >
@@ -74,6 +75,7 @@ export const PageHeader: React.FC<{
             <>
               <span>/</span>
               <Link
+                suppressHydrationWarning
                 href={parentHref}
                 className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors"
               >
@@ -119,7 +121,7 @@ export const ContentCard: React.FC<{
 
   if (href) {
     return (
-      <Link href={href} className="block group focus:outline-none h-full">
+      <Link suppressHydrationWarning href={href} className="block group focus:outline-none h-full">
         {cardContent}
       </Link>
     );
@@ -136,6 +138,7 @@ export const AnimatedLink: React.FC<{
 }> = ({ children, href, className = "" }) => {
   return (
     <Link
+      suppressHydrationWarning
       href={href}
       className={`group inline-flex items-center space-x-1.5 text-xs md:text-sm font-sans font-bold tracking-[0.16em] uppercase text-carbon-950 dark:text-bone-100 hover:text-earth-600 dark:hover:text-earth-400 transition-colors focus:outline-none ${className}`}
     >

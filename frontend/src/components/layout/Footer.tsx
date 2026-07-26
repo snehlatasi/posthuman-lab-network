@@ -34,17 +34,22 @@ export const Footer: React.FC = () => {
                 Join our mailing circle
               </h4>
               <form
+                suppressHydrationWarning
                 onSubmit={(e) => e.preventDefault()}
-                className="flex items-center border border-carbon-950/20 dark:border-bone-50/15 rounded-full p-1 bg-white dark:bg-carbon-900 focus-within:border-earth-500 transition-all duration-300 shadow-md"
+                className="flex min-h-12 items-center border border-carbon-950/20 dark:border-bone-50/15 rounded-full p-1 bg-white dark:bg-carbon-900 focus-within:border-earth-500 transition-all duration-300 shadow-md"
               >
                 <input
+                  suppressHydrationWarning
                   type="email"
                   placeholder="Enter your email"
                   required
+                  autoComplete="email"
+                  spellCheck={false}
                   aria-label="Email for newsletter subscription"
-                  className="bg-transparent text-sm text-carbon-950 dark:text-bone-100 placeholder-carbon-700 dark:placeholder-bone-300 font-medium px-4 py-2.5 flex-grow focus:outline-none w-full"
+                  className="min-w-0 bg-transparent text-sm text-carbon-950 dark:text-bone-100 placeholder-carbon-700 dark:placeholder-bone-300 font-medium px-4 py-2.5 flex-grow focus:outline-none w-full"
                 />
                 <button
+                  suppressHydrationWarning
                   type="submit"
                   aria-label="Submit newsletter subscription"
                   className="p-3 text-bone-50 bg-carbon-950 dark:bg-earth-600 hover:bg-earth-600 dark:hover:bg-earth-500 transition-colors rounded-full cursor-pointer"
