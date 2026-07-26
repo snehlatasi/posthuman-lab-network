@@ -1,7 +1,7 @@
 "use client";
 
 import type { FC } from "react";
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -19,6 +19,7 @@ export const Header: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [headerHeight, setHeaderHeight] = useState(0);
   const pathname = usePathname();
   const shouldReduceMotion = useSafeReducedMotion();
   const headerRef = useRef<HTMLDivElement>(null);
@@ -44,6 +45,34 @@ export const Header: FC = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useLayoutEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const updateHeaderHeight = () => {
+      setHeaderHeight(Math.ceil(header.getBoundingClientRect().height));
+    };
+
+    updateHeaderHeight();
+
+    const observer = new ResizeObserver(updateHeaderHeight);
+    observer.observe(header);
+    window.addEventListener("resize", updateHeaderHeight);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateHeaderHeight);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+
+    const nextHeight = Math.ceil(header.getBoundingClientRect().height);
+    setHeaderHeight((current) => (current === nextHeight ? current : nextHeight));
+  }, [activeGroup, isOpen, isScrolled]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -100,7 +129,7 @@ export const Header: FC = () => {
       ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled || activeGroup || isOpen
-          ? "bg-bone-50/90 dark:bg-carbon-950/90 backdrop-blur-xl border-b border-carbon-950/10 dark:border-bone-50/12 py-3 md:py-4 shadow-md dark:shadow-[0_14px_40px_-30px_rgba(0,0,0,0.7)]"
+          ? "bg-bone-50/90 dark:bg-carbon-950/90 backdrop-blur-xl border-b border-carbon-950/10 dark:border-bone-50/12 py-4 shadow-md dark:shadow-[0_14px_40px_-30px_rgba(0,0,0,0.7)]"
           : "bg-transparent py-4 md:py-6"
       }`}
     >
@@ -317,11 +346,16 @@ export const Header: FC = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={shouldReduceMotion ? {} : { opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "100dvh" }}
-            exit={shouldReduceMotion ? {} : { opacity: 0, height: 0 }}
+            initial={shouldReduceMotion ? {} : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={shouldReduceMotion ? {} : { opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="xl:hidden fixed top-0 left-0 right-0 bottom-0 bg-bone-50/98 dark:bg-carbon-950/98 backdrop-blur-xl border-t border-carbon-950/10 dark:border-bone-50/15 overflow-y-auto z-40 pt-20"
+            style={{
+              top: `${headerHeight}px`,
+              height: `calc(100dvh - ${headerHeight}px)`,
+            }}
+            data-testid="mobile-navigation-drawer"
+            className="xl:hidden fixed left-0 right-0 bottom-0 bg-bone-50/98 dark:bg-carbon-950/98 backdrop-blur-xl border-t border-carbon-950/10 dark:border-bone-50/15 overflow-y-auto overscroll-contain z-40"
           >
             <div className="px-6 py-8 space-y-6">
               {/* Theme Preference in Mobile Drawer */}
