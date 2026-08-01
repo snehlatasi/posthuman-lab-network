@@ -26,7 +26,7 @@ export const HeroSection: React.FC = () => {
         className={`absolute inset-0 z-10 pointer-events-none transition-colors duration-500 ${
           isDark
             ? "hero-readability-mask"
-            : "bg-[linear-gradient(90deg,rgba(255,250,240,0.98)_0%,rgba(255,250,240,0.94)_42%,rgba(255,250,240,0.7)_62%,rgba(255,250,240,0.42)_100%)]"
+            : "bg-[linear-gradient(90deg,rgba(255,250,240,0.92)_0%,rgba(255,250,240,0.74)_42%,rgba(255,250,240,0.2)_62%,rgba(255,250,240,0)_100%)]"
         }`}
       />
 

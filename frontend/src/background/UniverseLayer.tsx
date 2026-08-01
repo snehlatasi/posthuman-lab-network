@@ -10,7 +10,7 @@ const AnimatedUniverse = dynamic(
   () => import("./AnimatedUniverse").then((module) => module.AnimatedUniverse),
   {
     ssr: false,
-    loading: () => <StaticUniverseFallback />,
+    loading: () => <StaticUniverseFallback animated />,
   }
 );
 
@@ -33,7 +33,7 @@ class UniverseErrorBoundary extends Component<
 
   render() {
     if (this.state.hasError) {
-      return <StaticUniverseFallback />;
+      return <StaticUniverseFallback animated />;
     }
 
     return this.props.children;

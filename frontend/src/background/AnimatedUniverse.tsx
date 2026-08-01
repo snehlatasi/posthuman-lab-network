@@ -74,7 +74,7 @@ export function AnimatedUniverse() {
   }, [controls.visible]);
 
   if (webglUnavailable) {
-    return <StaticUniverseFallback />;
+    return <StaticUniverseFallback animated />;
   }
 
   const isDark = resolvedTheme === "dark";
@@ -88,20 +88,18 @@ export function AnimatedUniverse() {
     >
       <canvas
         ref={canvasRef}
-        className={`universe-canvas h-full w-full transition-opacity duration-300 ${
-          isDark ? "opacity-100" : "opacity-18"
-        }`}
+        className="universe-canvas h-full w-full opacity-100 transition-opacity duration-300"
       />
       <div
         className={`pointer-events-none absolute inset-0 transition-colors duration-300 ${
-          isDark ? "bg-carbon-950/34" : "bg-bone-50/86"
+          isDark ? "bg-carbon-950/34" : "bg-bone-50/18"
         }`}
       />
       <div
         className={`pointer-events-none absolute inset-0 ${
           isDark
             ? "bg-[radial-gradient(circle_at_52%_42%,transparent_0%,rgba(0,0,0,0.08)_42%,rgba(0,0,0,0.48)_100%)]"
-            : "bg-[linear-gradient(90deg,rgba(255,250,240,0.96)_0%,rgba(255,250,240,0.9)_38%,rgba(248,241,230,0.82)_68%,rgba(248,241,230,0.94)_100%)]"
+            : "bg-[linear-gradient(90deg,rgba(255,250,240,0.76)_0%,rgba(255,250,240,0.42)_38%,rgba(248,241,230,0.08)_68%,rgba(248,241,230,0.16)_100%)]"
         }`}
       />
       <div className="pointer-events-none absolute inset-0 backdrop-blur-[0.2px]" />
