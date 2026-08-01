@@ -54,6 +54,25 @@ interface PetalMeshState {
   seed: number;
 }
 
+interface OrbitNodeState {
+  mesh: THREE.Mesh;
+  halo: THREE.Mesh;
+  baseAngle: number;
+  radius: number;
+  yScale: number;
+  speed: number;
+  seed: number;
+}
+
+interface PulsePacketState {
+  mesh: THREE.Mesh;
+  baseAngle: number;
+  radius: number;
+  yScale: number;
+  speed: number;
+  phase: number;
+}
+
 function seeded(seed: number) {
   const value = Math.sin(seed * 12.9898) * 43758.5453;
   return value - Math.floor(value);
@@ -185,7 +204,10 @@ export class UniverseRenderer {
   private readonly coreLight: THREE.PointLight;
   private readonly root = new THREE.Group();
   private readonly outlineGroup = new THREE.Group();
+  private readonly knowledgeGroup = new THREE.Group();
   private readonly petalMeshes: PetalMeshState[] = [];
+  private readonly orbitNodes: OrbitNodeState[] = [];
+  private readonly pulsePackets: PulsePacketState[] = [];
   private readonly outlineMaterials: THREE.ShaderMaterial[] = [];
   private readonly waveMaterials: THREE.ShaderMaterial[] = [];
 
@@ -232,6 +254,7 @@ export class UniverseRenderer {
     this.corneaMaterial = core.corneaMaterial;
     this.coreLight = core.light;
     this.particleMaterial = this.createParticles();
+    this.createKnowledgeNetwork();
 
     this.resize();
     window.addEventListener("resize", this.resize);
@@ -337,6 +360,40 @@ export class UniverseRenderer {
     this.outlineGroup.scale.setScalar(
       1 + Math.sin(t * 1.1) * 0.045 + orbitalEnergy * 0.035 + pointerEnergy * 0.04
     );
+    this.knowledgeGroup.rotation.z = t * -0.026 + Math.sin(t * 0.2) * 0.018;
+    this.knowledgeGroup.rotation.x = Math.sin(t * 0.16) * 0.04 + this.pointer.y * 0.025;
+    this.knowledgeGroup.rotation.y = Math.cos(t * 0.14) * 0.035 + this.pointer.x * 0.035;
+    this.knowledgeGroup.scale.setScalar(1 + Math.sin(t * 0.68) * 0.018 + pointerEnergy * 0.02);
+
+    this.orbitNodes.forEach(({ mesh, halo, baseAngle, radius, yScale, speed, seed }) => {
+      const angle = baseAngle + t * speed;
+      const pulse = 0.78 + Math.sin(t * 1.05 + seed * 8.0) * 0.22 + pointerEnergy * 0.14;
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius * yScale;
+      const z = 0.22 + Math.sin(t * 0.44 + seed * 5.0) * 0.16;
+      mesh.position.set(x, y, z);
+      halo.position.copy(mesh.position);
+      mesh.scale.setScalar(pulse);
+      halo.scale.setScalar(0.86 + pulse * 0.34);
+
+      const material = mesh.material as THREE.MeshBasicMaterial;
+      const haloMaterial = halo.material as THREE.MeshBasicMaterial;
+      material.opacity = 0.68 + pulse * 0.2;
+      haloMaterial.opacity = 0.16 + pulse * 0.09;
+    });
+
+    this.pulsePackets.forEach(({ mesh, baseAngle, radius, yScale, speed, phase }) => {
+      const cycle = (t * speed + phase) % 1;
+      const angle = baseAngle + cycle * Math.PI * 2;
+      const fade = Math.sin(cycle * Math.PI);
+      mesh.position.set(
+        Math.cos(angle) * radius,
+        Math.sin(angle) * radius * yScale,
+        0.34 + Math.sin(angle * 2.0 + t * 0.22) * 0.08
+      );
+      mesh.scale.setScalar(0.58 + fade * 1.25 + pointerEnergy * 0.22);
+      (mesh.material as THREE.MeshBasicMaterial).opacity = 0.14 + fade * 0.72;
+    });
 
     this.petalMeshes.forEach(({ mesh, baseAngle, baseScale, layer, seed }) => {
       const independentBreath = Math.sin(t * (0.62 + layer * 0.08) + baseAngle * 2.0);
@@ -855,6 +912,125 @@ export class UniverseRenderer {
     this.root.add(points);
     this.disposables.push(geometry, material);
     return material;
+  }
+
+  private createKnowledgeNetwork() {
+    const cyan = new THREE.Color(this.config.palette.cyan);
+    const rose = new THREE.Color(this.config.palette.rose);
+    const violet = new THREE.Color(this.config.palette.violet);
+    const moss = new THREE.Color("#9cb394");
+    const amber = new THREE.Color("#e0b86c");
+    const white = new THREE.Color(this.config.palette.white);
+    const palette = [cyan, rose, moss, amber, violet, white];
+
+    this.knowledgeGroup.position.z = 0.12;
+
+    const arcCount = this.lowPower ? 3 : 5;
+    for (let index = 0; index < arcCount; index++) {
+      const radius = 2.35 + index * 0.34;
+      const yScale = 0.48 + index * 0.055;
+      const color = palette[index % palette.length];
+      const opacity = this.lowPower ? 0.12 : 0.16 + index * 0.018;
+      const arc = this.createEllipseArc(radius, yScale, color, opacity);
+      arc.rotation.z = index * 0.42;
+      arc.rotation.x = (index - 2) * 0.11;
+      arc.position.z = -0.28 - index * 0.04;
+      this.knowledgeGroup.add(arc);
+    }
+
+    const nodeCount = this.lowPower ? 6 : 8;
+    const nodeGeometry = new THREE.SphereGeometry(0.048, this.lowPower ? 10 : 16, this.lowPower ? 10 : 16);
+    const haloGeometry = new THREE.SphereGeometry(0.145, this.lowPower ? 12 : 20, this.lowPower ? 12 : 20);
+    this.disposables.push(nodeGeometry, haloGeometry);
+
+    for (let index = 0; index < nodeCount; index++) {
+      const color = palette[index % palette.length];
+      const nodeMaterial = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.86,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const haloMaterial = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.24,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const mesh = new THREE.Mesh(nodeGeometry, nodeMaterial);
+      const halo = new THREE.Mesh(haloGeometry, haloMaterial);
+      const seed = seeded(index + 191.4);
+      const radius = 2.56 + (index % 3) * 0.28 + seed * 0.08;
+      const yScale = 0.56 + seeded(index + 204.2) * 0.12;
+      const baseAngle = (index / nodeCount) * Math.PI * 2 + seed * 0.18;
+      const speed = (index % 2 === 0 ? 0.018 : -0.014) * (0.75 + seed * 0.5);
+
+      this.knowledgeGroup.add(halo, mesh);
+      this.orbitNodes.push({ mesh, halo, baseAngle, radius, yScale, speed, seed });
+      this.disposables.push(nodeMaterial, haloMaterial);
+    }
+
+    const pulseGeometry = new THREE.SphereGeometry(0.032, this.lowPower ? 8 : 14, this.lowPower ? 8 : 14);
+    this.disposables.push(pulseGeometry);
+    const pulseCount = this.lowPower ? 4 : 7;
+    for (let index = 0; index < pulseCount; index++) {
+      const color = palette[(index + 1) % palette.length];
+      const material = new THREE.MeshBasicMaterial({
+        color,
+        transparent: true,
+        opacity: 0.46,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
+      });
+      const mesh = new THREE.Mesh(pulseGeometry, material);
+      const seed = seeded(index + 241.8);
+      this.knowledgeGroup.add(mesh);
+      this.pulsePackets.push({
+        mesh,
+        baseAngle: seed * Math.PI * 2,
+        radius: 2.22 + (index % 3) * 0.36,
+        yScale: 0.52 + seeded(index + 258.5) * 0.18,
+        speed: 0.04 + seed * 0.028,
+        phase: seed,
+      });
+      this.disposables.push(material);
+    }
+
+    this.root.add(this.knowledgeGroup);
+  }
+
+  private createEllipseArc(
+    radius: number,
+    yScale: number,
+    color: THREE.Color,
+    opacity: number
+  ) {
+    const pointCount = this.lowPower ? 96 : 160;
+    const points: THREE.Vector3[] = [];
+    for (let index = 0; index <= pointCount; index++) {
+      const angle = (index / pointCount) * Math.PI * 2;
+      const wave = Math.sin(angle * 3.0) * 0.035;
+      points.push(
+        new THREE.Vector3(
+          Math.cos(angle) * (radius + wave),
+          Math.sin(angle) * radius * yScale,
+          Math.sin(angle * 2.0) * 0.08
+        )
+      );
+    }
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({
+      color,
+      transparent: true,
+      opacity,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    this.disposables.push(geometry, material);
+    return new THREE.Line(geometry, material);
   }
 
   private createStreams() {
