@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = useCallback(async (credentials: LoginRequestDto) => {
     const res = await authApi.login(credentials);
     if (res?.token) {
-      const email = res.email || credentials.email || "admin@posthumanlab.org";
+      const email = res.email || credentials.email || "posthumanlabnetwork@gmail.com";
       localStorage.setItem("posthuman_admin_email", email);
       window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
       setShowLoginModal(false);
@@ -103,7 +103,7 @@ function getServerAuthSnapshot() {
 
 function getAdminEmailSnapshot() {
   if (typeof window === "undefined" || !getStoredToken()) return null;
-  return localStorage.getItem("posthuman_admin_email") || "admin@posthumanlab.org";
+  return localStorage.getItem("posthuman_admin_email") || "posthumanlabnetwork@gmail.com";
 }
 
 function getServerEmailSnapshot() {

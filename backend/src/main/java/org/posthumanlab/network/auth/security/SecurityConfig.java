@@ -69,6 +69,9 @@ public class SecurityConfig {
                 // H2 console & Swagger docs
                 .requestMatchers("/h2-console/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
 
+                // Deployment health/readiness probes
+                .requestMatchers("/actuator/health/**", "/actuator/info").permitAll()
+
                 // All other endpoints (admin CRUD & private submissions) require ROLE_ADMIN
                 .anyRequest().hasAuthority("ROLE_ADMIN")
             )
@@ -77,4 +80,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-

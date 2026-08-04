@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://${PGHOST:${POSTGRES_HOST:localhost}}:${PGPORT:${POSTGRES_PORT:5432}}/${PGDATABASE:${POSTGRES_DB:postgres}}
+    username: ${PGUSER:${POSTGRES_USER:postgres}}
+    password: ${PGPASSWORD:${POSTGRES_PASSWORD:postgres}}
+    driver-class-name: org.postgresql.Driver
+  h2:
+    console:
+      enabled: false
+  jpa:
+    open-in-view: false
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+
+app:
+  member-auth:
+    expose-otp: false
+  cors:
+    allowed-origins:
+      - ${FRONTEND_ORIGIN:https://posthumanlabnetwork.online}
+      - ${FRONTEND_WWW_ORIGIN:https://www.posthumanlabnetwork.online}
+    allowed-origin-patterns: []

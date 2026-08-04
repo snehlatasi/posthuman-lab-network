@@ -229,7 +229,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 System Administrator
               </span>
               <span className="font-mono text-[9px] text-bone-200/60 block truncate">
-                admin@posthumanlab.org
+                posthumanlabnetwork@gmail.com
               </span>
             </div>
           </div>

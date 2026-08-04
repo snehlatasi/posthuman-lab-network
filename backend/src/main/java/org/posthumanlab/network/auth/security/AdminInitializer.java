@@ -13,7 +13,7 @@ public class AdminInitializer implements CommandLineRunner {
     private final AdminUserRepository adminUserRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${ADMIN_EMAIL:admin@posthumanlab.org}")
+    @Value("${ADMIN_EMAIL:posthumanlabnetwork@gmail.com}")
     private String adminEmail;
 
     @Value("${ADMIN_PASSWORD:AdminSecret123!}")

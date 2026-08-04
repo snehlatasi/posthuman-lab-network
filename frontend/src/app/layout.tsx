@@ -12,6 +12,8 @@ import { UniverseLayer } from "@/background/UniverseLayer";
 
 import { MemberProvider } from "@/context/MemberContext";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://posthumanlabnetwork.online";
+
 const manrope = Manrope({
   variable: "--font-manrope",
   subsets: ["latin"],
@@ -27,6 +29,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "Posthuman Lab Network | A Living Laboratory for Collective Futures",
   description:
     "An interactive digital ecosystem linking international philosophers, researchers, creative practitioners, and artists. Dedicated to posthumanism, ecological futures, technology ethics, and interdisciplinary collaboration.",
@@ -38,6 +41,17 @@ export const metadata: Metadata = {
     "Alternative Education",
     "Academic Monolith",
   ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Posthuman Lab Network",
+    description:
+      "A living laboratory for posthuman thought, ecological futures, technology ethics, and interdisciplinary collaboration.",
+    url: siteUrl,
+    siteName: "Posthuman Lab Network",
+    type: "website",
+  },
 };
 
 export const viewport: Viewport = {

@@ -1,0 +1,7 @@
+target
+data
+uploads
+logs
+*.log
+.env
+.env.*

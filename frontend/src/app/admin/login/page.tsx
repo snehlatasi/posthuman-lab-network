@@ -8,7 +8,7 @@ import { authApi } from "@/lib/api/auth";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("admin@posthumanlab.org");
+  const [email, setEmail] = useState("posthumanlabnetwork@gmail.com");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -96,7 +96,7 @@ export default function AdminLoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full pl-10 pr-4 py-3 bg-carbon-950 border border-bone-50/15 rounded-xl text-xs text-bone-50 placeholder-bone-200/40 focus:border-earth-400 focus:outline-none transition-all shadow-inner"
-                  placeholder="admin@posthumanlab.org"
+                  placeholder="posthumanlabnetwork@gmail.com"
                 />
               </div>
             </div>
@@ -190,7 +190,7 @@ export default function AdminLoginPage() {
             <p className="font-sans text-xs text-bone-200 leading-relaxed font-medium">
               Password recovery for administrative accounts requires super-administrator
               authorization. Please contact the network coordinator at{" "}
-              <span className="text-earth-400 font-mono">admin@posthumanlab.org</span> to reset
+              <span className="text-earth-400 font-mono">posthumanlabnetwork@gmail.com</span> to reset
               credentials.
             </p>
             <div className="flex justify-end pt-2">

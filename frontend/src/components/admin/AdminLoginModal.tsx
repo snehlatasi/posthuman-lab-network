@@ -6,7 +6,7 @@ import { ShieldCheck, Mail, Lock, X, ArrowRight } from "lucide-react";
 
 export const AdminLoginModal: React.FC = () => {
   const { showLoginModal, closeLoginModal, login } = useAuth();
-  const [email, setEmail] = useState("admin@posthumanlab.org");
+  const [email, setEmail] = useState("posthumanlabnetwork@gmail.com");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

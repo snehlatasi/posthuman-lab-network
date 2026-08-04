@@ -26,13 +26,13 @@ public class AdminMemberController {
 
     @PutMapping("/applications/{id}/approve")
     public ResponseEntity<MembershipApplication> approveApplication(@PathVariable("id") Long id, Authentication auth) {
-        String reviewer = auth != null ? auth.getName() : "admin@posthumanlab.org";
+        String reviewer = auth != null ? auth.getName() : "posthumanlabnetwork@gmail.com";
         return ResponseEntity.ok(applicationService.approveApplication(id, reviewer));
     }
 
     @PutMapping("/applications/{id}/reject")
     public ResponseEntity<MembershipApplication> rejectApplication(@PathVariable("id") Long id, Authentication auth) {
-        String reviewer = auth != null ? auth.getName() : "admin@posthumanlab.org";
+        String reviewer = auth != null ? auth.getName() : "posthumanlabnetwork@gmail.com";
         return ResponseEntity.ok(applicationService.rejectApplication(id, reviewer));
     }
 
@@ -43,7 +43,7 @@ public class AdminMemberController {
 
     @PutMapping("/list/{id}/deactivate")
     public ResponseEntity<Member> deactivateMember(@PathVariable("id") Long id, Authentication auth) {
-        String reviewer = auth != null ? auth.getName() : "admin@posthumanlab.org";
+        String reviewer = auth != null ? auth.getName() : "posthumanlabnetwork@gmail.com";
         return ResponseEntity.ok(applicationService.deactivateMember(id, reviewer));
     }
 }
