@@ -3,12 +3,18 @@
 import { useState, useEffect } from "react";
 import type { BlogPost } from "@/lib/api/blog";
 import { blogApi } from "@/lib/api/blog";
+import { slugify } from "@/lib/slugify";
+import { AdminActionNotice } from "@/components/admin/AdminActionNotice";
+import { LivePreviewLink } from "@/components/admin/LivePreviewLink";
 import { Plus, Trash2, AlertTriangle } from "lucide-react";
 
 export default function AdminBlogPage() {
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
-  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
+  const [actionFeedback, setActionFeedback] = useState<{
+    message: string;
+    href?: string;
+  } | null>(null);
 
   const [showNewModal, setShowNewModal] = useState(false);
   const [newBlog, setNewBlog] = useState({
@@ -42,17 +48,15 @@ export default function AdminBlogPage() {
     loadPosts();
   }, []);
 
-  const triggerFeedback = (msg: string) => {
-    setActionFeedback(msg);
+  const triggerFeedback = (message: string, href?: string) => {
+    setActionFeedback({ message, href });
     setTimeout(() => setActionFeedback(null), 4000);
   };
 
   return (
     <div className="space-y-6 font-sans">
       {actionFeedback && (
-        <div className="p-4 rounded-xl bg-moss-500/20 border border-moss-500/30 text-moss-400 text-xs font-mono uppercase font-bold">
-          {actionFeedback}
-        </div>
+        <AdminActionNotice message={actionFeedback.message} href={actionFeedback.href} />
       )}
 
       <div className="flex justify-between items-center">
@@ -117,8 +121,8 @@ export default function AdminBlogPage() {
                     ) : (
                       <button
                         onClick={async () => {
-                          await blogApi.publishBlogPost(b.id);
-                          triggerFeedback("Article published.");
+                          const published = await blogApi.publishBlogPost(b.id);
+                          triggerFeedback("Article published.", `/blog/${published.slug}`);
                           loadPosts();
                         }}
                         className="px-2.5 py-1 bg-moss-500/20 hover:bg-moss-500/40 text-moss-400 text-[10px] font-mono rounded-lg uppercase font-bold cursor-pointer border border-moss-500/30"
@@ -126,6 +130,7 @@ export default function AdminBlogPage() {
                         Publish
                       </button>
                     )}
+                    {b.status === "PUBLISHED" && <LivePreviewLink href={`/blog/${b.slug}`} />}
                     <button
                       onClick={() => {
                         setConfirmModal({
@@ -208,18 +213,14 @@ export default function AdminBlogPage() {
               <button
                 onClick={async () => {
                   if (!newBlog.title) return;
-                  const generatedSlug = newBlog.title
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, "-")
-                    .replace(/^-+|-+$/g, "");
-                  await blogApi.createBlogPost({
+                  const created = await blogApi.createBlogPost({
                     ...newBlog,
-                    slug: generatedSlug,
+                    slug: slugify(newBlog.title),
                     status: "PUBLISHED",
                   });
                   setShowNewModal(false);
                   setNewBlog({ title: "", excerpt: "", content: "", author: "Admin Coordinator" });
-                  triggerFeedback("Article published.");
+                  triggerFeedback("Article published.", `/blog/${created.slug}`);
                   loadPosts();
                 }}
                 className="px-4 py-2 bg-earth-600 hover:bg-earth-500 text-bone-50 font-bold text-xs font-mono uppercase rounded-xl cursor-pointer"

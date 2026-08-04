@@ -41,6 +41,7 @@ public class MediaAsset {
     private String credit;
     private String category;
     private boolean featured = false;
+    private boolean published = false;
     private int usageCount = 0;
 
     @Column(nullable = false)
@@ -106,6 +107,9 @@ public class MediaAsset {
 
     public boolean isFeatured() { return featured; }
     public void setFeatured(boolean featured) { this.featured = featured; }
+
+    public boolean isPublished() { return published; }
+    public void setPublished(boolean published) { this.published = published; }
 
     public int getUsageCount() { return usageCount; }
     public void setUsageCount(int usageCount) { this.usageCount = usageCount; }

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import "./globals.css";
 import { ScrollControls } from "@/components/layout/ScrollControls";
+import { NavigationProgress } from "@/components/layout/NavigationProgress";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { AdminLoginModal } from "@/components/admin/AdminLoginModal";
@@ -54,6 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${manrope.variable} ${cormorant.variable} h-full antialiased`}
       suppressHydrationWarning
     >
@@ -62,6 +64,7 @@ export default function RootLayout({
           <AuthProvider>
             <MemberProvider>
               <CustomCursor />
+              <NavigationProgress />
               <UniverseLayer />
               <div className="fixed inset-0 z-0 pointer-events-none digital-grid opacity-20" />
 

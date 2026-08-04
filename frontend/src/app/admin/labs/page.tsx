@@ -3,11 +3,14 @@
 import { useState, useEffect } from "react";
 import type { LabContentDto } from "@/lib/api/cms";
 import { cmsApi } from "@/lib/api/cms";
+import { AdminActionNotice } from "@/components/admin/AdminActionNotice";
+import { LivePreviewLink } from "@/components/admin/LivePreviewLink";
 import { Plus, Trash2 } from "lucide-react";
 
 export default function AdminLabsPage() {
   const [labs, setLabs] = useState<LabContentDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
   const [showNewModal, setShowNewModal] = useState(false);
   const [newLab, setNewLab] = useState({
     name: "",
@@ -35,6 +38,8 @@ export default function AdminLabsPage() {
 
   return (
     <div className="space-y-6 font-sans">
+      {actionFeedback && <AdminActionNotice message={actionFeedback} href="/labs" />}
+
       <div className="flex justify-between items-center">
         <div>
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
@@ -72,7 +77,8 @@ export default function AdminLabsPage() {
                     {l.researchFocus}
                   </td>
                   <td className="p-4 text-bone-200/70">{l.leadName || "Lab Coordinator"}</td>
-                  <td className="p-4 text-right">
+                  <td className="p-4 text-right space-x-2">
+                    <LivePreviewLink href="/labs" />
                     <button
                       onClick={async () => {
                         await cmsApi.deleteLab(l.id);
@@ -148,6 +154,8 @@ export default function AdminLabsPage() {
                   if (!newLab.name) return;
                   await cmsApi.createLab(newLab);
                   setShowNewModal(false);
+                  setActionFeedback("Research lab saved.");
+                  setTimeout(() => setActionFeedback(null), 4000);
                   loadLabs();
                 }}
                 className="px-4 py-2 bg-earth-600 hover:bg-earth-500 text-bone-50 font-bold text-xs font-mono uppercase rounded-xl cursor-pointer"

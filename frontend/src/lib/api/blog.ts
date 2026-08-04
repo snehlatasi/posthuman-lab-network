@@ -52,7 +52,3 @@ export const blogApi = {
     });
   },
 };
-
-// Export legacy single-functions for backwards compatibility
-export const getPublishedBlogPosts = blogApi.getPublishedBlogPosts;
-export const getBlogPostBySlug = blogApi.getBlogPostBySlug;

@@ -18,15 +18,18 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect, onClose }) =
   const [youtubeTitle, setYoutubeTitle] = useState("");
   const [addingYoutube, setAddingYoutube] = useState(false);
   const [activeTab, setActiveTab] = useState<"library" | "youtube">("library");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
     cmsApi
-      .getMedia()
+      .getMediaAdmin()
       .then((res) => {
         if (isMounted) setAssets(res);
       })
-      .catch(() => null)
+      .catch(() => {
+        if (isMounted) setError("Unable to load media assets.");
+      })
       .finally(() => {
         if (isMounted) setLoading(false);
       });
@@ -39,11 +42,12 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect, onClose }) =
     e.preventDefault();
     if (!youtubeUrl) return;
     setAddingYoutube(true);
+    setError(null);
     try {
       const created = await cmsApi.addYouTubeVideo({ url: youtubeUrl, title: youtubeTitle });
       onSelect(created.url);
-    } catch {
-      alert("Invalid YouTube URL. Please provide a valid video link.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Invalid YouTube URL.");
     } finally {
       setAddingYoutube(false);
     }
@@ -69,6 +73,12 @@ export const MediaPicker: React.FC<MediaPickerProps> = ({ onSelect, onClose }) =
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        {error && (
+          <div className="p-3 rounded-xl bg-earth-500/15 border border-earth-500/25 text-earth-300 text-xs font-mono uppercase font-bold">
+            {error}
+          </div>
+        )}
 
         {/* Tab Headers */}
         <div className="flex space-x-3 shrink-0">

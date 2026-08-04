@@ -234,3 +234,46 @@ export const allSubpages: Record<string, string[]> = {
   ],
   contact: ["collaboration", "invite-speaker", "partnership", "media", "social"],
 };
+
+const subpageLabels: Record<string, Record<string, string>> = {
+  community: {
+    reflections: "Reflections",
+    "global-voices": "Global Voices",
+    "reading-circles": "Reading Circles",
+    discussions: "Discussions",
+    "future-diaries": "Future Diaries",
+    "creative-showcase": "Creative Showcase",
+    "shared-experiences": "Shared Experiences",
+    projects: "Projects",
+  },
+};
+
+export function getSubpageLabel(section: string, subpage: string) {
+  const configuredLabel = subpageLabels[section]?.[subpage];
+  if (configuredLabel) return configuredLabel;
+
+  return subpage
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+export function getSectionSubpageLinks(section: string, activeSubpage?: string) {
+  return (allSubpages[section] || []).map((subpage) => ({
+    label: getSubpageLabel(section, subpage),
+    href: `/${section}/${subpage}`,
+    active: subpage === activeSubpage,
+  }));
+}
+
+export function getNextSectionSubpage(section: string, currentSubpage: string) {
+  const subpages = allSubpages[section] || [];
+  const currentIndex = subpages.indexOf(currentSubpage);
+  if (currentIndex < 0 || currentIndex >= subpages.length - 1) return null;
+
+  const nextSubpage = subpages[currentIndex + 1];
+  return {
+    label: getSubpageLabel(section, nextSubpage),
+    href: `/${section}/${nextSubpage}`,
+  };
+}

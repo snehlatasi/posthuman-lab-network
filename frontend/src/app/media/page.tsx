@@ -1,12 +1,14 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { ListingPageLayout } from "@/components/layout/Templates";
 import { ContentCard, AnimatedLink } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";
+import type { MediaAssetDto } from "@/lib/api/cms";
+import { cmsApi } from "@/lib/api/cms";
 
 interface MediaItem {
   title: string;
-  type: "video" | "podcast" | "art";
   tag: string;
   description: string;
   href: string;
@@ -15,7 +17,6 @@ interface MediaItem {
 const mediaFiles: MediaItem[] = [
   {
     title: "Posthuman Subjectivities in the Anthropocene",
-    type: "video",
     tag: "Recorded Lecture / Video",
     description:
       "Opening keynote exploring biological citizenship, cybernetic links, and non-anthropocentric futures.",
@@ -23,7 +24,6 @@ const mediaFiles: MediaItem[] = [
   },
   {
     title: "Eco-Acoustics & Trans-Species Listening",
-    type: "podcast",
     tag: "Podcast / Audio",
     description:
       "Podcast Episode 12: An exploration of sub-soil soundscapes, microphone ethics, and forest recordings.",
@@ -31,7 +31,6 @@ const mediaFiles: MediaItem[] = [
   },
   {
     title: "Digital Moss: Generative Art Synthesis",
-    type: "art",
     tag: "Visual Essay / Multimedia",
     description:
       "A generative browser simulation mapping simulated lichen growth patterns based on environmental grids.",
@@ -40,13 +39,37 @@ const mediaFiles: MediaItem[] = [
 ];
 
 export default function MediaArchiveMainPage() {
+  const [publishedMedia, setPublishedMedia] = useState<MediaAssetDto[]>([]);
+
+  useEffect(() => {
+    cmsApi
+      .getMedia()
+      .then(setPublishedMedia)
+      .catch(() => setPublishedMedia([]));
+  }, []);
+
+  const latestVideo = publishedMedia.find((item) => item.provider === "YOUTUBE");
+  const visibleMedia = latestVideo
+    ? [
+        {
+          title: latestVideo.title || "Published YouTube Lecture",
+          tag: `${latestVideo.category || "Lecture"} / Published Video`,
+          description:
+            latestVideo.caption ||
+            "A published video from the Posthuman Lab Network media library.",
+          href: "/media/youtube-lectures",
+        },
+        ...mediaFiles.slice(1),
+      ]
+    : mediaFiles;
+
   return (
     <ListingPageLayout
       tag="Media"
       title="YOUTUBE & MEDIA ARCHIVE"
       subtitle="Open-source video masterclasses, critical audio logs, visual essays, and code art."
     >
-      {mediaFiles.map((media) => (
+      {visibleMedia.map((media) => (
         <StaggerItem key={media.title}>
           <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300">
             <div className="space-y-6 h-full flex flex-col justify-between p-2">

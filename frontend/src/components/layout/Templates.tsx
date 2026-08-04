@@ -129,6 +129,8 @@ interface ListingPageLayoutProps {
   parentHref?: string;
   filters?: ListingFilterItem[];
   children: React.ReactNode;
+  nextPageLabel?: string;
+  nextPageHref?: string;
 }
 
 export const ListingPageLayout: React.FC<ListingPageLayoutProps> = ({
@@ -139,6 +141,8 @@ export const ListingPageLayout: React.FC<ListingPageLayoutProps> = ({
   parentHref,
   filters = [],
   children,
+  nextPageLabel,
+  nextPageHref,
 }) => {
   return (
     <>
@@ -178,6 +182,28 @@ export const ListingPageLayout: React.FC<ListingPageLayoutProps> = ({
                 {children}
               </div>
             </Reveal>
+
+            {nextPageLabel && nextPageHref && (
+              <div className="pt-8 border-t border-carbon-950/8 dark:border-bone-50/12 flex justify-end">
+                <Link
+                  suppressHydrationWarning
+                  href={nextPageHref}
+                  className="group inline-flex items-center space-x-3 text-right focus:outline-none"
+                >
+                  <div className="space-y-1">
+                    <span className="font-mono text-[9px] text-carbon-700 dark:text-bone-300 uppercase tracking-widest block">
+                      Read Next
+                    </span>
+                    <span className="font-serif text-lg font-semibold text-carbon-950 dark:text-bone-50 group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
+                      {nextPageLabel}
+                    </span>
+                  </div>
+                  <div className="p-3 bg-white/75 dark:bg-carbon-900 group-hover:bg-earth-600 dark:group-hover:bg-earth-500 text-carbon-700 dark:text-bone-200 group-hover:text-bone-50 transition-all rounded-full border border-carbon-950/8 dark:border-bone-50/12 group-hover:border-transparent">
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </div>
+                </Link>
+              </div>
+            )}
           </Container>
         </div>
       </main>

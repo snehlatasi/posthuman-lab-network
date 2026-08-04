@@ -1,17 +1,10 @@
 "use client";
 
 import { EditorialPageLayout } from "@/components/layout/Templates";
+import { getNextSectionSubpage, getSectionSubpageLinks } from "@/lib/navigation";
 
-const communitySidebar = [
-  { label: "Reflections", href: "/community/reflections" },
-  { label: "Global Voices", href: "/community/global-voices", active: true },
-  { label: "Reading Circles", href: "/community/reading-circles" },
-  { label: "Discussions", href: "/community/discussions" },
-  { label: "Future Diaries", href: "/community/future-diaries" },
-  { label: "Creative Showcase", href: "/community/creative-showcase" },
-  { label: "Shared Experiences", href: "/community/shared-experiences" },
-  { label: "Projects", href: "/community/projects" },
-];
+const currentSubpage = "global-voices";
+const nextPage = getNextSectionSubpage("community", currentSubpage);
 
 export default function GlobalVoicesPage() {
   return (
@@ -22,9 +15,9 @@ export default function GlobalVoicesPage() {
       parentLabel="Community"
       parentHref="/community"
       sidebarTitle="Community Menu"
-      sidebarLinks={communitySidebar}
-      nextPageLabel="Reflections"
-      nextPageHref="/community/reflections"
+      sidebarLinks={getSectionSubpageLinks("community", currentSubpage)}
+      nextPageLabel={nextPage?.label}
+      nextPageHref={nextPage?.href}
     >
       <div className="space-y-8 font-sans">
         <section className="space-y-4">

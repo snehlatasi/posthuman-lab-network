@@ -8,7 +8,10 @@ import { Reveal } from "../ui/Reveal";
 
 export const SupportSection: React.FC = () => {
   return (
-    <section className="py-20 md:py-24 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300">
+    <section
+      id="support"
+      className="py-20 md:py-24 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300"
+    >
       <Container className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
         {/* Description text */}
         <div className="md:col-span-8 space-y-3">

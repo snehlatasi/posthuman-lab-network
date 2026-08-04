@@ -7,6 +7,7 @@ import { StaggerItem } from "@/components/ui/Reveal";
 import type { PublicationApiDto } from "@/lib/api/publications";
 import { publicationsApi } from "@/lib/api/publications";
 import { useAuth } from "@/context/AuthContext";
+import { slugify } from "@/lib/slugify";
 import { Plus, Trash2, ShieldCheck, X } from "lucide-react";
 
 export default function PublicationsMainPage() {
@@ -101,13 +102,9 @@ export default function PublicationsMainPage() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const slug = newPub.title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
     await publicationsApi.createPublication({
       ...newPub,
-      slug,
+      slug: slugify(newPub.title),
       status: "PUBLISHED",
     });
     setShowAddModal(false);

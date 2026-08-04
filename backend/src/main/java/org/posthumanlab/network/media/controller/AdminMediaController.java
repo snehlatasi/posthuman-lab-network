@@ -1,12 +1,10 @@
 package org.posthumanlab.network.media.controller;
 
 import jakarta.validation.Valid;
-import org.posthumanlab.network.common.util.SlugUtils;
 import org.posthumanlab.network.media.entity.GalleryAlbum;
 import org.posthumanlab.network.media.entity.GalleryImage;
 import org.posthumanlab.network.media.entity.MediaAsset;
-import org.posthumanlab.network.media.repository.GalleryAlbumRepository;
-import org.posthumanlab.network.media.repository.GalleryImageRepository;
+import org.posthumanlab.network.media.service.GalleryService;
 import org.posthumanlab.network.media.service.MediaStorageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +20,18 @@ import java.util.Map;
 public class AdminMediaController {
 
     private final MediaStorageService mediaStorageService;
-    private final GalleryAlbumRepository galleryAlbumRepository;
-    private final GalleryImageRepository galleryImageRepository;
+    private final GalleryService galleryService;
 
     public AdminMediaController(
             MediaStorageService mediaStorageService,
-            GalleryAlbumRepository galleryAlbumRepository,
-            GalleryImageRepository galleryImageRepository) {
+            GalleryService galleryService) {
         this.mediaStorageService = mediaStorageService;
-        this.galleryAlbumRepository = galleryAlbumRepository;
-        this.galleryImageRepository = galleryImageRepository;
+        this.galleryService = galleryService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MediaAsset>> getAllAdminMedia() {
+        return ResponseEntity.ok(mediaStorageService.getAllMedia());
     }
 
     @PostMapping("/youtube")
@@ -60,26 +60,35 @@ public class AdminMediaController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}/publish")
+    public ResponseEntity<MediaAsset> publishMedia(@PathVariable("id") Long id) {
+        return mediaStorageService.publishMedia(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}/unpublish")
+    public ResponseEntity<MediaAsset> unpublishMedia(@PathVariable("id") Long id) {
+        return mediaStorageService.unpublishMedia(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/albums")
     public ResponseEntity<GalleryAlbum> createAlbum(@Valid @RequestBody GalleryAlbum album) {
-        if (album.getSlug() == null || album.getSlug().isBlank()) {
-            album.setSlug(SlugUtils.fromTitle(album.getTitle()));
-        }
-        GalleryAlbum created = galleryAlbumRepository.save(album);
+        GalleryAlbum created = galleryService.createAlbum(album);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PostMapping("/albums/{id}/images")
     public ResponseEntity<GalleryImage> addImageToAlbum(@PathVariable("id") Long albumId, @Valid @RequestBody GalleryImage image) {
-        image.setAlbumId(albumId);
-        GalleryImage saved = galleryImageRepository.save(image);
+        GalleryImage saved = galleryService.addImageToAlbum(albumId, image);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/albums/{id}")
     public ResponseEntity<Void> deleteAlbum(@PathVariable("id") Long id) {
-        galleryImageRepository.deleteByAlbumId(id);
-        galleryAlbumRepository.deleteById(id);
+        galleryService.deleteAlbum(id);
         return ResponseEntity.noContent().build();
     }
 }

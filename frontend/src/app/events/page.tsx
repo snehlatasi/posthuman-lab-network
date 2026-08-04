@@ -7,6 +7,7 @@ import { StaggerItem } from "@/components/ui/Reveal";
 import type { EventApiDto } from "@/lib/api/events";
 import { eventsApi } from "@/lib/api/events";
 import { useAuth } from "@/context/AuthContext";
+import { slugify } from "@/lib/slugify";
 import { Plus, Trash2, ShieldCheck, X } from "lucide-react";
 
 interface EventItem {
@@ -101,15 +102,11 @@ export default function EventsMainPage() {
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
-    const slug = newEvent.title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
     const now = new Date();
     const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
     await eventsApi.createEvent({
       ...newEvent,
-      slug,
+      slug: slugify(newEvent.title),
       startDateTime: nextWeek.toISOString(),
       endDateTime: new Date(nextWeek.getTime() + 2 * 60 * 60 * 1000).toISOString(),
       online: true,

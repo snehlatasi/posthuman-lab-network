@@ -16,6 +16,7 @@ export interface MediaAssetDto {
   credit?: string;
   category?: string;
   featured: boolean;
+  published: boolean;
   createdAt: string;
 }
 
@@ -126,6 +127,7 @@ export const cmsApi = {
   getHomepageSummary: () => fetchJson<Record<string, unknown>>("/api/public/home"),
 
   // Admin Media APIs
+  getMediaAdmin: () => fetchJson<MediaAssetDto[]>("/api/admin/media"),
   addYouTubeVideo: (data: {
     url: string;
     title?: string;
@@ -137,6 +139,10 @@ export const cmsApi = {
       body: JSON.stringify(data),
     }),
   deleteMedia: (id: number) => fetchJson<void>(`/api/admin/media/${id}`, { method: "DELETE" }),
+  publishMedia: (id: number) =>
+    fetchJson<MediaAssetDto>(`/api/admin/media/${id}/publish`, { method: "PUT" }),
+  unpublishMedia: (id: number) =>
+    fetchJson<MediaAssetDto>(`/api/admin/media/${id}/unpublish`, { method: "PUT" }),
 
   createAlbum: (album: Partial<GalleryAlbumDto>) =>
     fetchJson<GalleryAlbumDto>("/api/admin/media/albums", {

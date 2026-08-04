@@ -9,7 +9,10 @@ import { MagneticButton } from "../ui/Magnetic";
 
 export const JoinNetworkSection: React.FC = () => {
   return (
-    <section className="py-28 md:py-36 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative overflow-hidden transition-colors duration-300">
+    <section
+      id="join"
+      className="py-28 md:py-36 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative overflow-hidden transition-colors duration-300"
+    >
       {/* Decorative organic blurs inside background */}
       <div className="absolute top-[20%] left-[20%] w-[50%] h-[50%] organic-radial-glow opacity-30 pointer-events-none" />
 

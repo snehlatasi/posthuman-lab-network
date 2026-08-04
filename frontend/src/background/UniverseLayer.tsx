@@ -5,6 +5,7 @@ import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
 import { StaticUniverseFallback } from "./StaticUniverseFallback";
 import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
+import { logWarning } from "@/lib/logger";
 
 const AnimatedUniverse = dynamic(
   () => import("./AnimatedUniverse").then((module) => module.AnimatedUniverse),
@@ -25,7 +26,7 @@ class UniverseErrorBoundary extends Component<
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.warn("Universe background disabled: React boundary caught an error.", {
+    logWarning("Universe background disabled: React boundary caught an error.", {
       error,
       errorInfo,
     });

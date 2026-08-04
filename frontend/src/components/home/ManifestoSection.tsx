@@ -61,6 +61,7 @@ export const ManifestoSection: React.FC = () => {
               <Image
                 src="/circular_nature_portal.jpg"
                 fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-[0.8] contrast-[1.05]"
                 alt="Nature Portal entering another way of thinking"
               />

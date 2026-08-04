@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import type { HomepageCurationDto } from "@/lib/api/cms";
 import { cmsApi } from "@/lib/api/cms";
-import { CheckCircle2 } from "lucide-react";
+import { AdminActionNotice } from "@/components/admin/AdminActionNotice";
 
 export default function AdminCurationPage() {
   const [curation, setCuration] = useState<HomepageCurationDto>({
@@ -52,10 +52,7 @@ export default function AdminCurationPage() {
       </div>
 
       {feedback && (
-        <div className="p-4 rounded-xl bg-moss-500/20 border border-moss-500/30 text-moss-400 text-xs font-mono uppercase font-bold flex items-center space-x-2">
-          <CheckCircle2 className="w-4 h-4" />
-          <span>{feedback}</span>
-        </div>
+        <AdminActionNotice message={feedback} href="/" />
       )}
 
       <form

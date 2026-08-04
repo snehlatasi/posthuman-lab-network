@@ -3,11 +3,14 @@
 import { useState, useEffect } from "react";
 import type { LearningResourceDto } from "@/lib/api/cms";
 import { cmsApi } from "@/lib/api/cms";
+import { AdminActionNotice } from "@/components/admin/AdminActionNotice";
+import { LivePreviewLink } from "@/components/admin/LivePreviewLink";
 import { Plus, Trash2 } from "lucide-react";
 
 export default function AdminLearningPage() {
   const [resources, setResources] = useState<LearningResourceDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
   const [showNewModal, setShowNewModal] = useState(false);
   const [newRes, setNewRes] = useState({
     title: "",
@@ -35,6 +38,8 @@ export default function AdminLearningPage() {
 
   return (
     <div className="space-y-6 font-sans">
+      {actionFeedback && <AdminActionNotice message={actionFeedback} href="/learning" />}
+
       <div className="flex justify-between items-center">
         <div>
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
@@ -72,7 +77,8 @@ export default function AdminLearningPage() {
                     {r.resourceType}
                   </td>
                   <td className="p-4 text-bone-200/70">{r.instructor || "Network Lead"}</td>
-                  <td className="p-4 text-right">
+                  <td className="p-4 text-right space-x-2">
+                    <LivePreviewLink href="/learning" />
                     <button
                       onClick={async () => {
                         await cmsApi.deleteLearningResource(r.id);
@@ -146,6 +152,8 @@ export default function AdminLearningPage() {
                   if (!newRes.title) return;
                   await cmsApi.createLearningResource({ ...newRes, resourceType: "MASTERCLASS" });
                   setShowNewModal(false);
+                  setActionFeedback("Masterclass saved.");
+                  setTimeout(() => setActionFeedback(null), 4000);
                   loadLearning();
                 }}
                 className="px-4 py-2 bg-earth-600 hover:bg-earth-500 text-bone-50 font-bold text-xs font-mono uppercase rounded-xl cursor-pointer"

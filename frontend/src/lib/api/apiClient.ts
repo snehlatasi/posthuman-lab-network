@@ -65,16 +65,21 @@ export async function fetchJson<T>(path: string, options?: RequestInit): Promise
   if (!response.ok) {
     let errorDetail = "API communication failed";
     try {
-      const errBody = await response.json();
-      errorDetail = errBody.message || errorDetail;
+      const contentType = response.headers.get("content-type") || "";
+      if (contentType.includes("json")) {
+        const errBody = await response.json();
+        errorDetail = errBody.message || errBody.error || errorDetail;
+      } else {
+        errorDetail = (await response.text()) || errorDetail;
+      }
     } catch {
       // JSON parsing failure fallback
     }
     throw new Error(errorDetail);
   }
 
-  // Treat HTTP 201/204 empty responses safely
-  if (response.status === 204) {
+  const contentType = response.headers.get("content-type") || "";
+  if (response.status === 204 || !contentType.includes("json")) {
     return {} as T;
   }
 

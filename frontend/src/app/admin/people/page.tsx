@@ -3,11 +3,14 @@
 import { useState, useEffect } from "react";
 import type { PersonDto } from "@/lib/api/cms";
 import { cmsApi } from "@/lib/api/cms";
+import { AdminActionNotice } from "@/components/admin/AdminActionNotice";
+import { LivePreviewLink } from "@/components/admin/LivePreviewLink";
 import { Plus, Trash2 } from "lucide-react";
 
 export default function AdminPeoplePage() {
   const [people, setPeople] = useState<PersonDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
   const [showNewModal, setShowNewModal] = useState(false);
   const [newPerson, setNewPerson] = useState({
     name: "",
@@ -35,6 +38,10 @@ export default function AdminPeoplePage() {
 
   return (
     <div className="space-y-6 font-sans">
+      {actionFeedback && (
+        <AdminActionNotice message={actionFeedback} href="/about/founders-collaborators" />
+      )}
+
       <div className="flex justify-between items-center">
         <div>
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
@@ -72,7 +79,8 @@ export default function AdminPeoplePage() {
                     {p.role}
                   </td>
                   <td className="p-4 text-bone-200/70">{p.affiliation}</td>
-                  <td className="p-4 text-right">
+                  <td className="p-4 text-right space-x-2">
+                    <LivePreviewLink href="/about/founders-collaborators" />
                     <button
                       onClick={async () => {
                         await cmsApi.deletePerson(p.id);
@@ -148,6 +156,8 @@ export default function AdminPeoplePage() {
                   if (!newPerson.name) return;
                   await cmsApi.createPerson(newPerson);
                   setShowNewModal(false);
+                  setActionFeedback("Person saved.");
+                  setTimeout(() => setActionFeedback(null), 4000);
                   loadPeople();
                 }}
                 className="px-4 py-2 bg-earth-600 hover:bg-earth-500 text-bone-50 font-bold text-xs font-mono uppercase rounded-xl cursor-pointer"

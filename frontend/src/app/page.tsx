@@ -26,7 +26,14 @@ const homeSections = [
   { id: "pillars", label: "Our Pillars" },
   { id: "conversations", label: "Themes" },
   { id: "labs", label: "Labs" },
+  { id: "spaces", label: "Spaces" },
+  { id: "lecture", label: "Lecture" },
   { id: "events", label: "Events" },
+  { id: "learning", label: "Learning" },
+  { id: "publications", label: "Writing" },
+  { id: "global-connection", label: "Voices" },
+  { id: "join", label: "Join" },
+  { id: "support", label: "Support" },
 ];
 
 export default function HomePage() {
@@ -71,7 +78,10 @@ export default function HomePage() {
   const handleSectionClick = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
-      el.scrollIntoView({
+      const headerOffset = 96;
+      const target = el.getBoundingClientRect().top + window.scrollY - headerOffset;
+      window.scrollTo({
+        top: Math.max(0, target),
         behavior: shouldReduceMotion ? "auto" : "smooth",
       });
     }
@@ -92,12 +102,15 @@ export default function HomePage() {
           const isActive = activeSection === sec.id;
           const isHovered = hoveredIdx === idx;
           return (
-            <div
+            <button
+              type="button"
               key={sec.id}
-              className="relative flex items-center justify-end group cursor-pointer"
+              className="relative flex items-center justify-end group cursor-pointer focus:outline-none"
               onMouseEnter={() => setHoveredIdx(idx)}
               onMouseLeave={() => setHoveredIdx(null)}
               onClick={() => handleSectionClick(sec.id)}
+              aria-label={`Scroll to ${sec.label}`}
+              aria-current={isActive ? "true" : undefined}
             >
               {/* Tooltip Label */}
               <span
@@ -115,9 +128,8 @@ export default function HomePage() {
                     ? "bg-earth-500 border-earth-500 scale-110 shadow-lg shadow-earth-500/30"
                     : "border-carbon-950/20 dark:border-bone-50/30 bg-bone-50/40 dark:bg-carbon-900/40 group-hover:border-carbon-950/60 dark:group-hover:border-bone-50/70"
                 }`}
-                aria-label={`Scroll to ${sec.label}`}
               />
-            </div>
+            </button>
           );
         })}
       </div>

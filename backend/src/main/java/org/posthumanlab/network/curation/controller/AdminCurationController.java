@@ -2,7 +2,7 @@ package org.posthumanlab.network.curation.controller;
 
 import jakarta.validation.Valid;
 import org.posthumanlab.network.curation.entity.HomepageCuration;
-import org.posthumanlab.network.curation.repository.HomepageCurationRepository;
+import org.posthumanlab.network.curation.service.HomepageCurationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,21 +10,20 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/admin/curation")
 public class AdminCurationController {
 
-    private final HomepageCurationRepository homepageCurationRepository;
+    private final HomepageCurationService homepageCurationService;
 
-    public AdminCurationController(HomepageCurationRepository homepageCurationRepository) {
-        this.homepageCurationRepository = homepageCurationRepository;
+    public AdminCurationController(HomepageCurationService homepageCurationService) {
+        this.homepageCurationService = homepageCurationService;
     }
 
     @GetMapping
     public ResponseEntity<HomepageCuration> getCurationSettings() {
-        return ResponseEntity.ok(homepageCurationRepository.findById(1L).orElseGet(HomepageCuration::new));
+        return ResponseEntity.ok(homepageCurationService.getHomepageCuration());
     }
 
     @PutMapping
     public ResponseEntity<HomepageCuration> updateCurationSettings(@Valid @RequestBody HomepageCuration curation) {
-        curation.setId(1L);
-        HomepageCuration updated = homepageCurationRepository.save(curation);
+        HomepageCuration updated = homepageCurationService.updateHomepageCuration(curation);
         return ResponseEntity.ok(updated);
     }
 }

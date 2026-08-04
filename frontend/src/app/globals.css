@@ -126,6 +126,10 @@ html {
     color 0.3s ease;
 }
 
+section[id] {
+  scroll-margin-top: 6rem;
+}
+
 body {
   background: var(--background-body);
   color: var(--foreground);

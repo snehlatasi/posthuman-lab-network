@@ -9,6 +9,7 @@ import { Breadcrumb } from "@/components/layout/Breadcrumb";
 import { DynamicForm } from "@/components/layout/DynamicForm";
 import { ContentCard } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";
+import { getNextSectionSubpage, getSectionSubpageLinks } from "@/lib/navigation";
 import type { Metadata } from "next";
 
 interface RouteParams {
@@ -62,14 +63,18 @@ export default async function DynamicSubpage({ params }: { params: Promise<Route
     { label: page.title },
   ];
 
-  // Sidebar links context for Editorial Layouts (reusing related links)
-  const sidebarLinks = page.relatedLinks
-    ? page.relatedLinks.map((link) => ({
-        label: link.label,
-        href: link.href,
-        active: false,
-      }))
-    : [];
+  const sectionMenuLinks = getSectionSubpageLinks(section, subpage);
+  const sidebarLinks =
+    section === "community"
+      ? sectionMenuLinks
+      : page.relatedLinks
+        ? page.relatedLinks.map((link) => ({
+            label: link.label,
+            href: link.href,
+            active: false,
+          }))
+        : [];
+  const nextPage = section === "community" ? getNextSectionSubpage(section, subpage) : null;
 
   // A. EDITORIAL LAYOUT
   if (page.layout === "editorial") {
@@ -80,8 +85,10 @@ export default async function DynamicSubpage({ params }: { params: Promise<Route
         subtitle={page.description}
         parentLabel={page.parentLabel}
         parentHref={page.parentHref}
-        sidebarTitle="Related Navigation"
+        sidebarTitle={section === "community" ? "Community Menu" : "Related Navigation"}
         sidebarLinks={sidebarLinks}
+        nextPageLabel={nextPage?.label}
+        nextPageHref={nextPage?.href}
       >
         <div className="space-y-8">
           <Breadcrumb items={breadcrumbItems} />
@@ -110,6 +117,8 @@ export default async function DynamicSubpage({ params }: { params: Promise<Route
         subtitle={page.description}
         parentLabel={page.parentLabel}
         parentHref={page.parentHref}
+        nextPageLabel={nextPage?.label}
+        nextPageHref={nextPage?.href}
       >
         {/* Full-width breadcrumb placed before grid items in page header context */}
         <div className="col-span-12 md:col-span-2 lg:col-span-3">

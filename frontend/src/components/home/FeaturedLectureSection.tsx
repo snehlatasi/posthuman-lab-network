@@ -11,7 +11,10 @@ export const FeaturedLectureSection: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
-    <section className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300">
+    <section
+      id="lecture"
+      className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300"
+    >
       <Container className="space-y-16">
         {/* Section Header */}
         <div className="max-w-xl space-y-4">
@@ -35,6 +38,7 @@ export const FeaturedLectureSection: React.FC = () => {
                 alt="Masterclass Presentation"
                 fill
                 priority
+                sizes="(min-width: 1024px) 67vw, 100vw"
                 className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-70"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-carbon-950 via-carbon-950/40 to-transparent" />

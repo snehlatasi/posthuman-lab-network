@@ -40,15 +40,16 @@ export const ScrollControls: React.FC = () => {
   }, []);
 
   const getPageSections = (): number[] => {
-    const selector = "section, footer, header, main > div, main > article";
+    const selector = "main > section, main > article, main [data-page-section='true'], footer";
     const elements = Array.from(document.querySelectorAll(selector));
+    const headerOffset = 96;
 
     const offsets = elements
       .map((el) => {
         const rect = el.getBoundingClientRect();
-        return rect.top + window.scrollY;
+        return rect.top + window.scrollY - headerOffset;
       })
-      .filter((top) => top >= 0)
+      .filter((top) => top >= -headerOffset)
       .sort((a, b) => a - b);
 
     const uniqueOffsets: number[] = [0];

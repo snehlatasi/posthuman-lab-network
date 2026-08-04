@@ -30,7 +30,10 @@ const spaces = [
 
 export const Virtual360LabViewer: React.FC = () => {
   return (
-    <section className="py-24 relative overflow-hidden border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent transition-colors duration-300">
+    <section
+      id="spaces"
+      className="py-24 relative overflow-hidden border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent transition-colors duration-300"
+    >
       <Container className="relative z-10">
         <Reveal>
           <div className="max-w-xl space-y-4 mb-12">
@@ -58,7 +61,13 @@ export const Virtual360LabViewer: React.FC = () => {
                     className="bg-white dark:bg-carbon-900/90 rounded-[30px] overflow-hidden border border-carbon-950/10 dark:border-bone-50/15 shadow-md"
                   >
                     <div className="relative aspect-[4/3] overflow-hidden">
-                      <Image src={space.imageSrc} alt={space.title} fill className="object-cover" />
+                      <Image
+                        src={space.imageSrc}
+                        alt={space.title}
+                        fill
+                        sizes="(min-width: 1280px) 30vw, (min-width: 768px) 50vw, 100vw"
+                        className="object-cover"
+                      />
                       <div className="absolute inset-0 bg-gradient-to-t from-carbon-950/65 via-carbon-950/20 to-transparent" />
                       <div className="absolute left-5 top-5 inline-flex items-center gap-2 rounded-full bg-white/95 dark:bg-carbon-950/90 px-3 py-1.5 border border-carbon-950/10 dark:border-bone-50/15 shadow-sm">
                         <Icon className="w-3.5 h-3.5 text-earth-600 dark:text-earth-400" />

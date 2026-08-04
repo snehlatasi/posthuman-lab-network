@@ -3,8 +3,7 @@ package org.posthumanlab.network.media.controller;
 import org.posthumanlab.network.media.entity.GalleryAlbum;
 import org.posthumanlab.network.media.entity.GalleryImage;
 import org.posthumanlab.network.media.entity.MediaAsset;
-import org.posthumanlab.network.media.repository.GalleryAlbumRepository;
-import org.posthumanlab.network.media.repository.GalleryImageRepository;
+import org.posthumanlab.network.media.service.GalleryService;
 import org.posthumanlab.network.media.service.MediaStorageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,30 +15,27 @@ import java.util.List;
 public class MediaController {
 
     private final MediaStorageService mediaStorageService;
-    private final GalleryAlbumRepository galleryAlbumRepository;
-    private final GalleryImageRepository galleryImageRepository;
+    private final GalleryService galleryService;
 
     public MediaController(
             MediaStorageService mediaStorageService,
-            GalleryAlbumRepository galleryAlbumRepository,
-            GalleryImageRepository galleryImageRepository) {
+            GalleryService galleryService) {
         this.mediaStorageService = mediaStorageService;
-        this.galleryAlbumRepository = galleryAlbumRepository;
-        this.galleryImageRepository = galleryImageRepository;
+        this.galleryService = galleryService;
     }
 
     @GetMapping
     public ResponseEntity<List<MediaAsset>> getAllPublicMedia() {
-        return ResponseEntity.ok(mediaStorageService.getAllMedia());
+        return ResponseEntity.ok(mediaStorageService.getPublishedMedia());
     }
 
     @GetMapping("/albums")
     public ResponseEntity<List<GalleryAlbum>> getGalleryAlbums() {
-        return ResponseEntity.ok(galleryAlbumRepository.findAllByOrderByDisplayOrderAscCreatedAtDesc());
+        return ResponseEntity.ok(galleryService.getAlbums());
     }
 
     @GetMapping("/albums/{id}/images")
     public ResponseEntity<List<GalleryImage>> getAlbumImages(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(galleryImageRepository.findByAlbumIdOrderByDisplayOrderAsc(id));
+        return ResponseEntity.ok(galleryService.getAlbumImages(id));
     }
 }

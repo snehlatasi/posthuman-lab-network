@@ -119,8 +119,26 @@ public class MediaStorageService {
         return mediaAssetRepository.findAllByOrderByCreatedAtDesc();
     }
 
+    public List<MediaAsset> getPublishedMedia() {
+        return mediaAssetRepository.findByPublishedTrueOrderByCreatedAtDesc();
+    }
+
     public Optional<MediaAsset> getById(Long id) {
         return mediaAssetRepository.findById(id);
+    }
+
+    public Optional<MediaAsset> publishMedia(Long id) {
+        return mediaAssetRepository.findById(id).map(asset -> {
+            asset.setPublished(true);
+            return mediaAssetRepository.save(asset);
+        });
+    }
+
+    public Optional<MediaAsset> unpublishMedia(Long id) {
+        return mediaAssetRepository.findById(id).map(asset -> {
+            asset.setPublished(false);
+            return mediaAssetRepository.save(asset);
+        });
     }
 
     public void deleteMedia(Long id) {

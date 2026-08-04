@@ -22,8 +22,7 @@ export default function UpcomingEventsPage() {
         setEvents(data);
         setLoading(false);
       })
-      .catch((err) => {
-        console.warn("REST API connection unavailable. Using mock fallback.", err);
+      .catch(() => {
         setLoading(false);
       });
   }, []);
@@ -98,7 +97,7 @@ export default function UpcomingEventsPage() {
           <div className="space-y-8">
             {isUsingFallback && (
               <div className="p-4 rounded-lg bg-bone-100 border border-carbon-950/10 text-xs font-mono text-carbon-900 leading-relaxed max-w-xl font-bold">
-                ⚠️ [DEMO MODE] REST API database is empty or offline. Showing static conceptual
+                [DEMO MODE] REST API database is empty or offline. Showing static conceptual
                 event below. Active registry will be restored upon local server connection.
               </div>
             )}
@@ -118,10 +117,10 @@ export default function UpcomingEventsPage() {
                       {evt.title}
                     </h2>
                     <div className="flex flex-wrap gap-4 text-xs font-mono text-carbon-900 dark:text-bone-200 font-bold">
-                      <span>📅 {formatDate(evt.startDateTime)}</span>
+                      <span>Date: {formatDate(evt.startDateTime)}</span>
                       <span>•</span>
                       <span>
-                        📍 {evt.location || (evt.online ? "Online Webcast" : "Physical Venue")}
+                        Location: {evt.location || (evt.online ? "Online Webcast" : "Physical Venue")}
                       </span>
                     </div>
                     <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed font-medium pt-2">
@@ -136,7 +135,7 @@ export default function UpcomingEventsPage() {
                     {isBooked ? (
                       <div className="space-y-4 text-center py-6">
                         <span className="font-mono text-2xl text-earth-600 dark:text-earth-400 font-bold">
-                          ✓
+                          Confirmed
                         </span>
                         <h3 className="font-serif text-xl font-bold text-carbon-950 dark:text-bone-50">
                           Registration Confirmed

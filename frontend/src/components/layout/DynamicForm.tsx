@@ -5,6 +5,7 @@ import { ArrowRight, HelpCircle } from "lucide-react";
 import { contactApi } from "@/lib/api/contact";
 import { membershipApi } from "@/lib/api/membership";
 import { publicationsApi } from "@/lib/api/publications";
+import { slugify } from "@/lib/slugify";
 
 interface DynamicFormProps {
   formType: "contact" | "collaboration" | "submission" | "membership";
@@ -63,10 +64,6 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
     try {
       if (formType === "submission") {
         const rawTitle = formData.title || "Untitled Paper";
-        const generatedSlug = rawTitle
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-+|-+$/g, "");
 
         let typeVal: "ARTICLE" | "ESSAY" | "RESEARCH" | "CREATIVE_WORK" = "ARTICLE";
         if (formData.category === "essays") typeVal = "ESSAY";
@@ -75,7 +72,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
 
         await publicationsApi.submitPublication({
           title: rawTitle,
-          slug: generatedSlug,
+          slug: slugify(rawTitle),
           summary: formData.message || "Public draft submission.",
           content: formData.message || "Submitted for peer review.",
           authorDisplayName: formData.name,

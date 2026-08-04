@@ -1,7 +1,7 @@
 package org.posthumanlab.network.conversation.controller;
 
 import org.posthumanlab.network.conversation.entity.Conversation;
-import org.posthumanlab.network.conversation.repository.ConversationRepository;
+import org.posthumanlab.network.conversation.service.ConversationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,19 +11,19 @@ import java.util.List;
 @RequestMapping("/api/conversations")
 public class ConversationController {
 
-    private final ConversationRepository conversationRepository;
+    private final ConversationService conversationService;
 
-    public ConversationController(ConversationRepository conversationRepository) {
-        this.conversationRepository = conversationRepository;
+    public ConversationController(ConversationService conversationService) {
+        this.conversationService = conversationService;
     }
 
     @GetMapping
     public ResponseEntity<List<Conversation>> getFeaturedConversations() {
-        return ResponseEntity.ok(conversationRepository.findByFeaturedTrueOrderByDisplayOrderAscCreatedAtDesc());
+        return ResponseEntity.ok(conversationService.getFeatured());
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Conversation>> getAllConversations() {
-        return ResponseEntity.ok(conversationRepository.findAllByOrderByDisplayOrderAscCreatedAtDesc());
+        return ResponseEntity.ok(conversationService.getAll());
     }
 }

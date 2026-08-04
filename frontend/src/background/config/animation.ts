@@ -6,6 +6,21 @@ export interface UniversePalette {
   violet: string;
   rose: string;
   white: string;
+  moss: string;
+  amber: string;
+}
+
+export interface KnowledgeNetworkConfig {
+  arcCount: number;
+  lowPowerArcCount: number;
+  nodeCount: number;
+  lowPowerNodeCount: number;
+  pulseCount: number;
+  lowPowerPulseCount: number;
+  arcBaseRadius: number;
+  arcRadiusStep: number;
+  nodeBaseRadius: number;
+  pulseBaseRadius: number;
 }
 
 export interface UniverseConfig {
@@ -27,6 +42,7 @@ export interface UniverseConfig {
   maxDpr: number;
   lowPowerMaxDpr: number;
   palette: UniversePalette;
+  knowledgeNetwork: KnowledgeNetworkConfig;
 }
 
 export const universeConfig: UniverseConfig = {
@@ -55,5 +71,19 @@ export const universeConfig: UniverseConfig = {
     violet: "#7c7dff",
     rose: "#ff79cf",
     white: "#ffffff",
+    moss: "#9cb394",
+    amber: "#e0b86c",
+  },
+  knowledgeNetwork: {
+    arcCount: 5,
+    lowPowerArcCount: 3,
+    nodeCount: 8,
+    lowPowerNodeCount: 6,
+    pulseCount: 7,
+    lowPowerPulseCount: 4,
+    arcBaseRadius: 2.35,
+    arcRadiusStep: 0.34,
+    nodeBaseRadius: 2.56,
+    pulseBaseRadius: 2.22,
   },
 };

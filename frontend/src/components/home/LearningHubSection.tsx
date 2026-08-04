@@ -9,7 +9,10 @@ import { Reveal, StaggerItem } from "../ui/Reveal";
 
 export const LearningHubSection: React.FC = () => {
   return (
-    <section className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300">
+    <section
+      id="learning"
+      className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300"
+    >
       <Container className="space-y-16">
         {/* Section Header */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">

@@ -3,12 +3,18 @@
 import { useState, useEffect } from "react";
 import type { PublicationApiDto } from "@/lib/api/publications";
 import { publicationsApi } from "@/lib/api/publications";
+import { slugify } from "@/lib/slugify";
+import { AdminActionNotice } from "@/components/admin/AdminActionNotice";
+import { LivePreviewLink } from "@/components/admin/LivePreviewLink";
 import { Plus, Trash2, AlertTriangle } from "lucide-react";
 
 export default function AdminPublicationsPage() {
   const [publications, setPublications] = useState<PublicationApiDto[]>([]);
   const [loading, setLoading] = useState(true);
-  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
+  const [actionFeedback, setActionFeedback] = useState<{
+    message: string;
+    href?: string;
+  } | null>(null);
 
   const [showNewModal, setShowNewModal] = useState(false);
   const [newPub, setNewPub] = useState<{
@@ -49,17 +55,15 @@ export default function AdminPublicationsPage() {
     loadPublications();
   }, []);
 
-  const triggerFeedback = (msg: string) => {
-    setActionFeedback(msg);
+  const triggerFeedback = (message: string, href?: string) => {
+    setActionFeedback({ message, href });
     setTimeout(() => setActionFeedback(null), 4000);
   };
 
   return (
     <div className="space-y-6 font-sans">
       {actionFeedback && (
-        <div className="p-4 rounded-xl bg-moss-500/20 border border-moss-500/30 text-moss-400 text-xs font-mono uppercase font-bold">
-          {actionFeedback}
-        </div>
+        <AdminActionNotice message={actionFeedback.message} href={actionFeedback.href} />
       )}
 
       <div className="flex justify-between items-center">
@@ -126,14 +130,20 @@ export default function AdminPublicationsPage() {
                     ) : (
                       <button
                         onClick={async () => {
-                          await publicationsApi.publishPublication(p.id);
-                          triggerFeedback("Publication published.");
+                          const published = await publicationsApi.publishPublication(p.id);
+                          triggerFeedback(
+                            "Publication published.",
+                            `/publications/${published.slug}`
+                          );
                           loadPublications();
                         }}
                         className="px-2.5 py-1 bg-moss-500/20 hover:bg-moss-500/40 text-moss-400 text-[10px] font-mono rounded-lg uppercase font-bold cursor-pointer border border-moss-500/30"
                       >
                         Publish
                       </button>
+                    )}
+                    {p.status === "PUBLISHED" && (
+                      <LivePreviewLink href={`/publications/${p.slug}`} />
                     )}
                     <button
                       onClick={() => {
@@ -230,13 +240,9 @@ export default function AdminPublicationsPage() {
               <button
                 onClick={async () => {
                   if (!newPub.title) return;
-                  const generatedSlug = newPub.title
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, "-")
-                    .replace(/^-+|-+$/g, "");
-                  await publicationsApi.createPublication({
+                  const created = await publicationsApi.createPublication({
                     ...newPub,
-                    slug: generatedSlug,
+                    slug: slugify(newPub.title),
                     status: "PUBLISHED",
                   });
                   setShowNewModal(false);
@@ -247,7 +253,7 @@ export default function AdminPublicationsPage() {
                     authorDisplayName: "Admin Researcher",
                     publicationType: "ARTICLE",
                   });
-                  triggerFeedback("Publication cataloged.");
+                  triggerFeedback("Publication cataloged.", `/publications/${created.slug}`);
                   loadPublications();
                 }}
                 className="px-4 py-2 bg-earth-600 hover:bg-earth-500 text-bone-50 font-bold text-xs font-mono uppercase rounded-xl cursor-pointer"

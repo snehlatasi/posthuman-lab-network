@@ -3,11 +3,14 @@
 import { useState, useEffect } from "react";
 import type { ConversationDto } from "@/lib/api/cms";
 import { cmsApi } from "@/lib/api/cms";
+import { AdminActionNotice } from "@/components/admin/AdminActionNotice";
+import { LivePreviewLink } from "@/components/admin/LivePreviewLink";
 import { Plus, Trash2 } from "lucide-react";
 
 export default function AdminConversationsPage() {
   const [conversations, setConversations] = useState<ConversationDto[]>([]);
   const [loading, setLoading] = useState(true);
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
   const [showNewModal, setShowNewModal] = useState(false);
   const [newConv, setNewConv] = useState({
     title: "",
@@ -35,6 +38,8 @@ export default function AdminConversationsPage() {
 
   return (
     <div className="space-y-6 font-sans">
+      {actionFeedback && <AdminActionNotice message={actionFeedback} href="/" />}
+
       <div className="flex justify-between items-center">
         <div>
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
@@ -76,7 +81,8 @@ export default function AdminConversationsPage() {
                     {c.category}
                   </td>
                   <td className="p-4 max-w-xs truncate text-bone-200/70">{c.shortDescription}</td>
-                  <td className="p-4 text-right">
+                  <td className="p-4 text-right space-x-2">
+                    <LivePreviewLink href="/" />
                     <button
                       onClick={async () => {
                         await cmsApi.deleteConversation(c.id);
@@ -152,6 +158,8 @@ export default function AdminConversationsPage() {
                   if (!newConv.title) return;
                   await cmsApi.createConversation(newConv);
                   setShowNewModal(false);
+                  setActionFeedback("Conversation saved.");
+                  setTimeout(() => setActionFeedback(null), 4000);
                   loadConversations();
                 }}
                 className="px-4 py-2 bg-earth-600 hover:bg-earth-500 text-bone-50 font-bold text-xs font-mono uppercase rounded-xl cursor-pointer"

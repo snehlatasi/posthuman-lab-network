@@ -17,7 +17,7 @@ public final class SlugUtils {
 
     public static String resolve(String requestedSlug, String fallbackTitle) {
         if (requestedSlug != null && !requestedSlug.trim().isEmpty()) {
-            return requestedSlug;
+            return fromTitle(requestedSlug);
         }
 
         return fromTitle(fallbackTitle);

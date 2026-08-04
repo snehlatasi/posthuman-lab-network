@@ -2,7 +2,7 @@ package org.posthumanlab.network.learning.controller;
 
 import org.posthumanlab.network.learning.entity.LearningResource;
 import org.posthumanlab.network.learning.entity.LearningResourceType;
-import org.posthumanlab.network.learning.repository.LearningResourceRepository;
+import org.posthumanlab.network.learning.service.LearningResourceService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,29 +12,26 @@ import java.util.List;
 @RequestMapping("/api/learning")
 public class LearningResourceController {
 
-    private final LearningResourceRepository learningResourceRepository;
+    private final LearningResourceService learningResourceService;
 
-    public LearningResourceController(LearningResourceRepository learningResourceRepository) {
-        this.learningResourceRepository = learningResourceRepository;
+    public LearningResourceController(LearningResourceService learningResourceService) {
+        this.learningResourceService = learningResourceService;
     }
 
     @GetMapping
     public ResponseEntity<List<LearningResource>> getAllResources(
             @RequestParam(required = false) LearningResourceType type) {
-        if (type != null) {
-            return ResponseEntity.ok(learningResourceRepository.findByResourceTypeOrderByCreatedAtDesc(type));
-        }
-        return ResponseEntity.ok(learningResourceRepository.findAllByOrderByCreatedAtDesc());
+        return ResponseEntity.ok(learningResourceService.getAll(type));
     }
 
     @GetMapping("/featured")
     public ResponseEntity<List<LearningResource>> getFeaturedResources() {
-        return ResponseEntity.ok(learningResourceRepository.findByFeaturedTrueOrderByCreatedAtDesc());
+        return ResponseEntity.ok(learningResourceService.getFeatured());
     }
 
     @GetMapping("/slug/{slug}")
     public ResponseEntity<LearningResource> getResourceBySlug(@PathVariable("slug") String slug) {
-        return learningResourceRepository.findBySlug(slug)
+        return learningResourceService.getBySlug(slug)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

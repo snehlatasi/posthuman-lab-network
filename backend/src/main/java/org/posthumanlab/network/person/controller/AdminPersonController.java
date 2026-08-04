@@ -1,9 +1,8 @@
 package org.posthumanlab.network.person.controller;
 
 import jakarta.validation.Valid;
-import org.posthumanlab.network.common.util.SlugUtils;
 import org.posthumanlab.network.person.entity.Person;
-import org.posthumanlab.network.person.repository.PersonRepository;
+import org.posthumanlab.network.person.service.PersonService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,36 +13,33 @@ import java.util.List;
 @RequestMapping("/api/admin/people")
 public class AdminPersonController {
 
-    private final PersonRepository personRepository;
+    private final PersonService personService;
 
-    public AdminPersonController(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    public AdminPersonController(PersonService personService) {
+        this.personService = personService;
     }
 
     @GetMapping
     public ResponseEntity<List<Person>> getAllPeopleAdmin() {
-        return ResponseEntity.ok(personRepository.findAllByOrderByCreatedAtDesc());
+        return ResponseEntity.ok(personService.getAll());
     }
 
     @PostMapping
     public ResponseEntity<Person> createPerson(@Valid @RequestBody Person person) {
-        if (person.getSlug() == null || person.getSlug().isBlank()) {
-            person.setSlug(SlugUtils.fromTitle(person.getName()));
-        }
-        Person saved = personRepository.save(person);
+        Person saved = personService.create(person);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable("id") Long id, @Valid @RequestBody Person person) {
-        person.setId(id);
-        Person updated = personRepository.save(person);
-        return ResponseEntity.ok(updated);
+        return personService.update(id, person)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePerson(@PathVariable("id") Long id) {
-        personRepository.deleteById(id);
+        personService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

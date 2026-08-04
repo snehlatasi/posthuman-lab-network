@@ -6,6 +6,7 @@ import { useUniverseControls } from "./hooks/useUniverseControls";
 import { isWebGLAvailable, UniverseRenderer } from "./Renderer";
 import { StaticUniverseFallback } from "./StaticUniverseFallback";
 import { useTheme } from "@/context/ThemeContext";
+import { logWarning } from "@/lib/logger";
 
 export function AnimatedUniverse() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -24,7 +25,7 @@ export function AnimatedUniverse() {
       if (cancelled || !canvasRef.current) return;
 
       if (!isWebGLAvailable()) {
-        console.warn("Universe background disabled: WebGL is unavailable in this browser.");
+        logWarning("Universe background disabled: WebGL is unavailable in this browser.");
         setWebglUnavailable(true);
         return;
       }

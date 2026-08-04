@@ -3,12 +3,18 @@
 import { useState, useEffect } from "react";
 import type { EventApiDto } from "@/lib/api/events";
 import { eventsApi } from "@/lib/api/events";
+import { slugify } from "@/lib/slugify";
+import { AdminActionNotice } from "@/components/admin/AdminActionNotice";
+import { LivePreviewLink } from "@/components/admin/LivePreviewLink";
 import { Plus, Trash2, AlertTriangle } from "lucide-react";
 
 export default function AdminEventsPage() {
   const [events, setEvents] = useState<EventApiDto[]>([]);
   const [loading, setLoading] = useState(true);
-  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
+  const [actionFeedback, setActionFeedback] = useState<{
+    message: string;
+    href?: string;
+  } | null>(null);
 
   const [showNewModal, setShowNewModal] = useState(false);
   const [newEvent, setNewEvent] = useState({
@@ -45,17 +51,15 @@ export default function AdminEventsPage() {
     loadEvents();
   }, []);
 
-  const triggerFeedback = (msg: string) => {
-    setActionFeedback(msg);
+  const triggerFeedback = (message: string, href?: string) => {
+    setActionFeedback({ message, href });
     setTimeout(() => setActionFeedback(null), 4000);
   };
 
   return (
     <div className="space-y-6 font-sans">
       {actionFeedback && (
-        <div className="p-4 rounded-xl bg-moss-500/20 border border-moss-500/30 text-moss-400 text-xs font-mono uppercase font-bold">
-          {actionFeedback}
-        </div>
+        <AdminActionNotice message={actionFeedback.message} href={actionFeedback.href} />
       )}
 
       <div className="flex justify-between items-center">
@@ -108,6 +112,7 @@ export default function AdminEventsPage() {
                     </span>
                   </td>
                   <td className="p-4 text-right space-x-2">
+                    <LivePreviewLink href="/events" />
                     <button
                       onClick={() => {
                         setConfirmModal({
@@ -188,15 +193,11 @@ export default function AdminEventsPage() {
               <button
                 onClick={async () => {
                   if (!newEvent.title) return;
-                  const generatedSlug = newEvent.title
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, "-")
-                    .replace(/^-+|-+$/g, "");
                   const now = new Date();
                   const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
                   await eventsApi.createEvent({
                     ...newEvent,
-                    slug: generatedSlug,
+                    slug: slugify(newEvent.title),
                     startDateTime: nextWeek.toISOString(),
                     endDateTime: new Date(nextWeek.getTime() + 2 * 60 * 60 * 1000).toISOString(),
                     status: "UPCOMING",
@@ -211,7 +212,7 @@ export default function AdminEventsPage() {
                     location: "Online Webcast",
                     online: true,
                   });
-                  triggerFeedback("Event created.");
+                  triggerFeedback("Event created.", "/events");
                   loadEvents();
                 }}
                 className="px-4 py-2 bg-earth-600 hover:bg-earth-500 text-bone-50 font-bold text-xs font-mono uppercase rounded-xl cursor-pointer"
