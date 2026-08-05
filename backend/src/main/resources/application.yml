@@ -39,6 +39,21 @@ spring:
       hibernate:
         format_sql: true
 
+  mail:
+    host: ${SMTP_HOST:}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${SMTP_AUTH:true}
+          starttls:
+            enable: ${SMTP_STARTTLS_ENABLE:true}
+          connectiontimeout: ${SMTP_CONNECTION_TIMEOUT:10000}
+          timeout: ${SMTP_TIMEOUT:10000}
+          writetimeout: ${SMTP_WRITE_TIMEOUT:10000}
+
 springdoc:
   api-docs:
     path: /v3/api-docs
@@ -52,6 +67,10 @@ app:
   member-auth:
     expose-otp: ${MEMBER_AUTH_EXPOSE_OTP:true}
     otp-ttl-minutes: ${MEMBER_AUTH_OTP_TTL_MINUTES:10}
+    email:
+      enabled: ${MEMBER_AUTH_EMAIL_ENABLED:false}
+      from: ${MEMBER_AUTH_EMAIL_FROM:posthumanlabnetwork@gmail.com}
+      subject: ${MEMBER_AUTH_EMAIL_SUBJECT:Your Posthuman Lab Network verification code}
   cors:
     allowed-origins:
       - ${FRONTEND_ORIGIN:http://localhost:3000}

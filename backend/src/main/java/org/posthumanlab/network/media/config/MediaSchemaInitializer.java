@@ -20,14 +20,14 @@ public class MediaSchemaInitializer {
                         """
                         select count(*)
                         from information_schema.columns
-                        where table_name = 'MEDIA_ASSETS'
-                          and column_name = 'PUBLISHED'
+                        where table_name = 'media_assets'
+                          and column_name = 'published'
                         """,
                         Integer.class
                 );
 
                 if (count == null || count == 0) {
-                    jdbcTemplate.execute("alter table media_assets add column published boolean default false");
+                    jdbcTemplate.execute("alter table media_assets add column if not exists published boolean default false");
                     jdbcTemplate.execute("update media_assets set published = false where published is null");
                 }
             } catch (Exception ex) {

@@ -32,18 +32,21 @@ public class MemberAccountAuthService {
     private final SecureRandom secureRandom = new SecureRandom();
     private final boolean exposeOtp;
     private final int otpTtlMinutes;
+    private final OtpEmailService otpEmailService;
 
     public MemberAccountAuthService(
             MemberAccountRepository accountRepository,
             MemberRepository memberRepository,
             MembershipApplicationRepository applicationRepository,
             PasswordEncoder passwordEncoder,
+            OtpEmailService otpEmailService,
             @Value("${app.member-auth.expose-otp:false}") boolean exposeOtp,
             @Value("${app.member-auth.otp-ttl-minutes:10}") int otpTtlMinutes) {
         this.accountRepository = accountRepository;
         this.memberRepository = memberRepository;
         this.applicationRepository = applicationRepository;
         this.passwordEncoder = passwordEncoder;
+        this.otpEmailService = otpEmailService;
         this.exposeOtp = exposeOtp;
         this.otpTtlMinutes = otpTtlMinutes;
     }
@@ -62,6 +65,7 @@ public class MemberAccountAuthService {
 
         String otp = issueOtp(account);
         accountRepository.save(account);
+        deliverOtp(email, otp);
 
         return challengeResponse(email, otp);
     }
@@ -78,6 +82,7 @@ public class MemberAccountAuthService {
 
         String otp = issueOtp(account);
         accountRepository.save(account);
+        deliverOtp(email, otp);
         return challengeResponse(email, otp);
     }
 
@@ -118,8 +123,21 @@ public class MemberAccountAuthService {
         return otp;
     }
 
+    private void deliverOtp(String email, String otp) {
+        if (otpEmailService.isEnabled()) {
+            otpEmailService.sendOtp(email, otp, otpTtlMinutes);
+            return;
+        }
+
+        if (!exposeOtp) {
+            throw new IllegalStateException("Email OTP delivery is not configured.");
+        }
+    }
+
     private MemberOtpChallengeResponse challengeResponse(String email, String otp) {
-        String message = "Verification code sent. Please confirm the OTP to continue.";
+        String message = otpEmailService.isEnabled()
+                ? "Verification code sent to your email. Please confirm the OTP to continue."
+                : "Verification code generated. Please confirm the OTP to continue.";
         return new MemberOtpChallengeResponse(email, message, exposeOtp ? otp : null);
     }
 
