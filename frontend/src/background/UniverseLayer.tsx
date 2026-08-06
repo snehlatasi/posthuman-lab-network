@@ -1,19 +1,10 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import type { ErrorInfo, ReactNode } from "react";
 import { Component } from "react";
+import { AnimatedUniverse } from "./AnimatedUniverse";
 import { StaticUniverseFallback } from "./StaticUniverseFallback";
-import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { logWarning } from "@/lib/logger";
-
-const AnimatedUniverse = dynamic(
-  () => import("./AnimatedUniverse").then((module) => module.AnimatedUniverse),
-  {
-    ssr: false,
-    loading: () => <StaticUniverseFallback animated />,
-  }
-);
 
 class UniverseErrorBoundary extends Component<
   { children: ReactNode },
@@ -42,12 +33,6 @@ class UniverseErrorBoundary extends Component<
 }
 
 export function UniverseLayer() {
-  const mobilePerformanceMode = useMobilePerformanceMode();
-
-  if (mobilePerformanceMode) {
-    return <StaticUniverseFallback />;
-  }
-
   return (
     <UniverseErrorBoundary>
       <AnimatedUniverse />

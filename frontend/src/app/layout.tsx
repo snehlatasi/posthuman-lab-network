@@ -27,6 +27,22 @@ const cormorant = Cormorant_Garamond({
   weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
 });
+const themeInitScript = `
+(function() {
+  try {
+    var storageKey = "posthuman-theme-preference";
+    var preference = localStorage.getItem(storageKey);
+    if (preference !== "light" && preference !== "system") preference = "system";
+    var resolved = preference === "system" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    var root = document.documentElement;
+    root.classList.remove(resolved === "dark" ? "light" : "dark");
+    root.classList.add(resolved);
+    root.setAttribute("data-theme", resolved);
+    root.setAttribute("data-theme-preference", preference);
+    root.style.colorScheme = resolved;
+  } catch (error) {}
+})();
+`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -73,6 +89,9 @@ export default function RootLayout({
       className={`${manrope.variable} ${cormorant.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="min-h-full flex flex-col text-carbon-950 dark:text-bone-100 selection:bg-earth-500 selection:text-bone-50 relative">
         <ThemeProvider>
           <AuthProvider>

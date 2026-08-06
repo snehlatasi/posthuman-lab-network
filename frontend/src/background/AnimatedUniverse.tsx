@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { universeConfig } from "./config/animation";
 import { useUniverseControls } from "./hooks/useUniverseControls";
 import { isWebGLAvailable, UniverseRenderer } from "./Renderer";
@@ -15,7 +15,7 @@ export function AnimatedUniverse() {
   const controls = useUniverseControls();
   const { resolvedTheme } = useTheme();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (webglUnavailable) return;
 
     let cancelled = false;
@@ -49,11 +49,10 @@ export function AnimatedUniverse() {
       }
     };
 
-    const frameId = requestAnimationFrame(initializeRenderer);
+    initializeRenderer();
 
     return () => {
       cancelled = true;
-      cancelAnimationFrame(frameId);
       renderer?.dispose();
       if (rendererRef.current === renderer) {
         rendererRef.current = null;

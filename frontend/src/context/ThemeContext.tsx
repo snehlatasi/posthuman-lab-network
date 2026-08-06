@@ -4,7 +4,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useMemo,
   useSyncExternalStore,
 } from "react";
@@ -56,25 +56,29 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
   const resolvedTheme = theme === "system" ? systemTheme : theme;
 
-  const applyThemeToDOM = useCallback((resolved: ResolvedTheme) => {
-    if (typeof document === "undefined") return;
-    const root = document.documentElement;
-    if (resolved === "dark") {
-      root.classList.add("dark");
-      root.classList.remove("light");
-      root.setAttribute("data-theme", "dark");
-      root.style.colorScheme = "dark";
-    } else {
-      root.classList.add("light");
-      root.classList.remove("dark");
-      root.setAttribute("data-theme", "light");
-      root.style.colorScheme = "light";
-    }
-  }, []);
+  const applyThemeToDOM = useCallback(
+    (resolved: ResolvedTheme, preference: ThemePreference) => {
+      if (typeof document === "undefined") return;
+      const root = document.documentElement;
+      if (resolved === "dark") {
+        root.classList.add("dark");
+        root.classList.remove("light");
+        root.setAttribute("data-theme", "dark");
+        root.style.colorScheme = "dark";
+      } else {
+        root.classList.add("light");
+        root.classList.remove("dark");
+        root.setAttribute("data-theme", "light");
+        root.style.colorScheme = "light";
+      }
+      root.setAttribute("data-theme-preference", preference);
+    },
+    []
+  );
 
-  useEffect(() => {
-    applyThemeToDOM(resolvedTheme);
-  }, [applyThemeToDOM, resolvedTheme]);
+  useLayoutEffect(() => {
+    applyThemeToDOM(resolvedTheme, theme);
+  }, [applyThemeToDOM, resolvedTheme, theme]);
 
   const setTheme = useCallback((newTheme: ThemePreference) => {
     try {

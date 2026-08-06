@@ -262,6 +262,7 @@ export class UniverseRenderer {
 
   start() {
     if (this.animationId !== null || !this.visible) return;
+
     const tick = () => {
       if (!this.visible) return;
       try {
@@ -272,7 +273,8 @@ export class UniverseRenderer {
       }
       this.animationId = requestAnimationFrame(tick);
     };
-    this.animationId = requestAnimationFrame(tick);
+
+    tick();
   }
 
   dispose() {
