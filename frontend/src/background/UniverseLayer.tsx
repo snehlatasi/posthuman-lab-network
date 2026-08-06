@@ -34,7 +34,7 @@ class UniverseErrorBoundary extends Component<
 
   render() {
     if (this.state.hasError) {
-      return <StaticUniverseFallback animated />;
+      return <StaticUniverseFallback />;
     }
 
     return this.props.children;
@@ -45,7 +45,7 @@ export function UniverseLayer() {
   const mobilePerformanceMode = useMobilePerformanceMode();
 
   if (mobilePerformanceMode) {
-    return <StaticUniverseFallback animated />;
+    return <StaticUniverseFallback />;
   }
 
   return (

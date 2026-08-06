@@ -499,3 +499,33 @@ body::before {
       );
   }
 }
+
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body::before,
+  .digital-grid {
+    opacity: 0.28;
+  }
+
+  .mobile-universe-orbit,
+  .mobile-universe-petal,
+  .mobile-universe-wave,
+  .animate-glow-1,
+  .animate-glow-2,
+  .animate-glow-3 {
+    animation: none !important;
+    will-change: auto;
+  }
+
+  .mobile-universe-petal {
+    opacity: 0.48;
+  }
+
+  .mobile-universe-wave {
+    opacity: 0.22;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+}

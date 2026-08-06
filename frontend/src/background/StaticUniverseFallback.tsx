@@ -6,12 +6,12 @@ interface StaticUniverseFallbackProps {
   animated?: boolean;
 }
 
-const petalIndexes = Array.from({ length: 18 }, (_, index) => index);
-const waveIndexes = Array.from({ length: 4 }, (_, index) => index);
+const petalIndexes = Array.from({ length: 12 }, (_, index) => index);
+const waveIndexes = Array.from({ length: 2 }, (_, index) => index);
 
 export function CssUniverseOrbit({ isDark }: { isDark: boolean }) {
   return (
-    <div className="mobile-universe-orbit absolute left-1/2 top-[42%] h-[72vw] max-h-[360px] w-[72vw] max-w-[360px] -translate-x-1/2 -translate-y-1/2">
+    <div className="mobile-universe-orbit absolute left-1/2 top-[46%] h-[min(72vw,360px)] w-[min(72vw,360px)] -translate-x-1/2 -translate-y-1/2">
       {petalIndexes.map((index) => (
         <span
           key={index}
@@ -55,7 +55,7 @@ export function StaticUniverseFallback({ animated = false }: StaticUniverseFallb
         }`}
       />
       <div
-        className={`absolute left-1/2 top-[42%] h-[68vw] max-h-[360px] w-[68vw] max-w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[1px] ${
+        className={`absolute left-1/2 top-[46%] h-[min(68vw,360px)] w-[min(68vw,360px)] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[1px] ${
           isDark
             ? "bg-[radial-gradient(circle,rgba(255,255,255,0.42)_0%,rgba(159,248,255,0.28)_15%,rgba(255,121,207,0.14)_34%,transparent_70%)]"
             : "bg-[radial-gradient(circle,rgba(255,255,255,0.5)_0%,rgba(69,236,255,0.2)_20%,rgba(152,78,50,0.14)_42%,transparent_74%)]"

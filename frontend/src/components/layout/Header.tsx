@@ -5,6 +5,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState, useSyncExter
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { Menu, X, ArrowRight, ChevronDown, ShieldCheck } from "lucide-react";
 import type { NavigationGroup } from "@/lib/navigation";
@@ -24,6 +25,7 @@ export const Header: FC = () => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const pathname = usePathname();
   const shouldReduceMotion = useSafeReducedMotion();
+  const mobilePerformanceMode = useMobilePerformanceMode();
   const headerRef = useRef<HTMLDivElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -41,10 +43,25 @@ export const Header: FC = () => {
   }, [pathname]);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    let ticking = false;
+
+    const updateScrolled = () => {
+      setIsScrolled((current) => {
+        const next = window.scrollY > 20;
+        return current === next ? current : next;
+      });
+      ticking = false;
     };
-    window.addEventListener("scroll", handleScroll);
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateScrolled);
+        ticking = true;
+      }
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -359,16 +376,16 @@ export const Header: FC = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={shouldReduceMotion ? {} : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={shouldReduceMotion ? {} : { opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            initial={shouldReduceMotion || mobilePerformanceMode ? {} : { opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={shouldReduceMotion || mobilePerformanceMode ? {} : { opacity: 0, y: -8 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
             style={{
               top: `${headerHeight}px`,
               height: `calc(100dvh - ${headerHeight}px)`,
             }}
             data-testid="mobile-navigation-drawer"
-            className="xl:hidden fixed left-0 right-0 bottom-0 bg-bone-50/98 dark:bg-carbon-950/98 backdrop-blur-xl border-t border-carbon-950/10 dark:border-bone-50/15 overflow-y-auto overscroll-contain z-40"
+            className="xl:hidden fixed left-0 right-0 bottom-0 bg-bone-50/98 dark:bg-carbon-950/98 md:backdrop-blur-xl border-t border-carbon-950/10 dark:border-bone-50/15 overflow-y-auto overscroll-contain z-40"
           >
             <div className="px-6 py-8 space-y-6">
               {/* Theme Preference in Mobile Drawer */}
@@ -419,6 +436,7 @@ const MobileAccordionGroup: FC<{
 }> = ({ group, onClose }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const shouldReduceMotion = useSafeReducedMotion();
+  const mobilePerformanceMode = useMobilePerformanceMode();
 
   return (
     <div className="border-b border-carbon-950/10 dark:border-bone-50/10 pb-4">
@@ -445,10 +463,10 @@ const MobileAccordionGroup: FC<{
       <AnimatePresence initial={false}>
         {isExpanded && (
           <motion.div
-            initial={shouldReduceMotion ? {} : { height: 0, opacity: 0 }}
+            initial={shouldReduceMotion || mobilePerformanceMode ? false : { height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
-            exit={shouldReduceMotion ? {} : { height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            exit={shouldReduceMotion || mobilePerformanceMode ? undefined : { height: 0, opacity: 0 }}
+            transition={{ duration: mobilePerformanceMode ? 0 : 0.24, ease: "easeInOut" }}
             className="overflow-hidden"
           >
             <div className="mt-3 pl-2 flex flex-col space-y-4 pt-1">
