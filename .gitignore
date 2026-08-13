@@ -54,6 +54,10 @@ backend/logs/
 
 # Local visual verification captures
 universe-*.png
+homepage-check.png
+playwright-report/
+test-results/
+*.trace.zip
 
 # OS specific files
 .DS_Store
