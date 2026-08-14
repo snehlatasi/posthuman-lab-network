@@ -76,6 +76,19 @@ app:
       enabled: ${MEMBER_AUTH_EMAIL_ENABLED:false}
       from: ${MEMBER_AUTH_EMAIL_FROM:posthumanlabnetwork@gmail.com}
       subject: ${MEMBER_AUTH_EMAIL_SUBJECT:Your Posthuman Lab Network verification code}
+  newsletter:
+    email:
+      enabled: ${NEWSLETTER_EMAIL_ENABLED:true}
+      brevo-api-key: ${NEWSLETTER_BREVO_API_KEY:${BREVO_API_KEY:}}
+      brevo-api-url: ${NEWSLETTER_BREVO_API_URL:${BREVO_API_URL:https://api.brevo.com/v3/smtp/email}}
+      sender-name: ${NEWSLETTER_EMAIL_FROM_NAME:Posthuman Lab Network}
+      reply-to: ${NEWSLETTER_EMAIL_REPLY_TO:posthumanlabnetwork@gmail.com}
+      public-base-url: ${PUBLIC_SITE_URL:${FRONTEND_ORIGIN:http://localhost:3000}}
+      from:
+        updates: ${NEWSLETTER_EMAIL_FROM_UPDATES:posthumanlabnetwork+updates@gmail.com}
+        blog: ${NEWSLETTER_EMAIL_FROM_BLOG:posthumanlabnetwork+blog@gmail.com}
+        events: ${NEWSLETTER_EMAIL_FROM_EVENTS:posthumanlabnetwork+events@gmail.com}
+        media: ${NEWSLETTER_EMAIL_FROM_MEDIA:posthumanlabnetwork+media@gmail.com}
   cors:
     allowed-origins:
       - ${FRONTEND_ORIGIN:http://localhost:3000}

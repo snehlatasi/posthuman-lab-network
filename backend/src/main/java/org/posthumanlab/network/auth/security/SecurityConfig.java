@@ -61,6 +61,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/api/membership/interests").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/newsletter/subscribe").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/newsletter/unsubscribe/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/newsletter/unsubscribe/**").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/contact").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/collaboration").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/publications/submit").permitAll()

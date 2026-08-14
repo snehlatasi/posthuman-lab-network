@@ -5,8 +5,11 @@ import org.posthumanlab.network.media.entity.MediaAsset;
 import org.posthumanlab.network.media.entity.MediaProvider;
 import org.posthumanlab.network.media.entity.MediaType;
 import org.posthumanlab.network.media.repository.MediaAssetRepository;
+import org.posthumanlab.network.newsletter.email.NewsletterEmailChannel;
+import org.posthumanlab.network.newsletter.email.PublicationNotificationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,10 +33,15 @@ public class MediaStorageService {
 
     private final MediaAssetRepository mediaAssetRepository;
     private final MediaStorageProperties storageProperties;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public MediaStorageService(MediaAssetRepository mediaAssetRepository, MediaStorageProperties storageProperties) {
+    public MediaStorageService(
+            MediaAssetRepository mediaAssetRepository,
+            MediaStorageProperties storageProperties,
+            ApplicationEventPublisher eventPublisher) {
         this.mediaAssetRepository = mediaAssetRepository;
         this.storageProperties = storageProperties;
+        this.eventPublisher = eventPublisher;
     }
 
     public static String extractYouTubeId(String url) {
@@ -129,8 +137,11 @@ public class MediaStorageService {
 
     public Optional<MediaAsset> publishMedia(Long id) {
         return mediaAssetRepository.findById(id).map(asset -> {
+            boolean wasPublished = asset.isPublished();
             asset.setPublished(true);
-            return mediaAssetRepository.save(asset);
+            MediaAsset saved = mediaAssetRepository.save(asset);
+            notifyIfPublished(saved, wasPublished);
+            return saved;
         });
     }
 
@@ -155,5 +166,23 @@ public class MediaStorageService {
             }
             mediaAssetRepository.deleteById(id);
         }
+    }
+
+    private void notifyIfPublished(MediaAsset asset, boolean wasPublished) {
+        if (!wasPublished && asset.isPublished()) {
+            eventPublisher.publishEvent(new PublicationNotificationEvent(
+                    NewsletterEmailChannel.MEDIA,
+                    asset.getTitle(),
+                    asset.getCaption(),
+                    mediaPath(asset)
+            ));
+        }
+    }
+
+    private String mediaPath(MediaAsset asset) {
+        if (asset.getMediaType() == MediaType.VIDEO) {
+            return "/media/youtube-lectures";
+        }
+        return "/media";
     }
 }

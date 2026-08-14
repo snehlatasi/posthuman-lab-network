@@ -9,6 +9,9 @@ import org.posthumanlab.network.publication.entity.Publication;
 import org.posthumanlab.network.publication.entity.PublicationStatus;
 import org.posthumanlab.network.publication.entity.PublicationType;
 import org.posthumanlab.network.publication.repository.PublicationRepository;
+import org.posthumanlab.network.newsletter.email.NewsletterEmailChannel;
+import org.posthumanlab.network.newsletter.email.PublicationNotificationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +24,11 @@ import java.util.stream.Collectors;
 public class PublicationService {
 
     private final PublicationRepository publicationRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public PublicationService(PublicationRepository publicationRepository) {
+    public PublicationService(PublicationRepository publicationRepository, ApplicationEventPublisher eventPublisher) {
         this.publicationRepository = publicationRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public List<PublicationResponse> getAllPublications() {
@@ -74,13 +79,16 @@ public class PublicationService {
         pub.setStatus(req.getStatus() != null && req.getStatus().equalsIgnoreCase("DRAFT") ? PublicationStatus.DRAFT : PublicationStatus.PUBLISHED);
         pub.setPublishedAt(req.getPublishedAt() != null ? req.getPublishedAt() : LocalDateTime.now());
 
-        return new PublicationResponse(publicationRepository.save(pub));
+        Publication saved = publicationRepository.save(pub);
+        notifyIfPublished(saved, false);
+        return new PublicationResponse(saved);
     }
 
     @Transactional
     public PublicationResponse updatePublication(Long id, PublicationRequest req) {
         Publication pub = publicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Publication not found with ID: " + id));
+        boolean wasPublished = pub.getStatus() == PublicationStatus.PUBLISHED;
 
         pub.setTitle(req.getTitle());
         if (req.getSlug() != null && !req.getSlug().trim().isEmpty()) {
@@ -96,7 +104,9 @@ public class PublicationService {
             pub.setStatus(EnumUtils.parse(PublicationStatus.class, req.getStatus()));
         }
 
-        return new PublicationResponse(publicationRepository.save(pub));
+        Publication saved = publicationRepository.save(pub);
+        notifyIfPublished(saved, wasPublished);
+        return new PublicationResponse(saved);
     }
 
     @Transactional
@@ -111,10 +121,24 @@ public class PublicationService {
     public PublicationResponse setPublishStatus(Long id, boolean publish) {
         Publication pub = publicationRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Publication not found with ID: " + id));
+        boolean wasPublished = pub.getStatus() == PublicationStatus.PUBLISHED;
         pub.setStatus(publish ? PublicationStatus.PUBLISHED : PublicationStatus.DRAFT);
         if (publish && pub.getPublishedAt() == null) {
             pub.setPublishedAt(LocalDateTime.now());
         }
-        return new PublicationResponse(publicationRepository.save(pub));
+        Publication saved = publicationRepository.save(pub);
+        notifyIfPublished(saved, wasPublished);
+        return new PublicationResponse(saved);
+    }
+
+    private void notifyIfPublished(Publication publication, boolean wasPublished) {
+        if (!wasPublished && publication.getStatus() == PublicationStatus.PUBLISHED) {
+            eventPublisher.publishEvent(new PublicationNotificationEvent(
+                    NewsletterEmailChannel.UPDATES,
+                    publication.getTitle(),
+                    publication.getSummary(),
+                    "/publications/" + publication.getSlug()
+            ));
+        }
     }
 }

@@ -28,6 +28,7 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -267,6 +268,11 @@ public class DomainControllersTest {
         String token = newsletterSubscriberRepository.findByEmailIgnoreCase("asha@example.com")
                 .orElseThrow()
                 .getUnsubscribeToken();
+
+        mockMvc.perform(get("/api/newsletter/unsubscribe/{token}", token))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("You are unsubscribed")));
 
         mockMvc.perform(post("/api/newsletter/unsubscribe/{token}", token))
                 .andExpect(status().isOk())

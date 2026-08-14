@@ -8,6 +8,9 @@ import org.posthumanlab.network.event.dto.EventRequest;
 import org.posthumanlab.network.event.entity.Event;
 import org.posthumanlab.network.event.entity.EventStatus;
 import org.posthumanlab.network.event.repository.EventRepository;
+import org.posthumanlab.network.newsletter.email.NewsletterEmailChannel;
+import org.posthumanlab.network.newsletter.email.PublicationNotificationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +23,11 @@ import java.util.stream.Collectors;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public EventService(EventRepository eventRepository) {
+    public EventService(EventRepository eventRepository, ApplicationEventPublisher eventPublisher) {
         this.eventRepository = eventRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public List<EventResponse> getAllEvents() {
@@ -63,13 +68,16 @@ public class EventService {
         event.setRegistrationUrl(req.getRegistrationUrl());
         event.setStatus(req.getStatus() != null && req.getStatus().equalsIgnoreCase("DRAFT") ? EventStatus.DRAFT : EventStatus.UPCOMING);
 
-        return new EventResponse(eventRepository.save(event));
+        Event saved = eventRepository.save(event);
+        notifyIfPublished(saved, false);
+        return new EventResponse(saved);
     }
 
     @Transactional
     public EventResponse updateEvent(Long id, EventRequest req) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + id));
+        boolean wasPublished = event.getStatus() == EventStatus.UPCOMING;
 
         event.setTitle(req.getTitle());
         if (req.getSlug() != null && !req.getSlug().trim().isEmpty()) {
@@ -84,7 +92,9 @@ public class EventService {
         event.setRegistrationUrl(req.getRegistrationUrl());
         if (req.getStatus() != null) event.setStatus(EnumUtils.parse(EventStatus.class, req.getStatus()));
 
-        return new EventResponse(eventRepository.save(event));
+        Event saved = eventRepository.save(event);
+        notifyIfPublished(saved, wasPublished);
+        return new EventResponse(saved);
     }
 
     @Transactional
@@ -99,7 +109,21 @@ public class EventService {
     public EventResponse setPublishStatus(Long id, boolean publish) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Event not found with ID: " + id));
+        boolean wasPublished = event.getStatus() == EventStatus.UPCOMING;
         event.setStatus(publish ? EventStatus.UPCOMING : EventStatus.DRAFT);
-        return new EventResponse(eventRepository.save(event));
+        Event saved = eventRepository.save(event);
+        notifyIfPublished(saved, wasPublished);
+        return new EventResponse(saved);
+    }
+
+    private void notifyIfPublished(Event event, boolean wasPublished) {
+        if (!wasPublished && event.getStatus() == EventStatus.UPCOMING) {
+            eventPublisher.publishEvent(new PublicationNotificationEvent(
+                    NewsletterEmailChannel.EVENTS,
+                    event.getTitle(),
+                    event.getDescription(),
+                    "/events/upcoming"
+            ));
+        }
     }
 }

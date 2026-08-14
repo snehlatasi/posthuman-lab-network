@@ -6,6 +6,9 @@ import org.posthumanlab.network.blog.entity.BlogPostStatus;
 import org.posthumanlab.network.blog.repository.BlogPostRepository;
 import org.posthumanlab.network.common.util.EnumUtils;
 import org.posthumanlab.network.common.util.SlugUtils;
+import org.posthumanlab.network.newsletter.email.NewsletterEmailChannel;
+import org.posthumanlab.network.newsletter.email.PublicationNotificationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +21,11 @@ import java.util.Optional;
 public class BlogPostService {
 
     private final BlogPostRepository blogPostRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public BlogPostService(BlogPostRepository blogPostRepository) {
+    public BlogPostService(BlogPostRepository blogPostRepository, ApplicationEventPublisher eventPublisher) {
         this.blogPostRepository = blogPostRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     @Transactional(readOnly = true)
@@ -77,12 +82,14 @@ public class BlogPostService {
         post.setStatus(dto.getStatus() != null && dto.getStatus().equalsIgnoreCase("DRAFT") ? BlogPostStatus.DRAFT : BlogPostStatus.PUBLISHED);
 
         BlogPost saved = blogPostRepository.save(post);
+        notifyIfPublished(saved, false);
         return mapToDto(saved);
     }
 
     @Transactional
     public Optional<BlogPostDto> updatePost(Long id, BlogPostDto dto) {
         return blogPostRepository.findById(id).map(post -> {
+            boolean wasPublished = post.getStatus() == BlogPostStatus.PUBLISHED;
             post.setTitle(dto.getTitle());
             if (dto.getSlug() != null && !dto.getSlug().trim().isEmpty()) {
                 post.setSlug(dto.getSlug());
@@ -94,7 +101,9 @@ public class BlogPostService {
             if (dto.getStatus() != null) {
                 post.setStatus(EnumUtils.parse(BlogPostStatus.class, dto.getStatus()));
             }
-            return mapToDto(blogPostRepository.save(post));
+            BlogPost saved = blogPostRepository.save(post);
+            notifyIfPublished(saved, wasPublished);
+            return mapToDto(saved);
         });
     }
 
@@ -110,12 +119,26 @@ public class BlogPostService {
     @Transactional
     public Optional<BlogPostDto> setPublishStatus(Long id, boolean publish) {
         return blogPostRepository.findById(id).map(post -> {
+            boolean wasPublished = post.getStatus() == BlogPostStatus.PUBLISHED;
             post.setStatus(publish ? BlogPostStatus.PUBLISHED : BlogPostStatus.DRAFT);
             if (publish && post.getPublishedAt() == null) {
                 post.setPublishedAt(LocalDateTime.now());
             }
-            return mapToDto(blogPostRepository.save(post));
+            BlogPost saved = blogPostRepository.save(post);
+            notifyIfPublished(saved, wasPublished);
+            return mapToDto(saved);
         });
+    }
+
+    private void notifyIfPublished(BlogPost post, boolean wasPublished) {
+        if (!wasPublished && post.getStatus() == BlogPostStatus.PUBLISHED) {
+            eventPublisher.publishEvent(new PublicationNotificationEvent(
+                    NewsletterEmailChannel.BLOG,
+                    post.getTitle(),
+                    post.getExcerpt(),
+                    "/blog/" + post.getSlug()
+            ));
+        }
     }
 
     private BlogPostDto mapToDto(BlogPost post) {

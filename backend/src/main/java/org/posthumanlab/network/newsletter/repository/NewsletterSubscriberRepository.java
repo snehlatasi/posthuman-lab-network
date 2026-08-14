@@ -13,5 +13,6 @@ public interface NewsletterSubscriberRepository extends JpaRepository<Newsletter
     Optional<NewsletterSubscriber> findByEmailIgnoreCase(String email);
     Optional<NewsletterSubscriber> findByUnsubscribeToken(String unsubscribeToken);
     List<NewsletterSubscriber> findAllByOrderByCreatedAtDesc();
+    List<NewsletterSubscriber> findByStatusOrderBySubscribedAtDesc(NewsletterSubscriberStatus status);
     long countByStatus(NewsletterSubscriberStatus status);
 }
