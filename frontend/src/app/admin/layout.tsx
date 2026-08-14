@@ -111,7 +111,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       items: [
         { href: "/admin/events", label: "Events & Gatherings", icon: Calendar },
         { href: "/admin/learning", label: "Masterclasses & Learning", icon: Award },
-        { href: "/admin/labs", label: "Research Labs", icon: FlaskConical },
+        { href: "/admin/labs", label: "Research Catalog", icon: FlaskConical },
       ],
     },
     {
@@ -130,6 +130,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       items: [
         { href: "/admin/memberships", label: "Applications", icon: Users },
         { href: "/admin/members", label: "Approved Members", icon: UserCheck },
+        { href: "/admin/subscribers", label: "Subscribers", icon: Mail },
         { href: "/admin/inquiries", label: "Inquiries", icon: Mail },
       ],
     },

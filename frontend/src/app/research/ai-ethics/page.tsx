@@ -2,29 +2,29 @@
 
 import { EditorialPageLayout } from "@/components/layout/Templates";
 
-const labsSidebar = [
-  { label: "Research Labs", href: "/labs/research" },
-  { label: "Creative Labs", href: "/labs/creative" },
-  { label: "Ecological Futures", href: "/labs/ecological-futures" },
-  { label: "AI Ethics & Tech", href: "/labs/ai-ethics", active: true },
-  { label: "Experimental Media", href: "/labs/experimental-media" },
-  { label: "Collective Practice", href: "/labs/collective-practice" },
-  { label: "Community Research", href: "/labs/community-research" },
-  { label: "Open Collaboration", href: "/labs/open-collaboration" },
+const researchSidebar = [
+  { label: "Research Cells", href: "/research/research" },
+  { label: "Creative Research", href: "/research/creative" },
+  { label: "Ecological Futures", href: "/research/ecological-futures" },
+  { label: "AI Ethics & Tech", href: "/research/ai-ethics", active: true },
+  { label: "Experimental Media", href: "/research/experimental-media" },
+  { label: "Collective Practice", href: "/research/collective-practice" },
+  { label: "Community Research", href: "/research/community-research" },
+  { label: "Open Collaboration", href: "/research/open-collaboration" },
 ];
 
-export default function AIEthicsLabPage() {
+export default function AIEthicsResearchPage() {
   return (
     <EditorialPageLayout
       tag="AI Ethics"
       title="AI ETHICS & TECHNOLOGY"
       subtitle="Auditing algorithmic systems, synthetic mind structures, and human-machine symbiotic relationships."
-      parentLabel="Labs"
-      parentHref="/labs"
-      sidebarTitle="Labs Menu"
-      sidebarLinks={labsSidebar}
+      parentLabel="Research"
+      parentHref="/research"
+      sidebarTitle="Research Menu"
+      sidebarLinks={researchSidebar}
       nextPageLabel="Ecological Futures"
-      nextPageHref="/labs/ecological-futures"
+      nextPageHref="/research/ecological-futures"
     >
       <div className="space-y-8 font-sans">
         <section className="space-y-4">
@@ -55,3 +55,4 @@ export default function AIEthicsLabPage() {
     </EditorialPageLayout>
   );
 }
+

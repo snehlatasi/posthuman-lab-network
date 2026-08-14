@@ -1,16 +1,11 @@
 export default function Loading() {
   return (
-    <main className="min-h-dvh bg-bone-50 px-6 py-32 text-carbon-950 dark:bg-carbon-950 dark:text-bone-100">
-      <div className="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
-        <div className="h-10 w-10 rounded-full border border-earth-500/25 border-t-earth-600 animate-spin" />
-        <div className="space-y-2">
-          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-earth-600 dark:text-earth-400">
-            Loading
-          </p>
-          <p className="font-serif text-2xl font-bold uppercase text-carbon-950 dark:text-bone-50">
-            Preparing the next section
-          </p>
-        </div>
+    <main className="min-h-dvh bg-bone-50 px-6 py-28 text-carbon-950 dark:bg-carbon-950 dark:text-bone-100">
+      <div className="mx-auto flex max-w-sm items-center gap-3">
+        <div className="h-2 w-2 rounded-full bg-earth-600 dark:bg-earth-400" />
+        <p className="font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-carbon-700 dark:text-bone-300">
+          Loading
+        </p>
       </div>
     </main>
   );

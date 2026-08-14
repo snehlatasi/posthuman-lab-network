@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ShieldCheck, Lock, Mail, ArrowRight, Eye, EyeOff, X } from "lucide-react";
+import { ShieldCheck, Lock, Mail, ArrowRight, ArrowLeft, Eye, EyeOff, X } from "lucide-react";
 import { authApi } from "@/lib/api/auth";
 
 export default function AdminLoginPage() {
@@ -164,9 +164,19 @@ export default function AdminLoginPage() {
           <div className="pt-4 border-t border-bone-50/10 text-center">
             <Link
               href="/"
-              className="text-xs font-mono uppercase tracking-wider text-bone-200 hover:text-earth-400 transition-colors inline-flex items-center space-x-1"
+              className="group mx-auto inline-grid grid-cols-[2.5rem_1fr] items-center overflow-hidden rounded-2xl border border-earth-400/30 bg-gradient-to-r from-earth-600/22 via-bone-50/8 to-bone-50/4 text-left shadow-[0_18px_44px_-28px_rgba(202,117,85,0.65)] transition-all duration-200 hover:-translate-y-0.5 hover:border-earth-300/55 hover:from-earth-500/28 hover:shadow-[0_22px_54px_-28px_rgba(202,117,85,0.82)] focus:outline-none focus:ring-2 focus:ring-earth-400/45"
             >
-              <span>← Return to Network Home</span>
+              <span className="flex h-full min-h-12 items-center justify-center bg-earth-500/20 text-earth-300 transition-colors group-hover:bg-earth-500/30">
+                <ArrowLeft className="h-4 w-4 transition-transform duration-200 group-hover:-translate-x-0.5" />
+              </span>
+              <span className="flex flex-col px-4 py-2.5">
+                <span className="font-mono text-[9px] font-bold uppercase tracking-[0.22em] text-earth-300/90">
+                  Leave Admin
+                </span>
+                <span className="font-sans text-xs font-bold uppercase tracking-wider text-bone-50">
+                  Return Home
+                </span>
+              </span>
             </Link>
           </div>
         </div>

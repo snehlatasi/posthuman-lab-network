@@ -7,53 +7,74 @@ export interface NavigationSubItem {
 export interface NavigationGroup {
   label: string;
   number: string;
+  href: string;
   description: string;
   items: NavigationSubItem[];
 }
 
 export const navigationConfig: NavigationGroup[] = [
   {
-    label: "Explore",
+    label: "About",
     number: "01",
-    description: "Discover our mission, researchers, publication volumes, and media archives.",
+    href: "/about",
+    description: "Understand the network, its origin, collaborators, and posthuman orientation.",
     items: [
       {
-        label: "About the Network",
-        href: "/about",
-        description: "Discover our origin story, core beliefs, and vision for the future.",
+        label: "Our Story",
+        href: "/about/our-story",
+        description: "Trace the project history and the need it responds to.",
       },
       {
-        label: "Global Lab Networks",
-        href: "/labs",
-        description: "Engage with our research, creative, ecological, and technological units.",
+        label: "What is Posthumanism",
+        href: "/about/what-is-posthumanism",
+        description: "Start with the field's core ideas, questions, and tensions.",
       },
       {
-        label: "Publications & Journal",
-        href: "/publications",
-        description: "Read essays, digital journals, and creative writing from emerging thinkers.",
+        label: "Founders & Collaborators",
+        href: "/about/founders-collaborators",
+        description: "Meet the people shaping the network and its practices.",
       },
       {
-        label: "Media & Audio Archive",
-        href: "/media",
-        description: "Browse video lectures, visual essays, interviews, and podcast recordings.",
-      },
-      {
-        label: "Blog & Reflections",
-        href: "/blog",
-        description: "Read updates, research diaries, and logs from our global coordinators.",
+        label: "Future Vision",
+        href: "/about/future-vision",
+        description: "See where the network is heading over the coming phases.",
       },
     ],
   },
   {
-    label: "Learn",
+    label: "Research",
     number: "02",
+    href: "/research",
+    description: "Move through research cells, creative studios, ecological futures, and AI ethics.",
+    items: [
+      {
+        label: "AI Ethics",
+        href: "/research/ai-ethics",
+        description: "Study machine agency, accountability, and posthuman governance.",
+      },
+      {
+        label: "Ecological Futures",
+        href: "/research/ecological-futures",
+        description: "Explore planetary repair, multispecies relations, and future ecologies.",
+      },
+      {
+        label: "Open Collaboration",
+        href: "/research/open-collaboration",
+        description: "Find opportunities for shared research and creative experiments.",
+      },
+    ],
+  },
+  {
+    label: "Learning",
+    number: "03",
+    href: "/learning",
     description:
       "Access open educational pathways, conceptual guides, and foundational bibliographies.",
     items: [
       {
-        label: "Free Learning Hub",
-        href: "/learning",
-        description: "Free academic courses, beginners guides, and study materials.",
+        label: "Introduction to Posthumanism",
+        href: "/learning/introduction-to-posthumanism",
+        description: "Begin with a guided entry point into posthuman thought.",
       },
       {
         label: "Recorded Lectures",
@@ -73,58 +94,113 @@ export const navigationConfig: NavigationGroup[] = [
     ],
   },
   {
-    label: "Participate",
-    number: "03",
-    description:
-      "Join the network, engage in physical retreats, submit papers, and support our operations.",
+    label: "Events",
+    number: "04",
+    href: "/events",
+    description: "Find upcoming gatherings, workshops, conversations, and event archives.",
     items: [
       {
-        label: "Become a Member",
-        href: "/membership",
-        description: "Join as a learner, researcher, or creative collaborator.",
+        label: "Upcoming Events",
+        href: "/events/upcoming",
+        description: "See the next conversations, workshops, and public sessions.",
       },
       {
-        label: "Practice & Gatherings",
-        href: "/practice",
-        description: "Explore retreat details, workshops, and physical meetups.",
+        label: "Workshops",
+        href: "/events/workshops",
+        description: "Join practical sessions around methods, making, and dialogue.",
       },
       {
-        label: "Submit Your Work",
-        href: "/publications/submit",
-        description: "Contribute creative projects or academic papers to our journal.",
+        label: "Event Archive",
+        href: "/events/archive",
+        description: "Review past gatherings and recorded programming.",
+      },
+    ],
+  },
+  {
+    label: "Media",
+    number: "05",
+    href: "/media",
+    description: "Browse video lectures, visual essays, interviews, and recorded sessions.",
+    items: [
+      {
+        label: "YouTube Lectures",
+        href: "/media/youtube-lectures",
+        description: "Watch public lectures and extended conversations.",
       },
       {
-        label: "Support the Network",
-        href: "/support",
-        description: "Enable open-access, sustainable, carbon-conscious academic exchange.",
+        label: "Recorded Sessions",
+        href: "/media/recorded-sessions",
+        description: "Return to previous live sessions and seminar recordings.",
+      },
+      {
+        label: "Visual Essays",
+        href: "/media/visual-essays",
+        description: "Explore image-led and experimental media work.",
       },
     ],
   },
   {
     label: "Community",
-    number: "04",
+    number: "06",
+    href: "/community",
     description:
       "Interact with reading circles, speculative diaries, and global research chapters.",
     items: [
-      {
-        label: "Community Space",
-        href: "/community",
-        description: "View global reflections, shared experiences, and active projects.",
-      },
       {
         label: "Global Voices",
         href: "/community/global-voices",
         description: "Read field reports and speculative diaries from around the globe.",
       },
       {
-        label: "Collaboration & Contact",
-        href: "/contact",
-        description: "Pitch research joint-ventures, book speakers, or request media packages.",
+        label: "Reading Circles",
+        href: "/community/reading-circles",
+        description: "Join study groups and recurring discussion circles.",
       },
       {
-        label: "Research Pitches",
-        href: "/contact/collaboration",
-        description: "Get in touch regarding institutional partnerships and funding.",
+        label: "Community Projects",
+        href: "/community/projects",
+        description: "See shared experiments, local chapters, and network initiatives.",
+      },
+    ],
+  },
+  {
+    label: "Blog",
+    number: "07",
+    href: "/blog",
+    description: "Read essays, research diaries, announcements, and reflective field notes.",
+    items: [
+      {
+        label: "Publications & Journal",
+        href: "/publications",
+        description: "Read essays, digital journals, and creative writing.",
+      },
+      {
+        label: "Submit Your Work",
+        href: "/publications/submit",
+        description: "Contribute creative projects or academic papers to our journal.",
+      },
+    ],
+  },
+  {
+    label: "Support",
+    number: "08",
+    href: "/support",
+    description: "Support open access, ethical partnerships, and network sustainability.",
+    items: [
+      {
+        label: "Why Support",
+        href: "/support/why-support",
+        description: "Understand what support makes possible.",
+      },
+      {
+        label: "Become a Member",
+        href: "/membership",
+        description: "Join as a learner, researcher, or creative collaborator.",
+      },
+      {
+        label: "Collaboration & Contact",
+        href: "/support/contact",
+        description: "Pitch partnerships, invite speakers, or request media packages.",
       },
     ],
   },
@@ -144,7 +220,7 @@ export const allSubpages: Record<string, string[]> = {
     "founders-collaborators",
     "future-vision",
   ],
-  labs: [
+  research: [
     "research",
     "creative",
     "ecological-futures",
@@ -225,6 +301,12 @@ export const allSubpages: Record<string, string[]> = {
     "projects",
   ],
   support: [
+    "contact",
+    "collaboration",
+    "invite-speaker",
+    "partnership",
+    "media",
+    "social",
     "why-support",
     "current-needs",
     "become-supporter",
@@ -232,7 +314,6 @@ export const allSubpages: Record<string, string[]> = {
     "sponsorship",
     "sustainability",
   ],
-  contact: ["collaboration", "invite-speaker", "partnership", "media", "social"],
 };
 
 const subpageLabels: Record<string, Record<string, string>> = {

@@ -40,7 +40,7 @@ export default function FoundersCollaboratorsPage() {
                 If you would like to volunteer or suggest an advisory affiliation, please query our
                 coordinators using the{" "}
                 <Link
-                  href="/contact/collaboration"
+                  href="/support/collaboration"
                   className="text-earth-600 dark:text-earth-400 hover:text-earth-500 font-bold underline"
                 >
                   Collaboration Contact Portal

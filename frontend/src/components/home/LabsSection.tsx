@@ -10,7 +10,7 @@ import { Reveal, StaggerItem } from "../ui/Reveal";
 export const LabsSection: React.FC = () => {
   return (
     <section
-      id="labs"
+      id="research"
       className="py-24 md:py-32 border-t border-carbon-950/8 dark:border-bone-50/12 bg-transparent relative transition-colors duration-300"
     >
       <Container className="space-y-16">
@@ -21,7 +21,7 @@ export const LabsSection: React.FC = () => {
               ACTIVE CELLS
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-bold text-carbon-950 dark:text-bone-50 leading-tight uppercase">
-              Explore Our Labs
+              Explore Research
             </h2>
             <p className="font-sans text-sm md:text-base text-carbon-800 dark:text-bone-200 leading-relaxed max-w-xl font-medium">
               Collaborative spaces linking critical philosophy and creative practice. Select a cell
@@ -29,15 +29,15 @@ export const LabsSection: React.FC = () => {
             </p>
           </div>
           <Link
-            href="/labs"
+            href="/research"
             className="group inline-flex items-center space-x-2 text-xs font-sans font-bold tracking-wider uppercase text-carbon-950 dark:text-bone-50 hover:text-earth-600 dark:hover:text-earth-400 transition-colors focus:outline-none"
           >
-            <span>View All Labs</span>
+            <span>View Research</span>
             <ArrowRight className="w-4 h-4 text-carbon-950 dark:text-bone-50 group-hover:text-earth-600 dark:group-hover:text-earth-400 group-hover:translate-x-1 transition-all" />
           </Link>
         </div>
 
-        {/* Labs Grid */}
+        {/* Research Grid */}
         <Reveal staggerChildren={0.15} className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
           {featuredLabsList.map((lab) => (
             <StaggerItem key={lab.name}>

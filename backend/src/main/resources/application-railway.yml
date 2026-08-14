@@ -36,6 +36,9 @@ management:
     web:
       exposure:
         include: health,info
+  health:
+    mail:
+      enabled: ${MANAGEMENT_HEALTH_MAIL_ENABLED:false}
   endpoint:
     health:
       probes:

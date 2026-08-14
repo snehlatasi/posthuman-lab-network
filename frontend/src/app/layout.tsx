@@ -7,7 +7,6 @@ import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { AdminLoginModal } from "@/components/admin/AdminLoginModal";
 import { AdminBannerBar } from "@/components/admin/AdminBannerBar";
-import { CustomCursor } from "@/components/ui/CustomCursor";
 import { UniverseLayer } from "@/background/UniverseLayer";
 
 import { MemberProvider } from "@/context/MemberContext";
@@ -30,15 +29,12 @@ const cormorant = Cormorant_Garamond({
 const themeInitScript = `
 (function() {
   try {
-    var storageKey = "posthuman-theme-preference";
-    var preference = localStorage.getItem(storageKey);
-    if (preference !== "light" && preference !== "system") preference = "system";
-    var resolved = preference === "system" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    var resolved = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     var root = document.documentElement;
     root.classList.remove(resolved === "dark" ? "light" : "dark");
     root.classList.add(resolved);
     root.setAttribute("data-theme", resolved);
-    root.setAttribute("data-theme-preference", preference);
+    root.setAttribute("data-theme-preference", "system");
     root.style.colorScheme = resolved;
   } catch (error) {}
 })();
@@ -92,11 +88,10 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="min-h-full flex flex-col text-carbon-950 dark:text-bone-100 selection:bg-earth-500 selection:text-bone-50 relative">
+      <body className="min-h-full flex flex-col text-[var(--foreground)] selection:bg-earth-500 selection:text-bone-50 relative">
         <ThemeProvider>
           <AuthProvider>
             <MemberProvider>
-              <CustomCursor />
               <NavigationProgress />
               <UniverseLayer />
               <div className="fixed inset-0 z-0 pointer-events-none digital-grid opacity-20" />

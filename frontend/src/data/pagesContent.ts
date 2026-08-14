@@ -116,16 +116,16 @@ export const pagesContentMap: Record<string, PageContent> = {
   },
 
   // ----------------------------------------------------
-  // LABS SECTION
+  // RESEARCH SECTION
   // ----------------------------------------------------
-  "labs/research": {
+  "research/research": {
     slug: "research",
     title: "RESEARCH CELL",
-    eyebrow: "Labs",
+    eyebrow: "Research",
     description: "Investigating agency, decolonial computing, and post-anthropocentric ethics.",
     layout: "listing",
-    parentLabel: "Labs",
-    parentHref: "/labs",
+    parentLabel: "Research",
+    parentHref: "/research",
     items: [
       {
         title: "Decentered Cognitive Architectures",
@@ -141,18 +141,18 @@ export const pagesContentMap: Record<string, PageContent> = {
       },
     ],
     relatedLinks: [
-      { label: "AI Ethics Lab", href: "/labs/ai-ethics" },
-      { label: "Open Collaboration", href: "/labs/open-collaboration" },
+      { label: "AI Ethics Lab", href: "/research/ai-ethics" },
+      { label: "Open Collaboration", href: "/research/open-collaboration" },
     ],
   },
-  "labs/creative": {
+  "research/creative": {
     slug: "creative",
     title: "CREATIVE CELL",
-    eyebrow: "Labs",
+    eyebrow: "Research",
     description: "Generative visuals, acoustic ecology, and biosensor-driven space design.",
     layout: "listing",
-    parentLabel: "Labs",
-    parentHref: "/labs",
+    parentLabel: "Research",
+    parentHref: "/research",
     items: [
       {
         title: "Lichen-Synth Visual Topologies",
@@ -168,18 +168,18 @@ export const pagesContentMap: Record<string, PageContent> = {
       },
     ],
     relatedLinks: [
-      { label: "Experimental Media Lab", href: "/labs/experimental-media" },
-      { label: "Collective Practice", href: "/labs/collective-practice" },
+      { label: "Experimental Media Lab", href: "/research/experimental-media" },
+      { label: "Collective Practice", href: "/research/collective-practice" },
     ],
   },
-  "labs/collective-practice": {
+  "research/collective-practice": {
     slug: "collective-practice",
     title: "COLLECTIVE PRACTICE",
-    eyebrow: "Labs",
+    eyebrow: "Research",
     description: "Co-designing open-source community libraries, archives, and collective datasets.",
     layout: "listing",
-    parentLabel: "Labs",
-    parentHref: "/labs",
+    parentLabel: "Research",
+    parentHref: "/research",
     items: [
       {
         title: "Decentralized Knowledge Ledger",
@@ -195,18 +195,18 @@ export const pagesContentMap: Record<string, PageContent> = {
       },
     ],
     relatedLinks: [
-      { label: "Ecological Futures Lab", href: "/labs/ecological-futures" },
-      { label: "Community Research", href: "/labs/community-research" },
+      { label: "Ecological Futures Lab", href: "/research/ecological-futures" },
+      { label: "Community Research", href: "/research/community-research" },
     ],
   },
-  "labs/community-research": {
+  "research/community-research": {
     slug: "community-research",
     title: "COMMUNITY RESEARCH CELL",
-    eyebrow: "Labs",
+    eyebrow: "Research",
     description: "Grassroots inquiries on local environmental changes and digital commons.",
     layout: "listing",
-    parentLabel: "Labs",
-    parentHref: "/labs",
+    parentLabel: "Research",
+    parentHref: "/research",
     items: [
       {
         title: "Waterway Sensors Audit",
@@ -222,18 +222,18 @@ export const pagesContentMap: Record<string, PageContent> = {
       },
     ],
     relatedLinks: [
-      { label: "Collective Practice Lab", href: "/labs/collective-practice" },
+      { label: "Collective Practice Lab", href: "/research/collective-practice" },
       { label: "Why Support?", href: "/support/why-support" },
     ],
   },
-  "labs/open-collaboration": {
+  "research/open-collaboration": {
     slug: "open-collaboration",
     title: "OPEN COLLABORATION CELL",
-    eyebrow: "Labs",
+    eyebrow: "Research",
     description: "Ad-hoc temporary project groups linking external artists and research hubs.",
     layout: "listing",
-    parentLabel: "Labs",
-    parentHref: "/labs",
+    parentLabel: "Research",
+    parentHref: "/research",
     items: [
       {
         title: "Planetary Synthesizer Hackathon",
@@ -249,18 +249,18 @@ export const pagesContentMap: Record<string, PageContent> = {
       },
     ],
     relatedLinks: [
-      { label: "Research Lab", href: "/labs/research" },
-      { label: "Collaboration Contact", href: "/contact/collaboration" },
+      { label: "Research Lab", href: "/research/research" },
+      { label: "Collaboration Contact", href: "/support/collaboration" },
     ],
   },
-  "labs/experimental-media": {
+  "research/experimental-media": {
     slug: "experimental-media",
     title: "EXPERIMENTAL MEDIA CELL",
-    eyebrow: "Labs",
+    eyebrow: "Research",
     description: "Mapping biodata signals into generative browser interfaces.",
     layout: "listing",
-    parentLabel: "Labs",
-    parentHref: "/labs",
+    parentLabel: "Research",
+    parentHref: "/research",
     items: [
       {
         title: "Bio-Voltage Browser Interface",
@@ -276,7 +276,7 @@ export const pagesContentMap: Record<string, PageContent> = {
       },
     ],
     relatedLinks: [
-      { label: "Creative Lab", href: "/labs/creative" },
+      { label: "Creative Lab", href: "/research/creative" },
       { label: "YouTube Lectures", href: "/media/youtube-lectures" },
     ],
   },
@@ -411,13 +411,13 @@ export const pagesContentMap: Record<string, PageContent> = {
       {
         title: "How do I start a local study cell?",
         description:
-          "Download the Study Materials guide, organize 3-4 peers locally, and register your cell through our Contact forms to link your observations.",
+          "Download the Study Materials guide, organize 3-4 peers locally, and register your cell through our Support forms to link your observations.",
         tag: "Community FAQ",
       },
     ],
     relatedLinks: [
       { label: "Become a Member", href: "/membership/become-a-member" },
-      { label: "General Contact", href: "/contact/general" },
+      { label: "General Contact", href: "/support/contact" },
     ],
   },
 
@@ -526,7 +526,7 @@ export const pagesContentMap: Record<string, PageContent> = {
     ],
     relatedLinks: [
       { label: "Recorded Lectures", href: "/learning/recorded-lectures" },
-      { label: "Research Lab", href: "/labs/research" },
+      { label: "Research Lab", href: "/research/research" },
     ],
   },
 
@@ -636,7 +636,7 @@ export const pagesContentMap: Record<string, PageContent> = {
       {
         heading: "Research Collaboration Slots",
         content:
-          "Members can submit research papers directly to our publications press, apply for project collaboration spaces inside active Labs, and receive invites to off-grid wilderness retreat events.",
+          "Members can submit research papers directly to our publications press, apply for project collaboration spaces inside active research cells, and receive invites to off-grid wilderness retreat events.",
       },
     ],
     relatedLinks: [
@@ -661,12 +661,12 @@ export const pagesContentMap: Record<string, PageContent> = {
       {
         heading: "As a Cell Organizer",
         content:
-          "Gather 3-4 peers in your city, set up a monthly schedule to discuss articles or deploy local water/soil sensors, and register your cell through our Contact forms to coordinate outputs.",
+          "Gather 3-4 peers in your city, set up a monthly schedule to discuss articles or deploy local water/soil sensors, and register your cell through our Support forms to coordinate outputs.",
       },
     ],
     relatedLinks: [
       { label: "Become a Member", href: "/membership/become-a-member" },
-      { label: "General Contact", href: "/contact/general" },
+      { label: "General Contact", href: "/support/contact" },
     ],
   },
 
@@ -737,7 +737,7 @@ export const pagesContentMap: Record<string, PageContent> = {
     title: "LAB RESEARCH PAPERS",
     eyebrow: "Publications",
     description:
-      "Data logs, hardware schemas, and telemetry reports generated inside our active Labs.",
+      "Data logs, hardware schemas, and telemetry reports generated inside our active research cells.",
     layout: "listing",
     parentLabel: "Publications",
     parentHref: "/publications",
@@ -759,7 +759,7 @@ export const pagesContentMap: Record<string, PageContent> = {
     ],
     relatedLinks: [
       { label: "Articles Index", href: "/publications/articles" },
-      { label: "Ecological Futures Lab", href: "/labs/ecological-futures" },
+      { label: "Ecological Futures Lab", href: "/research/ecological-futures" },
     ],
   },
   "publications/creative-work": {
@@ -787,7 +787,7 @@ export const pagesContentMap: Record<string, PageContent> = {
     ],
     relatedLinks: [
       { label: "Essays Index", href: "/publications/essays" },
-      { label: "Experimental Media Lab", href: "/labs/experimental-media" },
+      { label: "Experimental Media Lab", href: "/research/experimental-media" },
     ],
   },
 
@@ -930,7 +930,7 @@ export const pagesContentMap: Record<string, PageContent> = {
     ],
     relatedLinks: [
       { label: "Cell Collaborations", href: "/community/collaborations" },
-      { label: "Collaboration Contact", href: "/contact/collaboration" },
+      { label: "Collaboration Contact", href: "/support/collaboration" },
     ],
   },
 
@@ -963,21 +963,33 @@ export const pagesContentMap: Record<string, PageContent> = {
     ],
   },
 
-  // ----------------------------------------------------
-  // CONTACT SECTION
-  // ----------------------------------------------------
-  "contact/general": {
-    slug: "general",
-    title: "GENERAL INQUIRIES",
-    eyebrow: "Contact",
-    description: "Get in touch with our core coordinators for general questions about the network.",
+  "support/contact": {
+    slug: "contact",
+    title: "COLLABORATION & CONTACT",
+    eyebrow: "Support",
+    description: "Reach the network for collaborations, speaking invitations, media, and partnerships.",
     layout: "form",
-    parentLabel: "Contact",
-    parentHref: "/contact",
+    parentLabel: "Support",
+    parentHref: "/support",
     formType: "contact",
     relatedLinks: [
-      { label: "Collaboration Inquiry", href: "/contact/collaboration" },
+      { label: "Collaboration Inquiry", href: "/support/collaboration" },
       { label: "Become a Member", href: "/membership/become-a-member" },
+    ],
+  },
+
+  "support/collaboration": {
+    slug: "collaboration",
+    title: "COLLABORATION INQUIRY",
+    eyebrow: "Support",
+    description: "Pitch partnerships, research collaborations, speaker invitations, or media requests.",
+    layout: "form",
+    parentLabel: "Support",
+    parentHref: "/support",
+    formType: "collaboration",
+    relatedLinks: [
+      { label: "General Contact", href: "/support/contact" },
+      { label: "Open Collaboration", href: "/research/open-collaboration" },
     ],
   },
 };
@@ -986,9 +998,8 @@ const sectionLabels: Record<string, string> = {
   about: "About",
   blog: "Blog",
   community: "Community",
-  contact: "Contact",
   events: "Events",
-  labs: "Labs",
+  research: "Research",
   learning: "Learning",
   media: "Media",
   membership: "Membership",
@@ -1001,9 +1012,8 @@ const sectionDescriptions: Record<string, string> = {
   about: "Explore the ideas, histories, and values that shape the Posthuman Lab Network.",
   blog: "Read reflections, field notes, and research diaries from the network.",
   community: "Connect with reading circles, reflections, creative showcases, and shared projects.",
-  contact: "Reach the network for collaborations, speaking invitations, media, and partnerships.",
   events: "Browse gatherings, registrations, workshops, dialogues, and event archives.",
-  labs: "Enter research, creative, ecological, media, and collaboration cells.",
+  research: "Enter research, creative, ecological, media, and collaboration cells.",
   learning: "Access learning pathways, concepts, recorded sessions, downloads, and open archives.",
   media: "Browse lectures, conversations, interviews, visual essays, and community media.",
   membership: "Find pathways for members, contributors, volunteers, ambassadors, and scholars.",
@@ -1049,6 +1059,10 @@ const routeAliases: Record<string, string> = {
   "support/ethical-partnerships": "support/contribute",
   "support/sponsorship": "support/contribute",
   "support/sustainability": "support/contribute",
+  "support/invite-speaker": "support/contact",
+  "support/partnership": "support/collaboration",
+  "support/media": "support/contact",
+  "support/social": "support/contact",
 };
 
 function titleFromSlug(slug: string) {
@@ -1080,13 +1094,13 @@ function buildFallbackPage(section: string, subpage: string): PageContent {
       {
         title: "How to participate",
         description:
-          "Use the related section links, membership pathways, or contact forms to move from reading into collaboration.",
+          "Use the related section links, membership pathways, or support forms to move from reading into collaboration.",
         tag: "Next Step",
       },
     ],
     relatedLinks: [
       { label: sectionLabel, href: `/${section}` },
-      { label: "Contact", href: "/contact" },
+      { label: "Support", href: "/support" },
     ],
   };
 }
@@ -1111,3 +1125,6 @@ Object.entries(allSubpages).forEach(([section, subpages]) => {
     }
   });
 });
+
+
+

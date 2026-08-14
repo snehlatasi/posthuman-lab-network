@@ -1,150 +1,117 @@
-﻿"use client";
-
-import React from "react";
 import Link from "next/link";
-import { navigationConfig } from "@/lib/navigation";
-import { ArrowRight, Facebook, Instagram, Youtube } from "lucide-react";
+import { Facebook, Instagram, Youtube } from "lucide-react";
+import { NewsletterSignup } from "./NewsletterSignup";
 
-export const Footer: React.FC = () => {
+const footerLinks = [
+  { label: "About", href: "/about" },
+  { label: "Research", href: "/research" },
+  { label: "Learning", href: "/learning" },
+  { label: "Events", href: "/events" },
+  { label: "Media", href: "/media" },
+  { label: "Community", href: "/community" },
+  { label: "Blog", href: "/blog" },
+  { label: "Support", href: "/support" },
+];
+
+const socialLinks = [
+  {
+    label: "Instagram Profile",
+    href: "https://instagram.com",
+    icon: Instagram,
+  },
+  {
+    label: "YouTube Channel",
+    href: "https://youtube.com",
+    icon: Youtube,
+  },
+  {
+    label: "Facebook Page",
+    href: "https://facebook.com",
+    icon: Facebook,
+  },
+];
+
+export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-bone-50/80 dark:bg-carbon-950/85 border-t border-carbon-950/8 dark:border-bone-50/12 mt-auto pt-16 pb-8 z-20 backdrop-blur-md transition-colors duration-300">
-      <div className="absolute top-0 left-[10%] right-[10%] h-px ink-rule" />
-
+    <footer className="relative z-20 mt-auto border-t border-carbon-950/8 bg-bone-50/88 py-12 backdrop-blur-md transition-colors duration-300 dark:border-bone-50/12 dark:bg-carbon-950/88">
       <div className="editorial-container">
-        <div className="grid grid-cols-12 gap-y-12 gap-x-8 pb-12 border-b border-carbon-950/8 dark:border-bone-50/12">
-          <div className="col-span-12 md:col-span-4 space-y-6">
-            <div className="flex flex-col">
-              <span className="font-serif text-3xl font-bold tracking-[0.08em] leading-none text-carbon-950 dark:text-bone-100">
+        <div className="grid gap-10 lg:grid-cols-[minmax(260px,0.9fr)_minmax(420px,1fr)] lg:items-start">
+          <div className="max-w-xl space-y-4">
+            <Link href="/" className="inline-flex flex-col focus:outline-none" aria-label="Posthuman Lab Network home">
+              <span className="font-serif text-2xl font-bold leading-none tracking-[0.08em] text-carbon-950 dark:text-bone-100">
                 POSTHUMAN
               </span>
-              <span className="font-sans text-[10px] tracking-[0.3em] font-bold text-carbon-900 dark:text-bone-200 leading-none mt-1 uppercase">
+              <span className="mt-1 font-sans text-[9px] font-bold uppercase leading-none tracking-[0.3em] text-carbon-900 dark:text-bone-200">
                 Lab Network
               </span>
-            </div>
-
-            <p className="text-sm font-sans text-carbon-800 dark:text-bone-200 leading-relaxed max-w-xs font-normal">
-              A digital ecosystem mapping connections between human thought, technological
-              expansion, and nonhuman environments.
+            </Link>
+            <p className="max-w-xl font-sans text-sm font-medium leading-relaxed text-carbon-800 dark:text-bone-200">
+              A collaborative space for posthuman thought, ecological futures, technology ethics,
+              learning, and interdisciplinary practice.
             </p>
-
-            <div className="space-y-2.5 max-w-sm">
-              <h4 className="text-[10px] font-sans font-bold tracking-widest text-earth-600 dark:text-earth-400 uppercase">
-                Join our mailing circle
-              </h4>
-              <form
-                suppressHydrationWarning
-                onSubmit={(e) => e.preventDefault()}
-                className="flex min-h-12 items-center border border-carbon-950/20 dark:border-bone-50/15 rounded-full p-1 bg-white dark:bg-carbon-900 focus-within:border-earth-500 transition-all duration-300 shadow-md"
-              >
-                <input
-                  suppressHydrationWarning
-                  type="email"
-                  placeholder="Enter your email"
-                  required
-                  autoComplete="email"
-                  spellCheck={false}
-                  aria-label="Email for newsletter subscription"
-                  className="min-w-0 bg-transparent text-sm text-carbon-950 dark:text-bone-100 placeholder-carbon-700 dark:placeholder-bone-300 font-medium px-4 py-2.5 flex-grow focus:outline-none w-full"
-                />
-                <button
-                  suppressHydrationWarning
-                  type="submit"
-                  aria-label="Submit newsletter subscription"
-                  className="p-3 text-bone-50 bg-carbon-950 dark:bg-earth-600 hover:bg-earth-600 dark:hover:bg-earth-500 transition-colors rounded-full cursor-pointer"
-                >
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </form>
-            </div>
           </div>
 
-          <div className="col-span-12 md:col-span-8 grid grid-cols-2 sm:grid-cols-4 gap-8">
-            {navigationConfig.map((group) => (
-              <div key={group.label} className="space-y-4">
-                <h3 className="font-serif text-lg font-bold tracking-wide text-carbon-950 dark:text-bone-100">
-                  {group.label}
-                </h3>
-                <ul className="space-y-2">
-                  {group.items.map((item) => (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        className="font-sans text-sm text-carbon-900 dark:text-bone-200 font-semibold hover:text-earth-600 dark:hover:text-earth-400 transition-colors inline-block py-0.5"
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+          <div className="space-y-3 lg:justify-self-end">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.24em] text-earth-600 dark:text-earth-400">
+              Explore
+            </p>
+            <nav
+              aria-label="Footer navigation"
+              className="grid max-w-[560px] grid-cols-2 gap-x-8 gap-y-2 sm:grid-cols-5"
+            >
+              {footerLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="py-1 font-sans text-sm font-bold text-carbon-900 transition-colors hover:text-earth-600 dark:text-bone-200 dark:hover:text-earth-400"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
           </div>
         </div>
 
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-xs font-sans text-carbon-900 dark:text-bone-200 font-medium">
-          <div className="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-2">
-            <span>© {currentYear} Posthuman Lab Network. All rights reserved.</span>
-            <span>/</span>
-            <span className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors cursor-pointer">
-              Ethical Guidelines
-            </span>
-            <span>/</span>
-            <span className="hover:text-earth-600 dark:hover:text-earth-400 transition-colors cursor-pointer">
-              Open-Access Policy
-            </span>
-            <span>/</span>
-            <Link
-              href="/admin"
-              className="text-earth-600 dark:text-earth-400 font-mono uppercase tracking-wider hover:underline"
-            >
-              Coordinator Admin Portal
+        <div className="mt-10 grid gap-5 border-t border-carbon-950/8 pt-8 dark:border-bone-50/12 lg:grid-cols-[minmax(220px,0.42fr)_minmax(420px,0.58fr)] lg:items-start">
+          <div className="space-y-1">
+            <p className="font-serif text-xl font-bold uppercase text-carbon-950 dark:text-bone-50">
+              Subscribe for Updates
+            </p>
+            <p className="max-w-sm font-sans text-sm font-medium leading-relaxed text-carbon-800 dark:text-bone-200">
+              Receive blogs, newsletters, media releases, and event notes from the network.
+            </p>
+          </div>
+          <div className="max-w-2xl lg:justify-self-end">
+            <NewsletterSignup />
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col gap-5 border-t border-carbon-950/8 pt-6 text-xs font-medium text-carbon-900 dark:border-bone-50/12 dark:text-bone-200 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-x-4 gap-y-2">
+            <span>&copy; {currentYear} Posthuman Lab Network</span>
+            <Link href="/admin" className="font-mono uppercase tracking-wider text-earth-600 hover:underline dark:text-earth-400">
+              Admin
             </Link>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram Profile"
-              className="p-2.5 bg-white/70 dark:bg-carbon-900/70 text-carbon-950 dark:text-bone-100 rounded-full border border-carbon-950/8 dark:border-bone-50/15 hover:border-earth-500/30 hover:text-earth-600 dark:hover:text-earth-400 transition-colors"
-            >
-              <Instagram className="w-3.5 h-3.5" />
-            </a>
-            <a
-              href="https://x.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="X Profile"
-              className="p-2.5 bg-white/70 dark:bg-carbon-900/70 text-carbon-950 dark:text-bone-100 rounded-full border border-carbon-950/8 dark:border-bone-50/15 hover:border-earth-500/30 hover:text-earth-600 dark:hover:text-earth-400 transition-colors"
-            >
-              <span className="block h-3.5 w-3.5 text-center font-sans text-[11px] font-black leading-[14px]">
-                X
-              </span>
-            </a>
-            <a
-              href="https://youtube.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="YouTube Channel"
-              className="p-2.5 bg-white/70 dark:bg-carbon-900/70 text-carbon-950 dark:text-bone-100 rounded-full border border-carbon-950/8 dark:border-bone-50/15 hover:border-earth-500/30 hover:text-earth-600 dark:hover:text-earth-400 transition-colors"
-            >
-              <Youtube className="w-3.5 h-3.5" />
-            </a>
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Facebook Page"
-              className="p-2.5 bg-white/70 dark:bg-carbon-900/70 text-carbon-950 dark:text-bone-100 rounded-full border border-carbon-950/8 dark:border-bone-50/15 hover:border-earth-500/30 hover:text-earth-600 dark:hover:text-earth-400 transition-colors"
-            >
-              <Facebook className="w-3.5 h-3.5" />
-            </a>
+          <div className="flex items-center gap-3">
+            {socialLinks.map(({ label, href, icon: Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                className="rounded-full border border-carbon-950/8 bg-white/70 p-2.5 text-carbon-950 transition-colors hover:border-earth-500/30 hover:text-earth-600 dark:border-bone-50/15 dark:bg-carbon-900/70 dark:text-bone-100 dark:hover:text-earth-400"
+              >
+                <Icon className="h-3.5 w-3.5" />
+              </a>
+            ))}
           </div>
         </div>
       </div>
     </footer>
   );
-};
+}

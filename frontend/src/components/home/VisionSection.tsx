@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import Link from "next/link";
@@ -30,7 +30,7 @@ const pillars: PillarItem[] = [
     title: "CREATIVITY & ART",
     description:
       "Creating speculative art installations, interactive digital systems, and visual essays that translate organic signals into visual code.",
-    href: "/labs",
+    href: "/research",
   },
   {
     icon: (
@@ -121,3 +121,4 @@ export const VisionSection: React.FC = () => {
   );
 };
 export default VisionSection;
+

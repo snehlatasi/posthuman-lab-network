@@ -110,6 +110,49 @@
   --homepage-bg: var(--background-body);
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    color-scheme: dark;
+
+    --background: #10120f;
+    --background-body:
+      radial-gradient(circle at top left, rgba(202, 117, 85, 0.15), transparent 35%),
+      radial-gradient(circle at 88% 18%, rgba(138, 166, 135, 0.12), transparent 30%),
+      linear-gradient(180deg, #10120f 0%, #131612 45%, #161914 100%);
+    --background-overlay: rgba(0, 0, 0, 0.25);
+
+    --foreground: #f3ebd9;
+    --heading: #f3ebd9;
+    --body-text: #d5d0c4;
+    --muted-text: #9e988b;
+
+    --surface: rgba(22, 26, 21, 0.88);
+    --surface-strong: rgba(28, 33, 26, 0.96);
+    --surface-elevated: #1a1e18;
+    --surface-border: rgba(243, 235, 217, 0.12);
+
+    --accent-primary: #ca7555;
+    --accent-hover: #d9744e;
+    --accent-secondary: #8aa687;
+    --accent-tertiary: #e0b86c;
+
+    --shadow-soft: 0 20px 60px -28px rgba(0, 0, 0, 0.7);
+    --shadow-card: 0 18px 44px -26px rgba(0, 0, 0, 0.6);
+
+    --grid-line-right: rgba(243, 235, 217, 0.04);
+    --grid-line-bottom: rgba(243, 235, 217, 0.035);
+    --grid-repeat-x: rgba(243, 235, 217, 0.03);
+    --grid-repeat-y: rgba(243, 235, 217, 0.02);
+
+    --hero-bg-from: rgba(16, 18, 15, 0.96);
+    --hero-bg-via: #141713;
+    --hero-bg-to: #181c17;
+    --hero-bottom-fade: linear-gradient(to top, transparent, transparent);
+
+    --homepage-bg: var(--background-body);
+  }
+}
+
 .font-serif-display {
   font-family: var(--font-cormorant), Georgia, serif;
   letter-spacing: 0;

@@ -218,7 +218,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({ formType }) => {
                   ? "border-earth-400"
                   : "border-bone-200/20 focus:border-earth-400"
               }`}
-              placeholder="Symbiotic Labs Collective"
+              placeholder="Symbiotic Research Collective"
             />
             {errors.organization && (
               <span id="org-error" className="block text-xs font-mono text-earth-400 font-bold">

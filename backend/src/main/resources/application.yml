@@ -60,6 +60,11 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
+management:
+  health:
+    mail:
+      enabled: ${MANAGEMENT_HEALTH_MAIL_ENABLED:false}
+
 app:
   jwt:
     secret: ${JWT_SECRET:PosthumanLabNetworkDevEnvSigningKey2026Minimum32BytesSecure!}

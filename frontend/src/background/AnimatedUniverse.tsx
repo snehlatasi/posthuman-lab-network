@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { universeConfig } from "./config/animation";
 import { useUniverseControls } from "./hooks/useUniverseControls";
 import { isWebGLAvailable, UniverseRenderer } from "./Renderer";
@@ -15,11 +15,12 @@ export function AnimatedUniverse() {
   const controls = useUniverseControls();
   const { resolvedTheme } = useTheme();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (webglUnavailable) return;
 
     let cancelled = false;
     let renderer: UniverseRenderer | null = null;
+    let frameId: number | null = null;
 
     const initializeRenderer = () => {
       if (cancelled || !canvasRef.current) return;
@@ -49,10 +50,11 @@ export function AnimatedUniverse() {
       }
     };
 
-    initializeRenderer();
+    frameId = window.requestAnimationFrame(initializeRenderer);
 
     return () => {
       cancelled = true;
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
       renderer?.dispose();
       if (rendererRef.current === renderer) {
         rendererRef.current = null;
@@ -88,7 +90,7 @@ export function AnimatedUniverse() {
     >
       <canvas
         ref={canvasRef}
-        className="universe-canvas h-full w-full opacity-100 transition-opacity duration-300"
+        className="universe-canvas h-full w-full opacity-100"
       />
       <div
         className={`pointer-events-none absolute inset-0 transition-colors duration-300 ${

@@ -43,14 +43,14 @@ export const conversationsList: ConversationTheme[] = [
     tag: "Theory / Technology",
     description:
       "Auditing synthetic cognition architectures, digital bias, and machine agency models.",
-    href: "/labs/ai-ethics",
+    href: "/research/ai-ethics",
   },
   {
     title: "Ecological Futures",
     tag: "Ecology / Sensing",
     description:
       "Tracking micro-electrical soil grids, botanical bio-electricity, and organic communication.",
-    href: "/labs/ecological-futures",
+    href: "/research/ecological-futures",
   },
   {
     title: "Human / Nonhuman Relations",
@@ -64,14 +64,14 @@ export const conversationsList: ConversationTheme[] = [
     tag: "Creative / Audio-Visual",
     description:
       "Mapping bio-signals into generative visuals, acoustic ecology soundscapes, and virtual space.",
-    href: "/labs/experimental-media",
+    href: "/research/experimental-media",
   },
   {
     title: "Collective Intelligence",
     tag: "Social / Grassroots",
     description:
       "Designing non-hierarchical open databases, citizen-science audits, and collaborative knowledge maps.",
-    href: "/labs/collective-practice",
+    href: "/research/collective-practice",
   },
 ];
 
@@ -82,7 +82,7 @@ export const featuredLabsList: FeaturedLab[] = [
     tag: "Bio-Sensing & Micro-Ecology",
     description:
       "Interfacing digital circuits with organic botanical networks to study carbon-water signal transductions.",
-    href: "/labs/ecological-futures",
+    href: "/research/ecological-futures",
   },
   {
     number: "02",
@@ -90,7 +90,7 @@ export const featuredLabsList: FeaturedLab[] = [
     tag: "Algorithmic Audits & Machine Agency",
     description:
       "Critically inspecting synthetic minds, language weights, and decolonial software patterns.",
-    href: "/labs/ai-ethics",
+    href: "/research/ai-ethics",
   },
   {
     number: "03",
@@ -98,7 +98,7 @@ export const featuredLabsList: FeaturedLab[] = [
     tag: "Soundscapes & Immersive Space",
     description:
       "Visualizing bio-voltage outputs inside dynamic browser canvases and spatial virtual topologies.",
-    href: "/labs/experimental-media",
+    href: "/research/experimental-media",
   },
 ];
 
@@ -176,3 +176,4 @@ export const learningPathwaysList: LearningPathway[] = [
     href: "/learning/recorded-lectures",
   },
 ];
+

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect } from "react";
 import type { LabContentDto } from "@/lib/api/cms";
@@ -38,12 +38,12 @@ export default function AdminLabsPage() {
 
   return (
     <div className="space-y-6 font-sans">
-      {actionFeedback && <AdminActionNotice message={actionFeedback} href="/labs" />}
+      {actionFeedback && <AdminActionNotice message={actionFeedback} href="/research" />}
 
       <div className="flex justify-between items-center">
         <div>
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
-            Research Labs Catalog
+            Research Catalog
           </h2>
           <p className="font-sans text-xs text-bone-200 font-medium">
             Manage research focus areas, lab leads, and experimental clusters.
@@ -78,7 +78,7 @@ export default function AdminLabsPage() {
                   </td>
                   <td className="p-4 text-bone-200/70">{l.leadName || "Lab Coordinator"}</td>
                   <td className="p-4 text-right space-x-2">
-                    <LivePreviewLink href="/labs" />
+                    <LivePreviewLink href="/research" />
                     <button
                       onClick={async () => {
                         await cmsApi.deleteLab(l.id);
@@ -169,3 +169,4 @@ export default function AdminLabsPage() {
     </div>
   );
 }
+

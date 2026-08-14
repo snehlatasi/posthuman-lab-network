@@ -2,29 +2,29 @@
 
 import { EditorialPageLayout } from "@/components/layout/Templates";
 
-const labsSidebar = [
-  { label: "Research Labs", href: "/labs/research" },
-  { label: "Creative Labs", href: "/labs/creative" },
-  { label: "Ecological Futures", href: "/labs/ecological-futures", active: true },
-  { label: "AI Ethics & Tech", href: "/labs/ai-ethics" },
-  { label: "Experimental Media", href: "/labs/experimental-media" },
-  { label: "Collective Practice", href: "/labs/collective-practice" },
-  { label: "Community Research", href: "/labs/community-research" },
-  { label: "Open Collaboration", href: "/labs/open-collaboration" },
+const researchSidebar = [
+  { label: "Research Cells", href: "/research/research" },
+  { label: "Creative Research", href: "/research/creative" },
+  { label: "Ecological Futures", href: "/research/ecological-futures", active: true },
+  { label: "AI Ethics & Tech", href: "/research/ai-ethics" },
+  { label: "Experimental Media", href: "/research/experimental-media" },
+  { label: "Collective Practice", href: "/research/collective-practice" },
+  { label: "Community Research", href: "/research/community-research" },
+  { label: "Open Collaboration", href: "/research/open-collaboration" },
 ];
 
-export default function EcologicalFuturesLabPage() {
+export default function EcologicalFuturesResearchPage() {
   return (
     <EditorialPageLayout
       tag="Ecological Futures"
-      title="ECOLOGICAL FUTURES LAB"
+      title="ECOLOGICAL FUTURES RESEARCH"
       subtitle="Designing technologies to interface with biological agents, networks, and environmental systems."
-      parentLabel="Labs"
-      parentHref="/labs"
-      sidebarTitle="Labs Menu"
-      sidebarLinks={labsSidebar}
+      parentLabel="Research"
+      parentHref="/research"
+      sidebarTitle="Research Menu"
+      sidebarLinks={researchSidebar}
       nextPageLabel="AI Ethics & Technology"
-      nextPageHref="/labs/ai-ethics"
+      nextPageHref="/research/ai-ethics"
     >
       <div className="space-y-8 font-sans">
         <section className="space-y-4">
@@ -54,3 +54,4 @@ export default function EcologicalFuturesLabPage() {
     </EditorialPageLayout>
   );
 }
+

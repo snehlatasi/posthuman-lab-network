@@ -7,13 +7,12 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
-import { Menu, X, ArrowRight, ChevronDown, ShieldCheck } from "lucide-react";
+import { Menu, X, ChevronDown, ShieldCheck } from "lucide-react";
 import type { NavigationGroup } from "@/lib/navigation";
 import { navigationConfig } from "@/lib/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useMember } from "@/context/MemberContext";
 import { useTheme } from "@/context/ThemeContext";
-import { ThemeSelector } from "@/components/ui/ThemeSelector";
 
 export const Header: FC = () => {
   const { isAdmin, openLoginModal } = useAuth();
@@ -21,6 +20,7 @@ export const Header: FC = () => {
   const { resolvedTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
+  const [activeMobileGroup, setActiveMobileGroup] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [headerHeight, setHeaderHeight] = useState(0);
   const pathname = usePathname();
@@ -40,6 +40,7 @@ export const Header: FC = () => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsOpen(false);
     setActiveGroup(null);
+    setActiveMobileGroup(null);
   }, [pathname]);
 
   useEffect(() => {
@@ -129,6 +130,16 @@ export const Header: FC = () => {
     setActiveGroup((current) => (current === label ? null : label));
   };
 
+  const isGroupCurrent = (group: NavigationGroup) => {
+    if (group.href === "/") return pathname === "/";
+    if (pathname === group.href || pathname.startsWith(`${group.href}/`)) return true;
+    if (group.label === "Blog" && pathname.startsWith("/publications")) return true;
+    if (group.label === "Support" && (pathname.startsWith("/membership") || pathname.startsWith("/contact"))) {
+      return true;
+    }
+    return false;
+  };
+
   const isOverlayingHero =
     resolvedTheme === "dark" && pathname === "/" && !isScrolled && !activeGroup && !isOpen;
   const brandTextClass = isOverlayingHero
@@ -174,89 +185,103 @@ export const Header: FC = () => {
           </span>
         </Link>
 
-        {/* Group 2: Main Desktop Primary Navigation */}
+        {/* Group 2: Desktop Primary Navigation */}
         <nav
-          className="hidden xl:flex items-center space-x-1 xl:space-x-1.5 2xl:space-x-2.5 shrink-0 whitespace-nowrap"
+          className="hidden xl:flex items-center gap-0.5 2xl:gap-1 shrink-0 whitespace-nowrap ml-auto"
           role="navigation"
-          aria-label="Main Desktop Navigation"
+          aria-label="Main desktop navigation"
         >
-          {pathname === "/"
-            ? [
-                { label: "HOME", href: "/" },
-                { label: "ABOUT", href: "/about" },
-                { label: "LABS", href: "/labs" },
-                { label: "LEARNING", href: "/learning" },
-                { label: "EVENTS", href: "/events" },
-                { label: "MEDIA", href: "/media" },
-                { label: "COMMUNITY", href: "/community" },
-                { label: "BLOG", href: "/blog" },
-                { label: "SUPPORT", href: "/support" },
-              ].map((link) => {
-                const isActive =
-                  link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
-                return (
-                  <Link
-                    suppressHydrationWarning
-                    key={link.label}
-                    href={link.href}
-                    className={`px-1.5 xl:px-2 2xl:px-2.5 py-1 text-[11px] xl:text-[11.5px] 2xl:text-xs font-sans tracking-wider uppercase transition-all duration-200 relative whitespace-nowrap ${
-                      isActive
-                        ? isOverlayingHero
-                          ? "text-[#9ff8ff] font-bold drop-shadow-[0_3px_12px_rgba(0,0,0,0.55)]"
-                          : "text-earth-600 dark:text-earth-400 font-bold"
-                        : isOverlayingHero
-                          ? "text-bone-100/82 font-semibold hover:text-[#9ff8ff] drop-shadow-[0_3px_12px_rgba(0,0,0,0.55)]"
-                          : "text-[#1b1613] dark:text-[#d5d0c4] font-semibold hover:text-earth-600 dark:hover:text-earth-400"
+          {navigationConfig.map((group, index) => {
+            const isDropdownActive = activeGroup === group.label;
+            const isCurrent = isGroupCurrent(group);
+            const alignRight = index >= navigationConfig.length - 3;
+
+            return (
+              <div
+                key={group.label}
+                className="relative flex items-center rounded-full"
+                onMouseEnter={() => handleMouseEnter(group.label)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <Link
+                  suppressHydrationWarning
+                  href={group.href}
+                  onClick={() => setActiveGroup(null)}
+                  className={`relative pl-2.5 pr-1 2xl:pl-3 2xl:pr-1.5 py-1.5 text-[10.5px] 2xl:text-xs font-sans tracking-wider uppercase rounded-l-full transition-all whitespace-nowrap ${
+                    isDropdownActive || isCurrent
+                      ? "text-earth-600 dark:text-earth-400 bg-bone-200/55 dark:bg-carbon-900/90 font-bold"
+                      : isOverlayingHero
+                        ? "text-bone-100/82 font-semibold hover:text-[#9ff8ff] drop-shadow-[0_3px_12px_rgba(0,0,0,0.55)]"
+                        : "text-[#1b1613] dark:text-[#d5d0c4] font-semibold hover:text-earth-600 dark:hover:text-earth-400 hover:bg-bone-200/40 dark:hover:bg-carbon-900/50"
+                  }`}
+                >
+                  {group.label}
+                </Link>
+                <button
+                  suppressHydrationWarning
+                  onClick={() => toggleGroupClick(group.label)}
+                  aria-expanded={isDropdownActive}
+                  aria-haspopup="true"
+                  aria-label={`Open ${group.label} submenu`}
+                  className={`pr-2.5 pl-0.5 2xl:pr-3 py-1.5 rounded-r-full transition-all cursor-pointer ${
+                    isDropdownActive || isCurrent
+                      ? "bg-bone-200/55 dark:bg-carbon-900/90 text-earth-600 dark:text-earth-400"
+                      : isOverlayingHero
+                        ? "text-bone-100/82 hover:text-[#9ff8ff]"
+                        : "text-[#594e46] dark:text-bone-300 hover:bg-bone-200/40 dark:hover:bg-carbon-900/50"
+                  }`}
+                >
+                  <ChevronDown
+                    className={`w-3 h-3 transition-transform duration-200 ${
+                      isDropdownActive ? "rotate-180" : ""
                     }`}
-                  >
-                    <span>{link.label}</span>
-                    {isActive && (
-                      <span className="absolute bottom-[-2px] left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-earth-500" />
-                    )}
-                  </Link>
-                );
-              })
-            : navigationConfig.map((group) => {
-                const isDropdownActive = activeGroup === group.label;
-                return (
-                  <div
-                    key={group.label}
-                    className="relative"
-                    onMouseEnter={() => handleMouseEnter(group.label)}
-                    onMouseLeave={handleMouseLeave}
-                  >
-                    <button
-                      suppressHydrationWarning
-                      onClick={() => toggleGroupClick(group.label)}
-                      aria-expanded={isDropdownActive}
-                      aria-haspopup="true"
-                      className={`flex items-center space-x-1 px-2 xl:px-2.5 2xl:px-3 py-1.5 text-xs font-sans tracking-wide uppercase transition-all duration-200 rounded-full focus:outline-none cursor-pointer whitespace-nowrap ${
-                        isDropdownActive
-                          ? "text-earth-600 dark:text-earth-400 bg-bone-200/50 dark:bg-carbon-900/90 border border-carbon-950/10 dark:border-bone-50/15"
-                          : "text-[#120e0c] dark:text-[#f3ebd9] hover:bg-bone-200/40 dark:hover:bg-carbon-900/50"
+                  />
+                </button>
+
+                <AnimatePresence>
+                  {isDropdownActive && (
+                    <motion.div
+                      initial={shouldReduceMotion ? {} : { opacity: 0, y: 8, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={shouldReduceMotion ? {} : { opacity: 0, y: 8, scale: 0.98 }}
+                      transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                      className={`absolute top-[calc(100%+0.75rem)] z-50 w-[320px] overflow-hidden rounded-md border border-carbon-950/10 bg-bone-50/98 shadow-2xl backdrop-blur-xl dark:border-bone-50/15 dark:bg-carbon-950/98 ${
+                        alignRight ? "right-0" : "left-0"
                       }`}
+                      onMouseEnter={() => {
+                        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+                      }}
+                      onMouseLeave={handleMouseLeave}
                     >
-                      <span>{group.label}</span>
-                      <ChevronDown
-                        className={`w-3 h-3 transition-transform duration-200 ${
-                          isDropdownActive
-                            ? "rotate-180 text-earth-600 dark:text-earth-400"
-                            : "text-[#594e46] dark:text-bone-300"
-                        }`}
-                      />
-                    </button>
-                  </div>
-                );
-              })}
+                      <div className="max-h-[360px] overflow-y-auto py-1.5">
+                        {group.items.map((item) => (
+                          <Link
+                            suppressHydrationWarning
+                            key={item.href}
+                            href={item.href}
+                            onClick={() => setActiveGroup(null)}
+                            className={`block px-4 py-2.5 transition-colors ${
+                              pathname === item.href
+                                ? "bg-bone-100 text-earth-600 dark:bg-carbon-900 dark:text-earth-400"
+                                : "text-[#120e0c] hover:bg-bone-100 dark:text-[#f3ebd9] dark:hover:bg-carbon-900/90"
+                            }`}
+                          >
+                            <span className="block truncate font-sans text-xs font-bold tracking-wide">
+                              {item.label}
+                            </span>
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
         </nav>
 
         {/* Group 3: Header Actions (Theme Selector + Admin Login + Join CTA + Mobile Toggle) */}
         <div className="flex items-center space-x-2 xl:space-x-3 2xl:space-x-4 shrink-0">
-          {/* Segmented Theme Preference Control */}
-          <div className="hidden md:block">
-            <ThemeSelector variant="pills" />
-          </div>
-
           {mounted && !isAdmin && (
             <button
               suppressHydrationWarning
@@ -305,73 +330,6 @@ export const Header: FC = () => {
         </div>
       </div>
 
-      {/* Desktop Submenu Dropdown */}
-      <AnimatePresence>
-        {activeGroup && (
-          <motion.div
-            initial={shouldReduceMotion ? {} : { opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={shouldReduceMotion ? {} : { opacity: 0, y: -8 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden xl:block absolute top-full left-0 right-0 bg-bone-50/95 dark:bg-carbon-950/95 backdrop-blur-xl border-b border-carbon-950/10 dark:border-bone-50/15 shadow-xl overflow-hidden z-40"
-            onMouseEnter={() => {
-              if (timeoutRef.current) clearTimeout(timeoutRef.current);
-            }}
-            onMouseLeave={handleMouseLeave}
-          >
-            <div className="w-full max-w-[1720px] mx-auto px-8 xl:px-10 py-12 grid grid-cols-12 gap-8">
-              <div className="col-span-4 border-r border-carbon-950/10 dark:border-bone-50/10 pr-8">
-                {navigationConfig.map((group) => {
-                  if (group.label !== activeGroup) return null;
-                  return (
-                    <div key={group.label} className="space-y-4">
-                      <div className="flex items-center space-x-3">
-                        <span className="font-mono text-xs text-earth-600 dark:text-earth-400 font-bold uppercase tracking-widest">
-                          {group.number}
-                        </span>
-                        <div className="h-[1px] w-8 bg-earth-500/40" />
-                      </div>
-                      <h2 className="font-serif text-4xl font-bold text-[#120e0c] dark:text-[#f3ebd9] leading-[1.05]">
-                        {group.label.toUpperCase()}
-                      </h2>
-                      <p className="text-sm text-[#1b1613] dark:text-[#d5d0c4] leading-relaxed font-sans max-w-xs font-medium">
-                        {group.description}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-
-              <div className="col-span-8 grid grid-cols-2 gap-x-8 gap-y-6 pl-8">
-                {navigationConfig
-                  .find((group) => group.label === activeGroup)
-                  ?.items.map((item) => (
-                    <Link
-                      suppressHydrationWarning
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setActiveGroup(null)}
-                      className="group flex flex-col justify-between p-5 rounded-lg bg-white dark:bg-carbon-900/90 hover:bg-bone-100 dark:hover:bg-carbon-900 border border-carbon-950/10 dark:border-bone-50/15 hover:border-earth-600 dark:hover:border-earth-400 shadow-sm transition-all duration-200"
-                    >
-                      <div className="space-y-1.5">
-                        <div className="flex items-center justify-between">
-                          <span className="font-serif text-xl font-bold text-[#120e0c] dark:text-[#f3ebd9] group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
-                            {item.label}
-                          </span>
-                          <ArrowRight className="w-4 h-4 text-[#120e0c] dark:text-[#d5d0c4] group-hover:text-earth-600 dark:group-hover:text-earth-400 group-hover:translate-x-1 transition-all" />
-                        </div>
-                        <p className="text-xs text-[#1b1613] dark:text-[#9e988b] leading-relaxed font-sans pr-4 font-medium">
-                          {item.description}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Mobile Drawer Menu */}
       <AnimatePresence>
         {isOpen && (
@@ -388,18 +346,20 @@ export const Header: FC = () => {
             className="xl:hidden fixed left-0 right-0 bottom-0 bg-bone-50/98 dark:bg-carbon-950/98 md:backdrop-blur-xl border-t border-carbon-950/10 dark:border-bone-50/15 overflow-y-auto overscroll-contain z-40"
           >
             <div className="px-6 py-8 space-y-6">
-              {/* Theme Preference in Mobile Drawer */}
-              <div className="flex flex-col items-center space-y-2 pb-4 border-b border-carbon-950/10 dark:border-bone-50/10">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-[#594e46] dark:text-[#9e988b]">
-                  Theme Preference
-                </span>
-                <ThemeSelector variant="pills" />
-              </div>
-
               {navigationConfig.map((group) => (
                 <MobileAccordionGroup
                   key={group.label}
                   group={group}
+                  isExpanded={
+                    activeMobileGroup
+                      ? activeMobileGroup === group.label
+                      : isGroupCurrent(group)
+                  }
+                  onToggle={() =>
+                    setActiveMobileGroup((current) =>
+                      current === group.label ? null : group.label
+                    )
+                  }
                   onClose={() => setIsOpen(false)}
                 />
               ))}
@@ -432,9 +392,16 @@ export const Header: FC = () => {
 
 const MobileAccordionGroup: FC<{
   group: NavigationGroup;
+  isExpanded: boolean;
+  onToggle: () => void;
   onClose: () => void;
-}> = ({ group, onClose }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+}> = ({ group, isExpanded, onToggle, onClose }) => {
+  const pathname = usePathname();
+  const isCurrent =
+    pathname === group.href ||
+    pathname.startsWith(`${group.href}/`) ||
+    (group.label === "Blog" && pathname.startsWith("/publications")) ||
+    (group.label === "Support" && (pathname.startsWith("/membership") || pathname.startsWith("/contact")));
   const shouldReduceMotion = useSafeReducedMotion();
   const mobilePerformanceMode = useMobilePerformanceMode();
 
@@ -442,14 +409,15 @@ const MobileAccordionGroup: FC<{
     <div className="border-b border-carbon-950/10 dark:border-bone-50/10 pb-4">
       <button
         suppressHydrationWarning
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={onToggle}
         className="w-full flex items-center justify-between py-2 text-left focus:outline-none cursor-pointer"
       >
-        <div className="space-y-1">
-          <span className="font-mono text-xs text-earth-600 dark:text-earth-400 tracking-wider uppercase font-bold block">
-            {group.number}
-          </span>
-          <span className="font-serif text-2xl font-bold text-[#120e0c] dark:text-[#f3ebd9]">
+        <div>
+          <span
+            className={`font-serif text-2xl font-bold ${
+              isCurrent ? "text-earth-600 dark:text-earth-400" : "text-[#120e0c] dark:text-[#f3ebd9]"
+            }`}
+          >
             {group.label}
           </span>
         </div>
@@ -476,13 +444,20 @@ const MobileAccordionGroup: FC<{
                   key={item.href}
                   href={item.href}
                   onClick={onClose}
-                  className="flex flex-col space-y-1 group"
+                  className={`flex flex-col space-y-1 group border-l pl-4 ${
+                    pathname === item.href
+                      ? "border-earth-500"
+                      : "border-carbon-950/10 dark:border-bone-50/10"
+                  }`}
                 >
-                  <span className="font-sans text-sm font-bold text-[#120e0c] dark:text-[#f3ebd9] group-hover:text-earth-600 dark:group-hover:text-earth-400 transition-colors">
+                  <span
+                    className={`font-sans text-sm font-bold transition-colors ${
+                      pathname === item.href
+                        ? "text-earth-600 dark:text-earth-400"
+                        : "text-[#120e0c] dark:text-[#f3ebd9] group-hover:text-earth-600 dark:group-hover:text-earth-400"
+                    }`}
+                  >
                     {item.label}
-                  </span>
-                  <span className="font-sans text-xs text-[#1b1613] dark:text-[#9e988b] pr-4 leading-relaxed font-medium">
-                    {item.description}
                   </span>
                 </Link>
               ))}

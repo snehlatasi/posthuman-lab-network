@@ -1,9 +1,5 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
-import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 
 // Homepage Sections
 import { HeroSection } from "@/components/home/HeroSection";
@@ -20,119 +16,11 @@ import { GlobalVoicesSection } from "@/components/home/GlobalVoicesSection";
 import { JoinNetworkSection } from "@/components/home/JoinNetworkSection";
 import { SupportSection } from "@/components/home/SupportSection";
 
-const homeSections = [
-  { id: "hero", label: "Intro" },
-  { id: "about-us", label: "Who We Are" },
-  { id: "pillars", label: "Our Pillars" },
-  { id: "conversations", label: "Themes" },
-  { id: "labs", label: "Labs" },
-  { id: "spaces", label: "Spaces" },
-  { id: "lecture", label: "Lecture" },
-  { id: "events", label: "Events" },
-  { id: "learning", label: "Learning" },
-  { id: "publications", label: "Writing" },
-  { id: "global-connection", label: "Voices" },
-  { id: "join", label: "Join" },
-  { id: "support", label: "Support" },
-];
-
 export default function HomePage() {
-  const shouldReduceMotion = useSafeReducedMotion();
-  const [activeSection, setActiveSection] = useState("hero");
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-
-  useEffect(() => {
-    let ticking = false;
-
-    const handleScroll = () => {
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          const winHeight = window.innerHeight;
-          let currentActive = "hero";
-
-          for (const sec of homeSections) {
-            const el = document.getElementById(sec.id);
-            if (el) {
-              const rect = el.getBoundingClientRect();
-              if (rect.top <= winHeight / 2 && rect.bottom >= winHeight / 2) {
-                currentActive = sec.id;
-                break;
-              }
-            }
-          }
-          setActiveSection((prev) => (prev !== currentActive ? currentActive : prev));
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const handleSectionClick = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const headerOffset = 96;
-      const target = el.getBoundingClientRect().top + window.scrollY - headerOffset;
-      window.scrollTo({
-        top: Math.max(0, target),
-        behavior: shouldReduceMotion ? "auto" : "smooth",
-      });
-    }
-  };
-
   return (
     <>
       {/* Sticky Global Navigation */}
       <Header />
-
-      {/* Right-Side Circular Section Indicators */}
-      <div
-        className="fixed right-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col space-y-4 z-40"
-        role="navigation"
-        aria-label="Section indicators"
-      >
-        {homeSections.map((sec, idx) => {
-          const isActive = activeSection === sec.id;
-          const isHovered = hoveredIdx === idx;
-          return (
-            <button
-              type="button"
-              key={sec.id}
-              className="relative flex items-center justify-end group cursor-pointer focus:outline-none"
-              onMouseEnter={() => setHoveredIdx(idx)}
-              onMouseLeave={() => setHoveredIdx(null)}
-              onClick={() => handleSectionClick(sec.id)}
-              aria-label={`Scroll to ${sec.label}`}
-              aria-current={isActive ? "true" : undefined}
-            >
-              {/* Tooltip Label */}
-              <span
-                className={`mr-3 font-mono text-[9px] tracking-widest text-carbon-950 dark:text-bone-100 uppercase transition-all duration-300 pointer-events-none select-none bg-bone-50/90 dark:bg-carbon-900/90 px-2 py-0.5 border border-carbon-950/8 dark:border-bone-50/15 rounded shadow-sm ${
-                  isHovered ? "opacity-100 translate-x-0" : "opacity-0 translate-x-2"
-                }`}
-              >
-                {sec.label}
-              </span>
-
-              {/* Dot */}
-              <div
-                className={`w-2.5 h-2.5 rounded-full border transition-all duration-300 ${
-                  isActive
-                    ? "bg-earth-500 border-earth-500 scale-110 shadow-lg shadow-earth-500/30"
-                    : "border-carbon-950/20 dark:border-bone-50/30 bg-bone-50/40 dark:bg-carbon-900/40 group-hover:border-carbon-950/60 dark:group-hover:border-bone-50/70"
-                }`}
-              />
-            </button>
-          );
-        })}
-      </div>
 
       {/* Main Page Layout */}
       <main className="flex-grow">
@@ -148,7 +36,7 @@ export default function HomePage() {
         {/* 4. Interactive Conversation Themes */}
         <ConversationsSection />
 
-        {/* 5. Exploration Labs Cards */}
+        {/* 5. Exploration Research Cards */}
         <LabsSection />
 
         {/* 5.5 Interactive 360 Virtual Lab Tour */}

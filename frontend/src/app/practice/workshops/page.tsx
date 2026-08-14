@@ -8,7 +8,7 @@ const practiceSidebar = [
   { label: "Collective Learning", href: "/practice/collective-learning" },
   { label: "Retreats", href: "/practice/retreats" },
   { label: "Embodied Practices", href: "/practice/embodied-practices" },
-  { label: "Creative Labs", href: "/practice/creative-labs" },
+  { label: "Creative Research", href: "/practice/creative-labs" },
   { label: "Experimental Learning", href: "/practice/experimental-learning" },
   { label: "Global Meetups", href: "/practice/global-meetups" },
 ];

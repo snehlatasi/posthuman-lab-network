@@ -5,7 +5,7 @@ import { ListingPageLayout } from "@/components/layout/Templates";
 import { ContentCard, AnimatedLink } from "@/components/layout/Primitives";
 import { StaggerItem } from "@/components/ui/Reveal";
 
-interface LabItem {
+interface ResearchItem {
   name: string;
   category: "theory" | "creative" | "applied";
   description: string;
@@ -13,14 +13,14 @@ interface LabItem {
   href: string;
 }
 
-const labsList: LabItem[] = [
+const researchList: ResearchItem[] = [
   {
-    name: "Ecological Futures Lab",
+    name: "Ecological Futures Research",
     category: "applied",
     tag: "Applied / Ecology",
     description:
       "Monitoring environmental changes and botanical communication pathways through creative biosensors.",
-    href: "/labs/ecological-futures",
+    href: "/research/ecological-futures",
   },
   {
     name: "AI Ethics & Technology Unit",
@@ -28,14 +28,14 @@ const labsList: LabItem[] = [
     tag: "Theory / AI",
     description:
       "Philosophical audits on algorithmic biases, artificial agency, and synthetic consciousness.",
-    href: "/labs/ai-ethics",
+    href: "/research/ai-ethics",
   },
   {
     name: "Experimental Media Studio",
     category: "creative",
     tag: "Creative / Audio-Visual",
     description: "Investigating sound art, new media aesthetics, and immersive virtual topologies.",
-    href: "/labs/experimental-media",
+    href: "/research/experimental-media",
   },
   {
     name: "Collective Practice Network",
@@ -43,7 +43,7 @@ const labsList: LabItem[] = [
     tag: "Applied / Social",
     description:
       "Designing frameworks for decentralized community action, citizen science, and open data.",
-    href: "/labs/collective-practice",
+    href: "/research/collective-practice",
   },
   {
     name: "Creative Writing Sanctuary",
@@ -62,17 +62,17 @@ const labsList: LabItem[] = [
   },
 ];
 
-export default function LabsPage() {
+export default function ResearchPage() {
   const [activeFilter, setActiveFilter] = useState<"all" | "theory" | "creative" | "applied">(
     "all"
   );
 
-  const filteredLabs = labsList.filter(
+  const filteredResearch = researchList.filter(
     (lab) => activeFilter === "all" || lab.category === activeFilter
   );
 
   const filters = [
-    { label: "All Labs", active: activeFilter === "all", onClick: () => setActiveFilter("all") },
+    { label: "All Research", active: activeFilter === "all", onClick: () => setActiveFilter("all") },
     {
       label: "Theory & Ethics",
       active: activeFilter === "theory",
@@ -92,12 +92,12 @@ export default function LabsPage() {
 
   return (
     <ListingPageLayout
-      tag="Labs"
-      title="GLOBAL LAB NETWORKS"
+      tag="Research"
+      title="GLOBAL RESEARCH NETWORKS"
       subtitle="Distributed collaborative clusters tackling critical posthuman questions."
       filters={filters}
     >
-      {filteredLabs.map((lab) => (
+      {filteredResearch.map((lab) => (
         <StaggerItem key={lab.name}>
           <ContentCard className="border border-carbon-950/10 dark:border-bone-50/15 bg-white dark:bg-carbon-900/90 hover:bg-white dark:hover:bg-carbon-900 shadow-md hover:shadow-xl hover:border-earth-600 dark:hover:border-earth-400 transition-all duration-300">
             <div className="space-y-6 h-full flex flex-col justify-between p-2">
@@ -123,3 +123,4 @@ export default function LabsPage() {
     </ListingPageLayout>
   );
 }
+

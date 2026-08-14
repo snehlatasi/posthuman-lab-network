@@ -9,6 +9,7 @@ import org.posthumanlab.network.event.entity.Event;
 import org.posthumanlab.network.event.entity.EventStatus;
 import org.posthumanlab.network.event.repository.EventRepository;
 import org.posthumanlab.network.membership.dto.MembershipInterestRequest;
+import org.posthumanlab.network.newsletter.repository.NewsletterSubscriberRepository;
 import org.posthumanlab.network.publication.entity.Publication;
 import org.posthumanlab.network.publication.entity.PublicationStatus;
 import org.posthumanlab.network.publication.entity.PublicationType;
@@ -45,12 +46,16 @@ public class DomainControllersTest {
     private PublicationRepository publicationRepository;
 
     @Autowired
+    private NewsletterSubscriberRepository newsletterSubscriberRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setup() {
         eventRepository.deleteAll();
         publicationRepository.deleteAll();
+        newsletterSubscriberRepository.deleteAll();
     }
 
     // ----------------------------------------------------
@@ -206,6 +211,87 @@ public class DomainControllersTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testNewsletterSubscriptionWorkflow() throws Exception {
+        String subscribePayload = """
+                {
+                  "name": "Asha Reader",
+                  "email": "ASHA@example.com",
+                  "interests": "all-updates",
+                  "termsAccepted": true,
+                  "source": "footer"
+                }
+                """;
+
+        mockMvc.perform(post("/api/newsletter/subscribe")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(subscribePayload))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.email", is("asha@example.com")))
+                .andExpect(jsonPath("$.status", is("ACTIVE")));
+
+        String updatedPayload = """
+                {
+                  "name": "Asha Updated",
+                  "email": "asha@example.com",
+                  "interests": "events-media",
+                  "termsAccepted": true,
+                  "source": "footer"
+                }
+                """;
+
+        mockMvc.perform(post("/api/newsletter/subscribe")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updatedPayload))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.status", is("ACTIVE")));
+
+        org.assertj.core.api.Assertions.assertThat(newsletterSubscriberRepository.count()).isEqualTo(1);
+
+        mockMvc.perform(get("/api/newsletter/subscribers"))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(post("/api/newsletter/subscribe")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "No Terms",
+                                  "email": "no-terms@example.com",
+                                  "termsAccepted": false
+                                }
+                                """))
+                .andExpect(status().isBadRequest());
+
+        String token = newsletterSubscriberRepository.findByEmailIgnoreCase("asha@example.com")
+                .orElseThrow()
+                .getUnsubscribeToken();
+
+        mockMvc.perform(post("/api/newsletter/unsubscribe/{token}", token))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is("UNSUBSCRIBED")));
+    }
+
+    @Test
+    @WithMockUser(authorities = "ROLE_ADMIN")
+    public void testAdminCanListNewsletterSubscribers() throws Exception {
+        mockMvc.perform(post("/api/newsletter/subscribe")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "name": "Editorial Reader",
+                                  "email": "reader@example.com",
+                                  "termsAccepted": true
+                                }
+                                """))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/newsletter/subscribers"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].email", is("reader@example.com")))
+                .andExpect(jsonPath("$[0].status", is("ACTIVE")));
     }
 
     @Test
