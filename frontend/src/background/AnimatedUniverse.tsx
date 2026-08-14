@@ -83,7 +83,7 @@ export function AnimatedUniverse() {
 
   return (
     <div
-      className={`fixed inset-0 z-0 min-h-dvh w-full overflow-hidden pointer-events-none transition-colors duration-300 ${
+      className={`fixed inset-0 z-0 min-h-dvh w-full overflow-hidden pointer-events-none ${
         isDark ? "bg-[#020611]" : "bg-[#f8f1e6]"
       }`}
       aria-hidden="true"
@@ -93,7 +93,7 @@ export function AnimatedUniverse() {
         className="universe-canvas h-full w-full opacity-100"
       />
       <div
-        className={`pointer-events-none absolute inset-0 transition-colors duration-300 ${
+        className={`pointer-events-none absolute inset-0 ${
           isDark ? "bg-carbon-950/34" : "bg-bone-50/18"
         }`}
       />

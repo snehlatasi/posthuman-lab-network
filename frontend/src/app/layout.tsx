@@ -29,13 +29,12 @@ const cormorant = Cormorant_Garamond({
 const themeInitScript = `
 (function() {
   try {
-    var resolved = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     var root = document.documentElement;
-    root.classList.remove(resolved === "dark" ? "light" : "dark");
-    root.classList.add(resolved);
-    root.setAttribute("data-theme", resolved);
+    root.classList.remove("light");
+    root.classList.add("dark");
+    root.setAttribute("data-theme", "dark");
     root.setAttribute("data-theme-preference", "system");
-    root.style.colorScheme = resolved;
+    root.style.colorScheme = "dark";
   } catch (error) {}
 })();
 `;
@@ -82,7 +81,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${manrope.variable} ${cormorant.variable} h-full antialiased`}
+      className={`${manrope.variable} ${cormorant.variable} dark h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

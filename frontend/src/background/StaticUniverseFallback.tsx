@@ -42,7 +42,7 @@ export function StaticUniverseFallback({ animated = false }: StaticUniverseFallb
   return (
     <div
       data-testid="static-universe-fallback"
-      className={`fixed inset-0 z-0 min-h-dvh w-full overflow-hidden pointer-events-none transition-colors duration-300 ${
+      className={`fixed inset-0 z-0 min-h-dvh w-full overflow-hidden pointer-events-none ${
         isDark ? "bg-[#020611]" : "bg-[#f8f1e6]"
       }`}
       aria-hidden="true"

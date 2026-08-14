@@ -16,10 +16,9 @@ interface ThemeContextType {
 }
 
 const getSystemTheme = (): ResolvedTheme => {
-  if (typeof window === "undefined") return "light";
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  return "dark";
 };
-const getServerSystemTheme = (): ResolvedTheme => "light";
+const getServerSystemTheme = (): ResolvedTheme => "dark";
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
@@ -62,23 +61,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   return <ThemeContext.Provider value={contextValue}>{children}</ThemeContext.Provider>;
 };
 
-function subscribeToSystemTheme(callback: () => void) {
-  if (typeof window === "undefined") return () => {};
-
-  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-  if (mediaQuery.addEventListener) {
-    mediaQuery.addEventListener("change", callback);
-  } else {
-    mediaQuery.addListener(callback);
-  }
-
-  return () => {
-    if (mediaQuery.removeEventListener) {
-      mediaQuery.removeEventListener("change", callback);
-    } else {
-      mediaQuery.removeListener(callback);
-    }
-  };
+function subscribeToSystemTheme() {
+  return () => {};
 }
 
 export const useTheme = () => {
