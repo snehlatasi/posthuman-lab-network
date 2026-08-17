@@ -35,4 +35,10 @@ export const newsletterApi = {
       body: JSON.stringify(data),
     }),
   getSubscribers: () => fetchJson<NewsletterSubscriberDto[]>("/api/newsletter/subscribers"),
+  unsubscribeSubscriber: (id: number) =>
+    fetchJson<NewsletterSubscriptionResponseDto>(`/api/newsletter/subscribers/${id}/unsubscribe`, {
+      method: "PUT",
+    }),
+  deleteSubscriber: (id: number) =>
+    fetchJson<void>(`/api/newsletter/subscribers/${id}`, { method: "DELETE" }),
 };

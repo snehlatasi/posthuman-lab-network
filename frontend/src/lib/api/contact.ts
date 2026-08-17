@@ -13,7 +13,7 @@ export interface ContactResponseDto {
   email: string;
   subject: string;
   message: string;
-  status: string;
+  status: "NEW" | "READ" | "ARCHIVED";
   createdAt: string;
 }
 
@@ -24,5 +24,7 @@ export const contactApi = {
       body: JSON.stringify(data),
     }),
   getAllMessages: () => fetchJson<ContactResponseDto[]>("/api/contact"),
+  updateMessageStatus: (id: number, status: ContactResponseDto["status"]) =>
+    fetchJson<ContactResponseDto>(`/api/contact/${id}/status?status=${status}`, { method: "PUT" }),
   deleteMessage: (id: number) => fetchJson<void>(`/api/contact/${id}`, { method: "DELETE" }),
 };

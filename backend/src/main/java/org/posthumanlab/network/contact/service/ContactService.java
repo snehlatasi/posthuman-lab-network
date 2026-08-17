@@ -43,4 +43,11 @@ public class ContactService {
         }
         contactRepository.deleteById(id);
     }
+
+    public ContactResponse updateStatus(Long id, ContactMessageStatus status) {
+        ContactMessage message = contactRepository.findById(id)
+                .orElseThrow(() -> new org.posthumanlab.network.common.exception.ResourceNotFoundException("Contact message not found with ID: " + id));
+        message.setStatus(status);
+        return new ContactResponse(contactRepository.save(message));
+    }
 }

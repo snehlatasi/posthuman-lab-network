@@ -5,7 +5,7 @@ import type { ContactResponseDto } from "@/lib/api/contact";
 import { contactApi } from "@/lib/api/contact";
 import type { CollaborationResponseDto } from "@/lib/api/collaboration";
 import { collaborationApi } from "@/lib/api/collaboration";
-import { Trash2, AlertTriangle } from "lucide-react";
+import { Archive, CheckCircle2, Trash2, AlertTriangle } from "lucide-react";
 
 export default function AdminInquiriesPage() {
   const [messages, setMessages] = useState<ContactResponseDto[]>([]);
@@ -66,6 +66,7 @@ export default function AdminInquiriesPage() {
                   <th className="p-4">Email</th>
                   <th className="p-4">Subject</th>
                   <th className="p-4">Message</th>
+                  <th className="p-4">Status</th>
                   <th className="p-4 text-right">Actions</th>
                 </tr>
               </thead>
@@ -76,31 +77,73 @@ export default function AdminInquiriesPage() {
                     <td className="p-4 font-mono text-[10px] text-bone-200/70">{m.email}</td>
                     <td className="p-4">{m.subject}</td>
                     <td className="p-4 max-w-xs truncate text-bone-200/70">{m.message}</td>
-                    <td className="p-4 text-right">
-                      <button
-                        onClick={() => {
-                          setConfirmModal({
-                            isOpen: true,
-                            title: "Delete Inquiry",
-                            description: `Delete message from ${m.name}?`,
-                            onConfirm: async () => {
-                              await contactApi.deleteMessage(m.id);
-                              triggerFeedback("Inquiry deleted.");
-                              loadInquiries();
-                            },
-                          });
-                        }}
-                        className="p-1.5 text-earth-400 hover:text-earth-300 cursor-pointer"
+                    <td className="p-4">
+                      <span
+                        className={`rounded-full border px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-wider ${
+                          m.status === "NEW"
+                            ? "border-earth-500/30 bg-earth-500/20 text-earth-400"
+                            : m.status === "READ"
+                              ? "border-moss-500/30 bg-moss-500/20 text-moss-400"
+                              : "border-bone-50/10 bg-carbon-950 text-bone-200/40"
+                        }`}
                       >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                        {m.status}
+                      </span>
+                    </td>
+                    <td className="p-4 text-right">
+                      <div className="flex justify-end gap-2">
+                        {m.status === "NEW" && (
+                          <button
+                            onClick={async () => {
+                              await contactApi.updateMessageStatus(m.id, "READ");
+                              triggerFeedback("Inquiry marked read.");
+                              loadInquiries();
+                            }}
+                            className="p-1.5 text-moss-400 hover:bg-moss-500/20 hover:text-moss-300"
+                            title="Mark read"
+                          >
+                            <CheckCircle2 className="h-4 w-4" />
+                          </button>
+                        )}
+                        {m.status !== "ARCHIVED" && (
+                          <button
+                            onClick={async () => {
+                              await contactApi.updateMessageStatus(m.id, "ARCHIVED");
+                              triggerFeedback("Inquiry archived.");
+                              loadInquiries();
+                            }}
+                            className="p-1.5 text-bone-200/60 hover:bg-bone-50/10 hover:text-bone-100"
+                            title="Archive inquiry"
+                          >
+                            <Archive className="h-4 w-4" />
+                          </button>
+                        )}
+                        <button
+                          onClick={() => {
+                            setConfirmModal({
+                              isOpen: true,
+                              title: "Delete Inquiry",
+                              description: `Permanently delete message from ${m.name}?`,
+                              onConfirm: async () => {
+                                await contactApi.deleteMessage(m.id);
+                                triggerFeedback("Inquiry deleted.");
+                                loadInquiries();
+                              },
+                            });
+                          }}
+                          className="p-1.5 text-earth-400 hover:text-earth-300 cursor-pointer"
+                          title="Delete inquiry"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
                 {messages.length === 0 && !loading && (
                   <tr>
                     <td
-                      colSpan={5}
+                      colSpan={6}
                       className="p-6 text-center font-mono text-xs text-bone-200/40 uppercase"
                     >
                       No contact inquiries.
@@ -127,6 +170,7 @@ export default function AdminInquiriesPage() {
                   <th className="p-4">Organization</th>
                   <th className="p-4">Type</th>
                   <th className="p-4">Proposal</th>
+                  <th className="p-4">Status</th>
                   <th className="p-4 text-right">Actions</th>
                 </tr>
               </thead>
@@ -139,31 +183,73 @@ export default function AdminInquiriesPage() {
                     </td>
                     <td className="p-4 uppercase text-[10px] font-mono">{c.collaborationType}</td>
                     <td className="p-4 max-w-xs truncate text-bone-200/70">{c.message}</td>
-                    <td className="p-4 text-right">
-                      <button
-                        onClick={() => {
-                          setConfirmModal({
-                            isOpen: true,
-                            title: "Delete Proposal",
-                            description: `Delete proposal from ${c.name}?`,
-                            onConfirm: async () => {
-                              await collaborationApi.deleteRequest(c.id);
-                              triggerFeedback("Proposal deleted.");
-                              loadInquiries();
-                            },
-                          });
-                        }}
-                        className="p-1.5 text-earth-400 hover:text-earth-300 cursor-pointer"
+                    <td className="p-4">
+                      <span
+                        className={`rounded-full border px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-wider ${
+                          c.status === "NEW"
+                            ? "border-earth-500/30 bg-earth-500/20 text-earth-400"
+                            : c.status === "REVIEWED"
+                              ? "border-moss-500/30 bg-moss-500/20 text-moss-400"
+                              : "border-bone-50/10 bg-carbon-950 text-bone-200/40"
+                        }`}
                       >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                        {c.status}
+                      </span>
+                    </td>
+                    <td className="p-4 text-right">
+                      <div className="flex justify-end gap-2">
+                        {c.status === "NEW" && (
+                          <button
+                            onClick={async () => {
+                              await collaborationApi.updateRequestStatus(c.id, "REVIEWED");
+                              triggerFeedback("Proposal marked reviewed.");
+                              loadInquiries();
+                            }}
+                            className="p-1.5 text-moss-400 hover:bg-moss-500/20 hover:text-moss-300"
+                            title="Mark reviewed"
+                          >
+                            <CheckCircle2 className="h-4 w-4" />
+                          </button>
+                        )}
+                        {c.status !== "ARCHIVED" && (
+                          <button
+                            onClick={async () => {
+                              await collaborationApi.updateRequestStatus(c.id, "ARCHIVED");
+                              triggerFeedback("Proposal archived.");
+                              loadInquiries();
+                            }}
+                            className="p-1.5 text-bone-200/60 hover:bg-bone-50/10 hover:text-bone-100"
+                            title="Archive proposal"
+                          >
+                            <Archive className="h-4 w-4" />
+                          </button>
+                        )}
+                        <button
+                          onClick={() => {
+                            setConfirmModal({
+                              isOpen: true,
+                              title: "Delete Proposal",
+                              description: `Permanently delete proposal from ${c.name}?`,
+                              onConfirm: async () => {
+                                await collaborationApi.deleteRequest(c.id);
+                                triggerFeedback("Proposal deleted.");
+                                loadInquiries();
+                              },
+                            });
+                          }}
+                          className="p-1.5 text-earth-400 hover:text-earth-300 cursor-pointer"
+                          title="Delete proposal"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
                 {collaborations.length === 0 && !loading && (
                   <tr>
                     <td
-                      colSpan={5}
+                      colSpan={6}
                       className="p-6 text-center font-mono text-xs text-bone-200/40 uppercase"
                     >
                       No collaboration proposals.

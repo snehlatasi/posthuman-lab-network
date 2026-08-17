@@ -68,4 +68,15 @@ public class NewsletterSubscriptionController {
     public ResponseEntity<List<NewsletterSubscriberResponse>> getSubscribers() {
         return ResponseEntity.ok(subscriptionService.getAllSubscribers());
     }
+
+    @PutMapping("/subscribers/{id}/unsubscribe")
+    public ResponseEntity<NewsletterSubscriptionResponse> unsubscribeSubscriber(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(subscriptionService.unsubscribeById(id));
+    }
+
+    @DeleteMapping("/subscribers/{id}")
+    public ResponseEntity<Void> deleteSubscriber(@PathVariable("id") Long id) {
+        subscriptionService.deleteSubscriber(id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -155,6 +156,7 @@ public class DomainControllersTest {
     // CONTACT MESSAGE TESTS
     // ----------------------------------------------------
     @Test
+    @WithMockUser(authorities = "ROLE_ADMIN")
     public void testContactSubmission() throws Exception {
         ContactRequest req = new ContactRequest();
         req.setName("Dr. Anya Chen");
@@ -163,12 +165,24 @@ public class DomainControllersTest {
         req.setMessage("Proposal details mapping sensor arrays.");
 
         // Valid Submission
-        mockMvc.perform(post("/api/contact")
+        String contactJson = mockMvc.perform(post("/api/contact")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.status", is("NEW")));
+                .andExpect(jsonPath("$.status", is("NEW")))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        long contactId = objectMapper.readTree(contactJson).get("id").asLong();
+        mockMvc.perform(put("/api/contact/{id}/status?status=READ", contactId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is("READ")));
+
+        mockMvc.perform(put("/api/contact/{id}/status?status=ARCHIVED", contactId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is("ARCHIVED")));
 
         // Invalid Email Validation
         req.setEmail("invalid-email-address");
@@ -293,11 +307,24 @@ public class DomainControllersTest {
                                 """))
                 .andExpect(status().isCreated());
 
-        mockMvc.perform(get("/api/newsletter/subscribers"))
+        String subscribersJson = mockMvc.perform(get("/api/newsletter/subscribers"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].email", is("reader@example.com")))
-                .andExpect(jsonPath("$[0].status", is("ACTIVE")));
+                .andExpect(jsonPath("$[0].status", is("ACTIVE")))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        long subscriberId = objectMapper.readTree(subscribersJson).get(0).get("id").asLong();
+        mockMvc.perform(put("/api/newsletter/subscribers/{id}/unsubscribe", subscriberId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is("UNSUBSCRIBED")));
+
+        mockMvc.perform(delete("/api/newsletter/subscribers/{id}", subscriberId))
+                .andExpect(status().isNoContent());
+
+        org.assertj.core.api.Assertions.assertThat(newsletterSubscriberRepository.count()).isZero();
     }
 
     @Test
@@ -435,6 +462,12 @@ public class DomainControllersTest {
         mockMvc.perform(get("/api/members/directory"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
+
+        mockMvc.perform(delete("/api/admin/members/list/{id}", memberId))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(delete("/api/admin/members/applications/{id}", applicationId))
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -496,6 +529,7 @@ public class DomainControllersTest {
     // COLLABORATION REQUEST TESTS
     // ----------------------------------------------------
     @Test
+    @WithMockUser(authorities = "ROLE_ADMIN")
     public void testCollaborationSubmission() throws Exception {
         org.posthumanlab.network.collaboration.dto.CollaborationRequestDto req = new org.posthumanlab.network.collaboration.dto.CollaborationRequestDto();
         req.setName("Elena Rostova");
@@ -504,11 +538,23 @@ public class DomainControllersTest {
         req.setCollaborationType("Research Project");
         req.setMessage("Proposal for transdisciplinary research collaboration.");
 
-        mockMvc.perform(post("/api/collaboration")
+        String collaborationJson = mockMvc.perform(post("/api/collaboration")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id", notNullValue()))
-                .andExpect(jsonPath("$.status", is("NEW")));
+                .andExpect(jsonPath("$.status", is("NEW")))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        long collaborationId = objectMapper.readTree(collaborationJson).get("id").asLong();
+        mockMvc.perform(put("/api/collaboration/{id}/status?status=REVIEWED", collaborationId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is("REVIEWED")));
+
+        mockMvc.perform(put("/api/collaboration/{id}/status?status=ARCHIVED", collaborationId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status", is("ARCHIVED")));
     }
 }

@@ -72,11 +72,22 @@ public class NewsletterSubscriptionService {
         NewsletterSubscriber subscriber = subscriberRepository.findByUnsubscribeToken(token)
                 .orElseThrow(() -> new ResourceNotFoundException("Newsletter subscription not found."));
 
-        subscriber.setStatus(NewsletterSubscriberStatus.UNSUBSCRIBED);
-        subscriber.setUnsubscribedAt(LocalDateTime.now());
-
-        NewsletterSubscriber saved = subscriberRepository.save(subscriber);
+        NewsletterSubscriber saved = unsubscribeSubscriber(subscriber);
         return new NewsletterSubscriptionResponse(saved, "You have been unsubscribed from network updates.");
+    }
+
+    public NewsletterSubscriptionResponse unsubscribeById(Long id) {
+        NewsletterSubscriber subscriber = subscriberRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Newsletter subscription not found with ID: " + id));
+        NewsletterSubscriber saved = unsubscribeSubscriber(subscriber);
+        return new NewsletterSubscriptionResponse(saved, "Subscriber was unsubscribed from network updates.");
+    }
+
+    public void deleteSubscriber(Long id) {
+        if (!subscriberRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Newsletter subscription not found with ID: " + id);
+        }
+        subscriberRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
@@ -99,5 +110,11 @@ public class NewsletterSubscriptionService {
 
     private String generateUnsubscribeToken() {
         return UUID.randomUUID().toString().replace("-", "") + UUID.randomUUID().toString().replace("-", "");
+    }
+
+    private NewsletterSubscriber unsubscribeSubscriber(NewsletterSubscriber subscriber) {
+        subscriber.setStatus(NewsletterSubscriberStatus.UNSUBSCRIBED);
+        subscriber.setUnsubscribedAt(LocalDateTime.now());
+        return subscriberRepository.save(subscriber);
     }
 }

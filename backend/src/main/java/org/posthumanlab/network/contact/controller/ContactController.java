@@ -36,5 +36,11 @@ public class ContactController {
         contactService.deleteMessage(id);
         return ResponseEntity.noContent().build();
     }
-}
 
+    @PutMapping("/{id}/status")
+    public ResponseEntity<ContactResponse> updateStatus(
+            @PathVariable("id") Long id,
+            @RequestParam("status") org.posthumanlab.network.contact.entity.ContactMessageStatus status) {
+        return ResponseEntity.ok(contactService.updateStatus(id, status));
+    }
+}

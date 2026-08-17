@@ -48,6 +48,14 @@ public class CollaborationRequestService {
         collaborationRequestRepository.deleteById(id);
     }
 
+    @Transactional
+    public CollaborationRequestDto updateStatus(Long id, CollaborationRequestStatus status) {
+        CollaborationRequest request = collaborationRequestRepository.findById(id)
+                .orElseThrow(() -> new org.posthumanlab.network.common.exception.ResourceNotFoundException("Collaboration request not found with ID: " + id));
+        request.setStatus(status);
+        return mapToDto(collaborationRequestRepository.save(request));
+    }
+
     private CollaborationRequestDto mapToDto(CollaborationRequest entity) {
         CollaborationRequestDto dto = new CollaborationRequestDto();
         dto.setId(entity.getId());
@@ -61,4 +69,3 @@ public class CollaborationRequestService {
         return dto;
     }
 }
-

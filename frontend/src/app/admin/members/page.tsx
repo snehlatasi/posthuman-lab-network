@@ -3,12 +3,19 @@
 import { useState, useEffect } from "react";
 import type { MemberDto } from "@/lib/api/memberAuth";
 import { memberAuthApi } from "@/lib/api/memberAuth";
-import { Search } from "lucide-react";
+import { AlertTriangle, Search, Trash2 } from "lucide-react";
 
 export default function AdminMembersPage() {
   const [members, setMembers] = useState<MemberDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    description: string;
+    onConfirm: () => Promise<void>;
+  }>({ isOpen: false, title: "", description: "", onConfirm: async () => {} });
 
   const loadMembers = async () => {
     setLoading(true);
@@ -34,8 +41,19 @@ export default function AdminMembersPage() {
       (m.affiliation && m.affiliation.toLowerCase().includes(search.toLowerCase()))
   );
 
+  const triggerFeedback = (message: string) => {
+    setActionFeedback(message);
+    setTimeout(() => setActionFeedback(null), 4000);
+  };
+
   return (
     <div className="space-y-6 font-sans">
+      {actionFeedback && (
+        <div className="rounded-xl border border-moss-500/30 bg-moss-500/20 p-4 text-xs font-bold uppercase tracking-widest text-moss-300">
+          {actionFeedback}
+        </div>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="font-serif text-2xl font-bold text-bone-50 uppercase">
@@ -68,6 +86,7 @@ export default function AdminMembersPage() {
                 <th className="p-4">Role & Institution</th>
                 <th className="p-4">Status</th>
                 <th className="p-4">Joined Date</th>
+                <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-bone-50/5 text-bone-200 font-medium">
@@ -101,12 +120,53 @@ export default function AdminMembersPage() {
                   <td className="p-4 font-mono text-[10px] text-bone-200/50">
                     {m.joinedAt ? new Date(m.joinedAt).toLocaleDateString() : "Recent"}
                   </td>
+                  <td className="p-4 text-right">
+                    <div className="flex justify-end gap-2">
+                      {m.status === "ACTIVE" && (
+                        <button
+                          onClick={() => {
+                            setConfirmModal({
+                              isOpen: true,
+                              title: "Deactivate Member",
+                              description: `Deactivate ${m.fullName}? They will be removed from active membership access and public member listings.`,
+                              onConfirm: async () => {
+                                await memberAuthApi.deactivateMember(m.id);
+                                triggerFeedback(`Deactivated member ${m.fullName}`);
+                                await loadMembers();
+                              },
+                            });
+                          }}
+                          className="rounded-lg border border-earth-500/30 bg-earth-600/20 px-3 py-1 text-[10px] font-bold uppercase text-earth-300 transition-colors hover:bg-earth-600/40"
+                        >
+                          Deactivate
+                        </button>
+                      )}
+                      <button
+                        onClick={() => {
+                          setConfirmModal({
+                            isOpen: true,
+                            title: "Delete Member",
+                            description: `Permanently delete ${m.fullName}? This removes their member record completely.`,
+                            onConfirm: async () => {
+                              await memberAuthApi.deleteMember(m.id);
+                              triggerFeedback(`Deleted member ${m.fullName}`);
+                              await loadMembers();
+                            },
+                          });
+                        }}
+                        className="rounded-lg p-1.5 text-earth-400 transition-colors hover:bg-earth-600/20 hover:text-earth-300"
+                        title="Delete member"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
               {filteredMembers.length === 0 && !loading && (
                 <tr>
                   <td
-                    colSpan={5}
+                    colSpan={6}
                     className="p-8 text-center font-mono text-xs text-bone-200/40 uppercase tracking-widest"
                   >
                     No approved members found in directory.
@@ -117,6 +177,39 @@ export default function AdminMembersPage() {
           </table>
         </div>
       </div>
+
+      {confirmModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-carbon-950/80 p-4 backdrop-blur-md">
+          <div className="w-full max-w-md space-y-4 rounded-2xl border border-bone-50/15 bg-carbon-900 p-6 shadow-2xl">
+            <div className="flex items-center space-x-3 text-earth-400">
+              <AlertTriangle className="h-6 w-6 shrink-0" />
+              <h3 className="font-serif text-lg font-bold uppercase text-bone-50">
+                {confirmModal.title}
+              </h3>
+            </div>
+            <p className="text-xs font-medium leading-relaxed text-bone-200">
+              {confirmModal.description}
+            </p>
+            <div className="flex justify-end space-x-3 pt-2">
+              <button
+                onClick={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+                className="rounded-xl border border-bone-50/15 bg-carbon-950 px-4 py-2 font-mono text-xs uppercase text-bone-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  await confirmModal.onConfirm();
+                  setConfirmModal({ ...confirmModal, isOpen: false });
+                }}
+                className="rounded-xl bg-earth-600 px-4 py-2 font-mono text-xs font-bold uppercase text-bone-50 hover:bg-earth-500"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

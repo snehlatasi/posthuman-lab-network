@@ -36,6 +36,12 @@ public class AdminMemberController {
         return ResponseEntity.ok(applicationService.rejectApplication(id, reviewer));
     }
 
+    @DeleteMapping("/applications/{id}")
+    public ResponseEntity<Void> deleteApplication(@PathVariable("id") Long id) {
+        applicationService.deleteApplication(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/list")
     public ResponseEntity<List<Member>> getAllApprovedMembers() {
         return ResponseEntity.ok(applicationService.getAllApprovedMembers());
@@ -45,5 +51,11 @@ public class AdminMemberController {
     public ResponseEntity<Member> deactivateMember(@PathVariable("id") Long id, Authentication auth) {
         String reviewer = auth != null ? auth.getName() : "posthumanlabnetwork@gmail.com";
         return ResponseEntity.ok(applicationService.deactivateMember(id, reviewer));
+    }
+
+    @DeleteMapping("/list/{id}")
+    public ResponseEntity<Void> deleteMember(@PathVariable("id") Long id) {
+        applicationService.deleteMember(id);
+        return ResponseEntity.noContent().build();
     }
 }

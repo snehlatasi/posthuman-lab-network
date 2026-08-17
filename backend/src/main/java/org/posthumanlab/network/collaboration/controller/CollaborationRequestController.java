@@ -35,5 +35,11 @@ public class CollaborationRequestController {
         collaborationRequestService.deleteRequest(id);
         return ResponseEntity.noContent().build();
     }
-}
 
+    @PutMapping("/{id}/status")
+    public ResponseEntity<CollaborationRequestDto> updateStatus(
+            @PathVariable("id") Long id,
+            @RequestParam("status") org.posthumanlab.network.collaboration.entity.CollaborationRequestStatus status) {
+        return ResponseEntity.ok(collaborationRequestService.updateStatus(id, status));
+    }
+}

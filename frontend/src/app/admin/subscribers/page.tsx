@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { NewsletterSubscriberDto } from "@/lib/api/newsletter";
 import { newsletterApi } from "@/lib/api/newsletter";
+import { AlertTriangle, Trash2 } from "lucide-react";
 
 function formatDate(value?: string) {
   if (!value) return "-";
@@ -16,11 +17,31 @@ export default function AdminSubscribersPage() {
   const [subscribers, setSubscribers] = useState<NewsletterSubscriberDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [actionFeedback, setActionFeedback] = useState<string | null>(null);
+  const [confirmModal, setConfirmModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    description: string;
+    onConfirm: () => Promise<void>;
+  }>({ isOpen: false, title: "", description: "", onConfirm: async () => {} });
+
+  const loadSubscribers = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await newsletterApi.getSubscribers();
+      setSubscribers(response);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to load subscribers.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     let active = true;
 
-    const loadSubscribers = async () => {
+    const loadInitialSubscribers = async () => {
       setLoading(true);
       setError(null);
       try {
@@ -39,11 +60,16 @@ export default function AdminSubscribersPage() {
       }
     };
 
-    loadSubscribers();
+    loadInitialSubscribers();
     return () => {
       active = false;
     };
   }, []);
+
+  const triggerFeedback = (message: string) => {
+    setActionFeedback(message);
+    setTimeout(() => setActionFeedback(null), 4000);
+  };
 
   const activeCount = subscribers.filter((subscriber) => subscriber.status === "ACTIVE").length;
 
@@ -69,6 +95,12 @@ export default function AdminSubscribersPage() {
         </div>
       )}
 
+      {actionFeedback && (
+        <div className="rounded-xl border border-moss-500/30 bg-moss-500/20 p-4 text-xs font-bold uppercase tracking-widest text-moss-300">
+          {actionFeedback}
+        </div>
+      )}
+
       <div className="overflow-hidden rounded-2xl border border-bone-50/15 bg-carbon-900/90 shadow-md">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[820px] text-left text-xs">
@@ -80,6 +112,7 @@ export default function AdminSubscribersPage() {
                 <th className="p-4">Status</th>
                 <th className="p-4">Subscribed</th>
                 <th className="p-4">Source</th>
+                <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-bone-50/5 font-medium text-bone-200">
@@ -105,13 +138,54 @@ export default function AdminSubscribersPage() {
                   <td className="p-4 font-mono text-[10px] uppercase text-bone-200/60">
                     {subscriber.source}
                   </td>
+                  <td className="p-4 text-right">
+                    <div className="flex justify-end gap-2">
+                      {subscriber.status === "ACTIVE" && (
+                        <button
+                          onClick={() => {
+                            setConfirmModal({
+                              isOpen: true,
+                              title: "Unsubscribe Subscriber",
+                              description: `Unsubscribe ${subscriber.email}? They will stop receiving network updates, but their history will remain visible.`,
+                              onConfirm: async () => {
+                                await newsletterApi.unsubscribeSubscriber(subscriber.id);
+                                triggerFeedback("Subscriber unsubscribed.");
+                                await loadSubscribers();
+                              },
+                            });
+                          }}
+                          className="rounded-lg border border-earth-500/30 bg-earth-600/20 px-3 py-1 text-[10px] font-bold uppercase text-earth-300 transition-colors hover:bg-earth-600/40"
+                        >
+                          Unsubscribe
+                        </button>
+                      )}
+                      <button
+                        onClick={() => {
+                          setConfirmModal({
+                            isOpen: true,
+                            title: "Delete Subscriber",
+                            description: `Permanently delete ${subscriber.email}? This removes the subscription record completely.`,
+                            onConfirm: async () => {
+                              await newsletterApi.deleteSubscriber(subscriber.id);
+                              triggerFeedback("Subscriber deleted.");
+                              await loadSubscribers();
+                            },
+                          });
+                        }}
+                        className="rounded-lg p-1.5 text-earth-400 transition-colors hover:bg-earth-600/20 hover:text-earth-300"
+                        title="Delete subscriber"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  </td>
                 </tr>
               ))}
 
               {subscribers.length === 0 && !loading && (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className="p-8 text-center font-mono text-xs uppercase text-bone-200/40"
                   >
                     No subscribers recorded.
@@ -122,7 +196,7 @@ export default function AdminSubscribersPage() {
               {loading && (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className="p-8 text-center font-mono text-xs uppercase text-bone-200/40"
                   >
                     Loading subscribers...
@@ -133,6 +207,39 @@ export default function AdminSubscribersPage() {
           </table>
         </div>
       </div>
+
+      {confirmModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-carbon-950/80 p-4 backdrop-blur-md">
+          <div className="w-full max-w-md space-y-4 rounded-2xl border border-bone-50/15 bg-carbon-900 p-6 shadow-2xl">
+            <div className="flex items-center space-x-3 text-earth-400">
+              <AlertTriangle className="h-6 w-6 shrink-0" />
+              <h3 className="font-serif text-lg font-bold uppercase text-bone-50">
+                {confirmModal.title}
+              </h3>
+            </div>
+            <p className="text-xs font-medium leading-relaxed text-bone-200">
+              {confirmModal.description}
+            </p>
+            <div className="flex justify-end space-x-3 pt-2">
+              <button
+                onClick={() => setConfirmModal({ ...confirmModal, isOpen: false })}
+                className="rounded-xl border border-bone-50/15 bg-carbon-950 px-4 py-2 font-mono text-xs uppercase text-bone-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={async () => {
+                  await confirmModal.onConfirm();
+                  setConfirmModal({ ...confirmModal, isOpen: false });
+                }}
+                className="rounded-xl bg-earth-600 px-4 py-2 font-mono text-xs font-bold uppercase text-bone-50 hover:bg-earth-500"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

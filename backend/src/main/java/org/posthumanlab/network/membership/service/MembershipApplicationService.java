@@ -132,6 +132,14 @@ public class MembershipApplicationService {
     }
 
     @Transactional
+    public void deleteApplication(Long id) {
+        if (!applicationRepository.existsById(id)) {
+            throw new IllegalArgumentException("Application not found with ID: " + id);
+        }
+        applicationRepository.deleteById(id);
+    }
+
+    @Transactional
     public Member deactivateMember(Long id, String reviewerEmail) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Member not found with ID: " + id));
@@ -153,6 +161,14 @@ public class MembershipApplicationService {
         }
 
         return savedMember;
+    }
+
+    @Transactional
+    public void deleteMember(Long id) {
+        if (!memberRepository.existsById(id)) {
+            throw new IllegalArgumentException("Member not found with ID: " + id);
+        }
+        memberRepository.deleteById(id);
     }
 
     public List<Member> getAllApprovedMembers() {

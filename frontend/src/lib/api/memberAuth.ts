@@ -129,6 +129,8 @@ export const memberAuthApi = {
     fetchJson<MembershipApplicationResponseDto>(`/api/admin/members/applications/${id}/reject`, {
       method: "PUT",
     }),
+  deleteApplication: (id: number) =>
+    fetchJson<void>(`/api/admin/members/applications/${id}`, { method: "DELETE" }),
 
   getAdminMembersList: () => fetchJson<MemberDto[]>("/api/admin/members/list"),
 
@@ -136,4 +138,6 @@ export const memberAuthApi = {
     fetchJson<MemberDto>(`/api/admin/members/list/${id}/deactivate`, {
       method: "PUT",
     }),
+  deleteMember: (id: number) =>
+    fetchJson<void>(`/api/admin/members/list/${id}`, { method: "DELETE" }),
 };

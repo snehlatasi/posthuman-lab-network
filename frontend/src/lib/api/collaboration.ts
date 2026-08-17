@@ -15,7 +15,7 @@ export interface CollaborationResponse {
   organization?: string;
   collaborationType?: string;
   message?: string;
-  status: string;
+  status: "NEW" | "REVIEWED" | "ARCHIVED";
   createdAt: string;
 }
 
@@ -31,6 +31,10 @@ export const collaborationApi = {
     }),
   getAllRequests: (): Promise<CollaborationResponse[]> =>
     fetchJson<CollaborationResponse[]>("/api/collaboration"),
+  updateRequestStatus: (id: number, status: CollaborationResponse["status"]) =>
+    fetchJson<CollaborationResponse>(`/api/collaboration/${id}/status?status=${status}`, {
+      method: "PUT",
+    }),
   deleteRequest: (id: number): Promise<void> =>
     fetchJson<void>(`/api/collaboration/${id}`, { method: "DELETE" }),
 };

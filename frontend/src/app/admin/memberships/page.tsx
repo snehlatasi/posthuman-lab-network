@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import type { MemberDto, MembershipApplicationResponseDto } from "@/lib/api/memberAuth";
 import { memberAuthApi } from "@/lib/api/memberAuth";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Trash2 } from "lucide-react";
 
 export default function AdminMembershipsPage() {
   const [applications, setApplications] = useState<MembershipApplicationResponseDto[]>([]);
@@ -150,6 +150,24 @@ export default function AdminMembershipsPage() {
                         </button>
                       </>
                     )}
+                    <button
+                      onClick={() => {
+                        setConfirmModal({
+                          isOpen: true,
+                          title: "Delete Membership Application",
+                          description: `Permanently delete application for ${app.fullName}? This removes the application record from the admin queue.`,
+                          onConfirm: async () => {
+                            await memberAuthApi.deleteApplication(app.id);
+                            triggerFeedback(`Deleted application for ${app.fullName}`);
+                            loadApplications();
+                          },
+                        });
+                      }}
+                      className="inline-flex rounded-lg p-1.5 text-earth-400 transition-colors hover:bg-earth-600/20 hover:text-earth-300"
+                      title="Delete application"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -241,6 +259,24 @@ export default function AdminMembershipsPage() {
                         Deactivate
                       </button>
                     )}
+                    <button
+                      onClick={() => {
+                        setConfirmModal({
+                          isOpen: true,
+                          title: "Delete Member",
+                          description: `Permanently delete ${member.fullName}? This removes their member record completely.`,
+                          onConfirm: async () => {
+                            await memberAuthApi.deleteMember(member.id);
+                            triggerFeedback(`Deleted member ${member.fullName}`);
+                            loadApplications();
+                          },
+                        });
+                      }}
+                      className="ml-2 inline-flex rounded-lg p-1.5 text-earth-400 transition-colors hover:bg-earth-600/20 hover:text-earth-300"
+                      title="Delete member"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                   </td>
                 </tr>
               ))}
