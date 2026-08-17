@@ -168,7 +168,7 @@ export class UniverseRenderer {
   private readonly screenScene = new THREE.Scene();
   private readonly camera = new THREE.PerspectiveCamera(52, 1, 0.1, 80);
   private readonly screenCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-  private readonly clock = new THREE.Clock();
+  private readonly timer = new THREE.Timer();
   private readonly disposables: Array<{ dispose: () => void }> = [];
   private animationId: number | null = null;
   private visible = true;
@@ -283,6 +283,7 @@ export class UniverseRenderer {
     window.removeEventListener("resize", this.resize);
     this.canvas.removeEventListener("webglcontextlost", this.handleContextLost);
     this.disposables.forEach((item) => item.dispose());
+    this.timer.dispose();
     this.renderer.dispose();
   }
 
@@ -311,8 +312,9 @@ export class UniverseRenderer {
   };
 
   private render() {
+    this.timer.update();
     const t =
-      this.clock.getElapsedTime() * this.config.animationSpeed * (this.reducedMotion ? 0.08 : 1);
+      this.timer.getElapsed() * this.config.animationSpeed * (this.reducedMotion ? 0.08 : 1);
 
     this.camera.position.x = THREE.MathUtils.lerp(
       this.camera.position.x,

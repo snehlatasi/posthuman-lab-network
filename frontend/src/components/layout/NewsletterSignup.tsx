@@ -74,6 +74,7 @@ export function NewsletterSignup() {
             onChange={(event) => setName(event.target.value)}
             aria-label="Name"
             placeholder="Name"
+            suppressHydrationWarning
             className="min-h-11 min-w-0 rounded-full border border-carbon-950/10 bg-white/80 px-4 text-sm font-medium text-carbon-950 outline-none transition focus:border-earth-500 dark:border-bone-50/15 dark:bg-carbon-900/80 dark:text-bone-50"
           />
           <input
@@ -82,6 +83,7 @@ export function NewsletterSignup() {
             onChange={(event) => setEmail(event.target.value)}
             aria-label="Email address"
             placeholder="Email address"
+            suppressHydrationWarning
             className="min-h-11 min-w-0 rounded-full border border-carbon-950/10 bg-white/80 px-4 text-sm font-medium text-carbon-950 outline-none transition focus:border-earth-500 dark:border-bone-50/15 dark:bg-carbon-900/80 dark:text-bone-50"
           />
         </div>
@@ -91,6 +93,7 @@ export function NewsletterSignup() {
             type="checkbox"
             checked={acceptedTerms}
             onChange={(event) => setAcceptedTerms(event.target.checked)}
+            suppressHydrationWarning
             className="mt-0.5 h-4 w-4 shrink-0 rounded border-carbon-950/20 accent-earth-600 dark:border-bone-50/20"
           />
           <span>
@@ -111,6 +114,7 @@ export function NewsletterSignup() {
           <button
             type="submit"
             disabled={status === "loading"}
+            suppressHydrationWarning
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-carbon-950 px-6 text-xs font-bold uppercase tracking-widest text-bone-50 transition hover:bg-earth-600 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-earth-600 dark:hover:bg-earth-500"
           >
             <span>{status === "loading" ? "Subscribing" : "Subscribe"}</span>

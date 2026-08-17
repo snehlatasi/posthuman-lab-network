@@ -302,6 +302,7 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
             onClick={zoomIn}
             aria-label="Zoom In"
             title="Zoom In"
+            suppressHydrationWarning
             className="w-10 h-10 rounded-md bg-[#07111c]/78 backdrop-blur-md border border-[#e0b86c]/24 text-bone-100 hover:text-[#9ff8ff] hover:border-[#9ff8ff]/45 flex items-center justify-center transition-all cursor-pointer shadow-md"
           >
             <ZoomIn className="w-4 h-4" />
@@ -310,6 +311,7 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
             onClick={zoomOut}
             aria-label="Zoom Out"
             title="Zoom Out"
+            suppressHydrationWarning
             className="w-10 h-10 rounded-md bg-[#07111c]/78 backdrop-blur-md border border-[#e0b86c]/24 text-bone-100 hover:text-[#9ff8ff] hover:border-[#9ff8ff]/45 flex items-center justify-center transition-all cursor-pointer shadow-md"
           >
             <ZoomOut className="w-4 h-4" />
@@ -319,6 +321,7 @@ export const WorldMapSvg: React.FC<WorldMapSvgProps> = ({
               onClick={resetView}
               aria-label="Reset World View"
               title="Reset World View"
+              suppressHydrationWarning
               className="w-10 h-10 rounded-md bg-[#07111c]/78 backdrop-blur-md border border-[#e0b86c]/40 text-[#e0b86c] hover:text-earth-200 flex items-center justify-center transition-all cursor-pointer shadow-md"
             >
               <RotateCcw className="w-3.5 h-3.5" />

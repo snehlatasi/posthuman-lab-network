@@ -55,6 +55,15 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: [
+      {
+        url: "/mandala-favicon.webp",
+        type: "image/webp",
+      },
+    ],
+    shortcut: "/mandala-favicon.webp",
+  },
   openGraph: {
     title: "Posthuman Lab Network",
     description:
@@ -87,7 +96,10 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body className="min-h-full flex flex-col text-[var(--foreground)] selection:bg-earth-500 selection:text-bone-50 relative">
+      <body
+        className="min-h-full flex flex-col text-[var(--foreground)] selection:bg-earth-500 selection:text-bone-50 relative"
+        suppressHydrationWarning
+      >
         <ThemeProvider>
           <AuthProvider>
             <MemberProvider>
