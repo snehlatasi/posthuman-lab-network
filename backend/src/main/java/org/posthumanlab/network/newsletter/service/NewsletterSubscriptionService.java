@@ -62,9 +62,14 @@ public class NewsletterSubscriptionService {
                     saved.getUnsubscribeToken()
             ));
         }
-        String message = isNewSubscriber
-                ? "Subscribed for network updates."
-                : "Subscription updated. You are on the network updates list.";
+        String message;
+        if (isNewSubscriber) {
+            message = "Subscribed for network updates. Please check your inbox for the confirmation email.";
+        } else if (wasActive) {
+            message = "You are already subscribed. Your preferences were updated without sending a duplicate confirmation email.";
+        } else {
+            message = "Subscription reactivated. Please check your inbox for the confirmation email.";
+        }
         return new NewsletterSubscriptionResponse(saved, message);
     }
 

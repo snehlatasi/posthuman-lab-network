@@ -63,6 +63,13 @@ export async function fetchJson<T>(path: string, options?: RequestInit): Promise
   });
 
   if (!response.ok) {
+    if (response.status === 401 || response.status === 403) {
+      if (token) {
+        setStoredToken(null);
+      }
+      throw new Error("Your admin session has expired. Please sign in again.");
+    }
+
     let errorDetail = "API communication failed";
     try {
       const contentType = response.headers.get("content-type") || "";

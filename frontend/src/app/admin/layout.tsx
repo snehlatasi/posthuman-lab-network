@@ -61,14 +61,32 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (pathname === "/admin/login") return;
 
+    let active = true;
     const token = getStoredToken();
     if (!token) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setAuthorized(false);
       router.push("/admin/login");
     } else {
-      setAuthorized(true);
+      setAuthorized(false);
+      fetchJson<AdminStats>("/api/admin/stats")
+        .then(() => {
+          if (active) {
+            setAuthorized(true);
+          }
+        })
+        .catch(() => {
+          if (active) {
+            authApi.logout();
+            setAuthorized(false);
+            router.push("/admin/login");
+          }
+        });
     }
+
+    return () => {
+      active = false;
+    };
   }, [pathname, router]);
 
   if (pathname === "/admin/login") {
