@@ -74,6 +74,33 @@ public class NewsletterPublicationEmailService {
         log.info("Newsletter publication email completed for {}: sent={}, failed={}", event.channel().getTag(), sent, failed);
     }
 
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    public void sendSubscriptionConfirmation(SubscriptionConfirmationEvent event) {
+        if (!properties.isReady()) {
+            log.info("Newsletter confirmation email skipped because Brevo newsletter email is not configured.");
+            return;
+        }
+
+        String unsubscribeUrl = absoluteUrl("/api/newsletter/unsubscribe/" + event.unsubscribeToken());
+        String subject = "Welcome to Posthuman Lab Network updates";
+        String htmlContent = buildConfirmationHtmlContent(event, unsubscribeUrl);
+        String textContent = buildConfirmationTextContent(event, unsubscribeUrl);
+
+        try {
+            sendBrevoEmail(
+                    NewsletterEmailChannel.UPDATES,
+                    recipient(event.name(), event.email()),
+                    subject,
+                    htmlContent,
+                    textContent
+            );
+            log.info("Newsletter confirmation email accepted for {}", event.email());
+        } catch (RuntimeException ex) {
+            log.warn("Unable to send newsletter confirmation email to {}", event.email(), ex);
+        }
+    }
+
     private void sendToSubscriber(PublicationNotificationEvent event, NewsletterSubscriber subscriber) {
         String contentUrl = absoluteUrl(event.path());
         String unsubscribeUrl = absoluteUrl("/api/newsletter/unsubscribe/" + subscriber.getUnsubscribeToken());
@@ -81,12 +108,27 @@ public class NewsletterPublicationEmailService {
         String htmlContent = buildHtmlContent(event, subscriber, contentUrl, unsubscribeUrl);
         String textContent = buildTextContent(event, contentUrl, unsubscribeUrl);
 
+        sendBrevoEmail(
+                event.channel(),
+                recipient(subscriber),
+                subject,
+                htmlContent,
+                textContent
+        );
+    }
+
+    private void sendBrevoEmail(
+            NewsletterEmailChannel channel,
+            Map<String, String> recipient,
+            String subject,
+            String htmlContent,
+            String textContent) {
         HttpRequest request = HttpRequest.newBuilder(URI.create(properties.getBrevoApiUrl()))
                 .timeout(Duration.ofSeconds(15))
                 .header("accept", "application/json")
                 .header("api-key", properties.getBrevoApiKey())
                 .header("content-type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(buildBrevoPayload(event, subscriber, subject, htmlContent, textContent, unsubscribeUrl)))
+                .POST(HttpRequest.BodyPublishers.ofString(buildBrevoPayload(channel, recipient, subject, htmlContent, textContent)))
                 .build();
 
         try {
@@ -103,18 +145,17 @@ public class NewsletterPublicationEmailService {
     }
 
     private String buildBrevoPayload(
-            PublicationNotificationEvent event,
-            NewsletterSubscriber subscriber,
+            NewsletterEmailChannel channel,
+            Map<String, String> recipient,
             String subject,
             String htmlContent,
-            String textContent,
-            String unsubscribeUrl) {
+            String textContent) {
         Map<String, Object> payload = new HashMap<>();
         payload.put("sender", Map.of(
                 "name", properties.getSenderName(),
-                "email", properties.getSenderEmail(event.channel())
+                "email", properties.getSenderEmail(channel)
         ));
-        payload.put("to", List.of(recipient(subscriber)));
+        payload.put("to", List.of(recipient));
         payload.put("replyTo", Map.of(
                 "name", properties.getSenderName(),
                 "email", properties.getReplyTo()
@@ -122,7 +163,7 @@ public class NewsletterPublicationEmailService {
         payload.put("subject", subject);
         payload.put("htmlContent", htmlContent);
         payload.put("textContent", textContent);
-        payload.put("tags", List.of("posthuman-newsletter", event.channel().getTag()));
+        payload.put("tags", List.of("posthuman-newsletter", channel.getTag()));
 
         try {
             return objectMapper.writeValueAsString(payload);
@@ -136,6 +177,15 @@ public class NewsletterPublicationEmailService {
         recipient.put("email", subscriber.getEmail());
         if (StringUtils.hasText(subscriber.getName())) {
             recipient.put("name", subscriber.getName());
+        }
+        return recipient;
+    }
+
+    private Map<String, String> recipient(String name, String email) {
+        Map<String, String> recipient = new HashMap<>();
+        recipient.put("email", email);
+        if (StringUtils.hasText(name)) {
+            recipient.put("name", name);
         }
         return recipient;
     }
@@ -184,6 +234,57 @@ public class NewsletterPublicationEmailService {
                 + compactSummary(event.summary()) + "\n\n"
                 + "Open update: " + contentUrl + "\n"
                 + "Unsubscribe: " + unsubscribeUrl;
+    }
+
+    private String buildConfirmationHtmlContent(SubscriptionConfirmationEvent event, String unsubscribeUrl) {
+        String name = StringUtils.hasText(event.name()) ? HtmlUtils.htmlEscape(event.name()) : "there";
+        String interests = HtmlUtils.htmlEscape(formatInterests(event.interests()));
+        return """
+                <!doctype html>
+                <html lang="en">
+                <body style="margin:0;background:#071018;color:#f4efe6;font-family:Arial,sans-serif;">
+                  <table role="presentation" width="100%%" cellspacing="0" cellpadding="0" style="background:#071018;padding:28px 0;">
+                    <tr>
+                      <td align="center">
+                        <table role="presentation" width="100%%" cellspacing="0" cellpadding="0" style="max-width:620px;border:1px solid rgba(244,239,230,.18);background:#101820;">
+                          <tr>
+                            <td style="padding:30px;">
+                              <p style="margin:0 0 18px;color:#f2c879;text-transform:uppercase;letter-spacing:.08em;font-size:12px;">Posthuman Lab Network</p>
+                              <h1 style="margin:0 0 14px;font-size:28px;line-height:1.2;color:#fff;">You are subscribed</h1>
+                              <p style="margin:0 0 18px;color:#d9d2c7;line-height:1.6;">Hello %s, welcome to the Posthuman Lab Network updates list.</p>
+                              <p style="margin:0 0 18px;color:#d9d2c7;line-height:1.6;">You will receive selected notes when the network publishes new blogs, events, media, publications, and research updates.</p>
+                              <p style="margin:0 0 28px;color:#d9d2c7;line-height:1.6;"><strong style="color:#fff;">Subscription focus:</strong> %s</p>
+                              <p style="margin:0 0 28px;">
+                                <a href="%s" style="display:inline-block;background:#f2c879;color:#071018;text-decoration:none;padding:12px 18px;font-weight:700;">Visit the network</a>
+                              </p>
+                              <p style="margin:0;color:#9c9488;font-size:12px;line-height:1.5;">
+                                You can leave the updates list at any time.
+                                <a href="%s" style="color:#f2c879;">Unsubscribe</a>
+                              </p>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                </body>
+                </html>
+                """.formatted(name, interests, absoluteUrl("/"), unsubscribeUrl);
+    }
+
+    private String buildConfirmationTextContent(SubscriptionConfirmationEvent event, String unsubscribeUrl) {
+        return "You are subscribed to Posthuman Lab Network updates.\n\n"
+                + "You will receive selected notes when the network publishes new blogs, events, media, publications, and research updates.\n\n"
+                + "Subscription focus: " + formatInterests(event.interests()) + "\n"
+                + "Visit the network: " + absoluteUrl("/") + "\n"
+                + "Unsubscribe: " + unsubscribeUrl;
+    }
+
+    private String formatInterests(String interests) {
+        if (!StringUtils.hasText(interests)) {
+            return "All network updates";
+        }
+        return interests.replace('-', ' ').replace('_', ' ');
     }
 
     private String compactSummary(String value) {

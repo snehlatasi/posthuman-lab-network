@@ -6,7 +6,9 @@ import org.posthumanlab.network.newsletter.dto.NewsletterSubscriberResponse;
 import org.posthumanlab.network.newsletter.dto.NewsletterSubscriptionResponse;
 import org.posthumanlab.network.newsletter.entity.NewsletterSubscriber;
 import org.posthumanlab.network.newsletter.entity.NewsletterSubscriberStatus;
+import org.posthumanlab.network.newsletter.email.SubscriptionConfirmationEvent;
 import org.posthumanlab.network.newsletter.repository.NewsletterSubscriberRepository;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +21,13 @@ import java.util.UUID;
 public class NewsletterSubscriptionService {
 
     private final NewsletterSubscriberRepository subscriberRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public NewsletterSubscriptionService(NewsletterSubscriberRepository subscriberRepository) {
+    public NewsletterSubscriptionService(
+            NewsletterSubscriberRepository subscriberRepository,
+            ApplicationEventPublisher eventPublisher) {
         this.subscriberRepository = subscriberRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     public NewsletterSubscriptionResponse subscribe(NewsletterSubscribeRequest request) {
@@ -31,6 +37,7 @@ public class NewsletterSubscriptionService {
                 .orElseGet(NewsletterSubscriber::new);
 
         boolean isNewSubscriber = subscriber.getId() == null;
+        boolean wasActive = subscriber.getStatus() == NewsletterSubscriberStatus.ACTIVE;
         LocalDateTime now = LocalDateTime.now();
 
         subscriber.setName(request.getName().trim());
@@ -47,6 +54,14 @@ public class NewsletterSubscriptionService {
         }
 
         NewsletterSubscriber saved = subscriberRepository.save(subscriber);
+        if (isNewSubscriber || !wasActive) {
+            eventPublisher.publishEvent(new SubscriptionConfirmationEvent(
+                    saved.getName(),
+                    saved.getEmail(),
+                    saved.getInterests(),
+                    saved.getUnsubscribeToken()
+            ));
+        }
         String message = isNewSubscriber
                 ? "Subscribed for network updates."
                 : "Subscription updated. You are on the network updates list.";
